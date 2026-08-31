@@ -1,7 +1,39 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import logo from "../assets/logo purple.png";
 import "../styles/login-page.css";
+import api from "../services/api";
 
 function LoginPage() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+
+  console.log("=== LOGIN START ===");
+  console.log("EMAIL:", email);
+
+  try {
+    const response = await api.post("/v1/auth/login/", {
+      email: email,
+      password: password,
+    });
+
+    console.log("=== LOGIN SUCCESS ===");
+    console.log("STATUS:", response.status);
+    console.log("DATA:", response.data);
+
+  } catch (error) {
+    console.log("=== LOGIN ERROR ===");
+    console.log("STATUS:", error.response?.status);
+    console.log("DATA:", error.response?.data);
+    console.log("MESSAGE:", error.message);
+  }
+};
+
+
   return (
     <main className="login-page min-vh-100">
       <div className="container-fluid min-vh-100">
@@ -110,7 +142,7 @@ function LoginPage() {
                 Enter your credentials to continue to your dashboard.
               </p>
 
-              <form>
+              <form onSubmit={handleSubmit}>
 
                 {/* Email */}
                 <div className="mb-4">
@@ -126,6 +158,8 @@ function LoginPage() {
                     id="email"
                     className="form-control form-control-lg"
                     placeholder="you@school.edu"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
 
@@ -149,6 +183,8 @@ function LoginPage() {
                     id="password"
                     className="form-control form-control-lg"
                     placeholder="Enter your password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
@@ -185,12 +221,12 @@ function LoginPage() {
               </form>
 
               <div className="text-center mt-4">
-                <a
-                  href="/"
+                <Link
+                  to="/"
                   className="text-secondary text-decoration-none"
                 >
                   ← Back to homepage
-                </a>
+                </Link>
               </div>
 
             </div>

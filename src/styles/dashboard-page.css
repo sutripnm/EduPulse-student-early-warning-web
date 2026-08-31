@@ -1,0 +1,56 @@
+.dashboard-page {
+  min-height: 100vh;
+  background-color: #eeecfa;
+}
+
+.dashboard-main {
+  min-width: 0;
+}
+
+.dashboard-kpi {
+  min-height: 90px;
+  padding: 12px;
+  background-color: white;
+  border: 3px solid #6834d9;
+  border-radius: 18px;
+  text-align: center;
+}
+
+.dashboard-kpi p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.dashboard-kpi h5 {
+  margin: 4px 0 0;
+}
+
+.kpi-icon {
+  font-size: 28px;
+  margin-bottom: 3px;
+}
+
+.dashboard-box {
+  padding: 24px;
+  background-color: #9486df;
+  border-radius: 18px;
+}
+
+.dashboard-chart-box {
+  min-height: 115px;
+}
+
+.dashboard-table {
+  min-height: 205px;
+  padding: 16px;
+  background-color: #9486df;
+  border-radius: 18px;
+}
+
+.analytics-box {
+  min-height: 200px;
+}
+
+.today-summary {
+  min-height: 465px;
+}

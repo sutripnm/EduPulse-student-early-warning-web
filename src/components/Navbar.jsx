@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import logo from "../assets/logo black.png";
 import "../styles/navbar.css";
 
@@ -47,9 +48,12 @@ function Navbar() {
         </div>
 
         {/* Login */}
-        <button className="btn btn-dark rounded-pill px-4 ms-auto">
+        <Link
+          to="/login"
+          className="btn btn-dark rounded-pill px-4 ms-auto"
+        >
           Login
-        </button>
+        </Link>
 
       </div>
     </nav>
