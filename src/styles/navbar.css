@@ -1,0 +1,11 @@
+.navbar {
+  min-height: 84px;
+}
+
+.navbar-brand img {
+  height: 42px;
+}
+
+.text-purple {
+  color: #6840d9;
+}
