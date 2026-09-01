@@ -1,0 +1,45 @@
+.add-student-page {
+  min-height: 100vh;
+  background-color: #eeeeff;
+}
+
+.add-student-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.add-student-container {
+  width: 100%;
+  max-width: 480px;
+  background-color: #ffffff;
+  border: 1px solid #222;
+  border-radius: 14px;
+  padding: 24px;
+}
+
+.add-student-container .form-control,
+.add-student-container .form-select {
+  border-radius: 8px;
+  border: 1px solid #8b78d8;
+  background-color: #f5f2ff;
+}
+
+.add-student-container .form-control:focus,
+.add-student-container .form-select:focus {
+  border-color: #6f4ed8;
+  box-shadow: 0 0 0 0.2rem rgba(111, 78, 216, 0.2);
+  background-color: #ffffff;
+}
+
+.add-student-container .btn-primary {
+  background-color: #6f4ed8;
+  border-color: #6f4ed8;
+  border-radius: 8px;
+}
+
+.add-student-container .btn-primary:hover {
+  background-color: #5d3bc7;
+  border-color: #5d3bc7;
+}
