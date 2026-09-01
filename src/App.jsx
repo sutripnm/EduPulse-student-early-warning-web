@@ -4,6 +4,8 @@ import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import StudentDetailPage from "./pages/StudentDetailPage";
+import AddStudentPage from "./pages/AddStudentPage";
+import InputNilaiAbsensiPage from "./pages/InputNilaiAbsensiPage";
 
 function App() {
   return (
@@ -33,6 +35,16 @@ function App() {
         <Route
           path="/detail-siswa/:id"
           element={<StudentDetailPage />}
+        />
+
+        <Route
+          path="/tambah-siswa"
+          element={<AddStudentPage />}
+        />
+
+        <Route
+          path="/input-nilai-dan-absensi"
+          element={<InputNilaiAbsensiPage />}
         />
 
       </Routes>

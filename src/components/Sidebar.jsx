@@ -33,6 +33,13 @@ function Sidebar() {
         </Link>
 
         <Link
+          to="/input-nilai-dan-absensi"
+          className="sidebar-link"
+        >
+          Input Nilai & Absensi
+        </Link>
+
+        <Link
           to="/pengaturan"
           className="sidebar-link"
         >

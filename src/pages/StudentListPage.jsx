@@ -250,7 +250,7 @@ return (
               <div className="col-lg-3">
 
                 <Link
-                  to="/students/new"
+                  to="/tambah-siswa"
                   className="btn btn-dark w-100"
                 >
                   + Tambah Siswa
