@@ -1,0 +1,48 @@
+.settings-page {
+  min-height: 100vh;
+  background-color: #eeeeff;
+}
+
+.settings-main {
+  min-width: 0;
+}
+
+.settings-container {
+  max-width: 1000px;
+}
+
+.settings-card {
+  background-color: #ffffff;
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.settings-card .form-control,
+.settings-card .form-select,
+.settings-card .input-group-text {
+  background-color: #f5f2ff;
+  border-color: #8b78d8;
+}
+
+.settings-card .form-control:focus,
+.settings-card .form-select:focus {
+  border-color: #6f4ed8;
+  box-shadow: 0 0 0 0.2rem rgba(111, 78, 216, 0.2);
+  background-color: #ffffff;
+}
+
+.settings-card .btn-primary {
+  background-color: #6f4ed8;
+  border-color: #6f4ed8;
+}
+
+.settings-card .btn-primary:hover {
+  background-color: #5d3bc7;
+  border-color: #5d3bc7;
+}
+
+.settings-card .form-check-input:checked {
+  background-color: #6f4ed8;
+  border-color: #6f4ed8;
+}

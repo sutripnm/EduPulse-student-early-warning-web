@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import StudentDetailPage from "./pages/StudentDetailPage";
 import AddStudentPage from "./pages/AddStudentPage";
 import InputNilaiAbsensiPage from "./pages/InputNilaiAbsensiPage";
+import SettingsPage from "./pages/SettingsPage";
 
 function App() {
   return (
@@ -45,6 +46,11 @@ function App() {
         <Route
           path="/input-nilai-dan-absensi"
           element={<InputNilaiAbsensiPage />}
+        />
+
+        <Route
+          path="/pengaturan"
+          element={<SettingsPage />}
         />
 
       </Routes>
