@@ -1,0 +1,88 @@
+.login-page {
+  background-color: #ffffff;
+}
+
+.login-brand {
+  background-color: #15151d;
+  color: #8d8d9a;
+}
+
+.login-logo {
+  width: 150px;
+}
+
+.login-label {
+  color: #8d8d9a;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+
+.login-label span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background-color: #31d98a;
+}
+
+.login-title {
+  color: #ffffff;
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 1;
+  font-weight: 500;
+}
+
+.login-title span {
+  color: #8b76ff;
+}
+
+.login-description {
+  max-width: 550px;
+  line-height: 1.6;
+}
+
+.login-feature-icon {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #353541;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #8b76ff;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.login-welcome {
+  color: #7662dc;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.login-heading {
+  font-size: 42px;
+}
+
+.login-form-wrapper {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.forgot-password {
+  color: #7662dc;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.demo-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px;
+  border: 1px solid #e5e5e5;
+  border-radius: 16px;
+  background-color: white;
+}
