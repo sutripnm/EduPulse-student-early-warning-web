@@ -1,0 +1,57 @@
+.input-nilai-page {
+  min-height: 100vh;
+  background-color: #eeeeff;
+}
+
+.input-nilai-main {
+  padding: 40px;
+}
+
+.input-nilai-container {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.input-subject-filter {
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.input-form-card,
+.attendance-form-card {
+  background-color: #ffffff;
+  border: 1px solid #222;
+  border-radius: 16px;
+  padding: 24px;
+  min-height: 430px;
+}
+
+.input-form-card .form-control,
+.input-form-card .form-select,
+.attendance-form-card .form-control,
+.attendance-form-card .form-select {
+  background-color: #f5f2ff;
+  border: 1px solid #8b78d8;
+  border-radius: 8px;
+}
+
+.input-form-card .form-control:focus,
+.input-form-card .form-select:focus,
+.attendance-form-card .form-control:focus,
+.attendance-form-card .form-select:focus {
+  border-color: #6f4ed8;
+  box-shadow: 0 0 0 0.2rem rgba(111, 78, 216, 0.2);
+}
+
+.input-form-card .btn-primary,
+.attendance-form-card .btn-primary {
+  background-color: #6f4ed8;
+  border-color: #6f4ed8;
+  border-radius: 8px;
+}
+
+.input-form-card .btn-primary:hover,
+.attendance-form-card .btn-primary:hover {
+  background-color: #5d3bc7;
+  border-color: #5d3bc7;
+}
