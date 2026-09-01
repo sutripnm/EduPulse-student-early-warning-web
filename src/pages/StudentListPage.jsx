@@ -351,7 +351,7 @@ return (
                       <td>
 
                         <Link
-                          to={`/students/${student.id}`}
+                          to={`/detail-siswa/${student.id}`}
                           className="btn btn-sm btn-outline-dark"
                         >
                           Detail

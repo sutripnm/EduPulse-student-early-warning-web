@@ -1,0 +1,99 @@
+.student-detail-page {
+  min-height: 100vh;
+  background-color: #eeeeff;
+}
+
+.student-detail-main {
+  min-width: 0;
+}
+
+
+/* ========================= */
+/* PROFIL SISWA */
+/* ========================= */
+
+.student-profile-info {
+  width: 310px;
+}
+
+.student-info-item {
+  background-color: #7056d8;
+  color: white;
+  border: 1px solid #111;
+  border-radius: 20px;
+  padding: 7px 14px;
+  margin-bottom: 5px;
+}
+
+
+/* ========================= */
+/* METRIK */
+/* ========================= */
+
+.student-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr) 2.5fr;
+  gap: 8px;
+
+  background-color: #9182df;
+  border: 1px solid #111;
+  border-radius: 16px;
+  padding: 10px;
+}
+
+.metric-card {
+  background-color: white;
+  border: 1px solid #111;
+  border-radius: 14px;
+
+  min-height: 105px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.metric-card span {
+  font-size: 14px;
+}
+
+.metric-card strong {
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.metric-risk strong {
+  color: #dc3545;
+}
+
+
+/* ========================= */
+/* ANALISIS RISIKO */
+/* ========================= */
+
+.risk-analysis-card {
+  background-color: white;
+
+  border: 1px solid #111;
+  border-radius: 16px;
+
+  padding: 28px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 40px;
+
+  min-height: 230px;
+}
+
+.risk-analysis-section {
+  padding: 5px 20px;
+}
+
+.risk-analysis-section li {
+  margin-bottom: 8px;
+}

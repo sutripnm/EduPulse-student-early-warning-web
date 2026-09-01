@@ -33,13 +33,6 @@ function Sidebar() {
         </Link>
 
         <Link
-          to="/detail-siswa"
-          className="sidebar-link"
-        >
-          Detail Siswa
-        </Link>
-
-        <Link
           to="/pengaturan"
           className="sidebar-link"
         >
