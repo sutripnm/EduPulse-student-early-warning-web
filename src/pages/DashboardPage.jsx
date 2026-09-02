@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { getDashboardSummary } from "../services/api";
 import Sidebar from "../components/Sidebar";
 import "../styles/dashboard-page.css";
 import {
@@ -156,6 +158,25 @@ const riskFactorColors = [
 ];
 
 function DashboardPage() {
+  const [dashboardData, setDashboardData] = useState(null);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        const result = await getDashboardSummary(2023);
+
+        console.log("Dashboard API:", result);
+
+        setDashboardData(result.data);
+      } catch (error) {
+        console.error("Gagal mengambil dashboard:", error);
+      }
+    };
+
+    fetchDashboard();
+  }, []);
+
+
   return (
     <main className="dashboard-page d-flex">
 
@@ -212,7 +233,7 @@ function DashboardPage() {
                     </p>
 
                     <h3 className="fw-bold mb-1">
-                      300
+                      {dashboardData ? dashboardData.summary.total_siswa : "..."}
                     </h3>
 
                     <small className="text-success">

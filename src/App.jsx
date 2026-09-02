@@ -29,7 +29,7 @@ function App() {
         />
 
         <Route
-          path="/student-list"
+          path="/daftar-siswa"
           element={<StudentListPage />}
         />
 

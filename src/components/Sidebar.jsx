@@ -26,7 +26,7 @@ function Sidebar() {
         </Link>
 
         <Link
-          to="/student-list"
+          to="/daftar-siswa"
           className="sidebar-link"
         >
           Daftar Siswa
