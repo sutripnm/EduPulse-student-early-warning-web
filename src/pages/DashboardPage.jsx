@@ -24,87 +24,12 @@ import {
   FiCheckCircle,
 } from "react-icons/fi";
 
-// =============================================================
-// Data Dummy for Charts and KPIs
-// =============================================================
-const performanceData = [
-  { month: "Jan", performance: 72, attendance: 85 },
-  { month: "Feb", performance: 74, attendance: 87 },
-  { month: "Mar", performance: 76, attendance: 84 },
-  { month: "Apr", performance: 75, attendance: 88 },
-  { month: "May", performance: 79, attendance: 90 },
-  { month: "Jun", performance: 82, attendance: 92 },
-];
-
-// ==============================================================
-// Data Dummy for Risk Distribution
-// ==============================================================
-
-const riskData = [
-  {
-    name: "Rendah",
-    value: 80,
-  },
-  {
-    name: "Sedang",
-    value: 13,
-  },
-  {
-    name: "Tinggi",
-    value: 7,
-  },
-];
 const riskColors = {
   Rendah: "#22a06b",
   Sedang: "#f5b82e",
   Tinggi: "#dc3545",
 };
 
-// ==============================================================
-// Data Dummy for Top 5 Students Needing Intervention
-// ==============================================================
-const topRiskStudents = [
-  {
-    id: 1,
-    name: "Ahmad Rizky",
-    className: "XI IPA 1",
-    score: 58,
-    attendance: 62,
-    risk: "Tinggi",
-  },
-  {
-    id: 2,
-    name: "Siti Aisyah",
-    className: "XI IPA 2",
-    score: 61,
-    attendance: 68,
-    risk: "Tinggi",
-  },
-  {
-    id: 3,
-    name: "Budi Santoso",
-    className: "XII IPA 1",
-    score: 64,
-    attendance: 71,
-    risk: "Sedang",
-  },
-  {
-    id: 4,
-    name: "Citra Putri",
-    className: "X IPA 2",
-    score: 67,
-    attendance: 74,
-    risk: "Sedang",
-  },
-  {
-    id: 5,
-    name: "Dina Lestari",
-    className: "XI IPS 1",
-    score: 69,
-    attendance: 76,
-    risk: "Sedang",
-  },
-];
 
 // ==============================================================
 // Data School Analytics Section
@@ -157,8 +82,35 @@ const riskFactorColors = [
   "#22a06b",
 ];
 
+
+
+
 function DashboardPage() {
   const [dashboardData, setDashboardData] = useState(null);
+
+  const riskData = [
+  {
+    name: "Rendah",
+    value: dashboardData?.proporsi_risiko?.rendah?.percentage || 0,
+  },
+  {
+    name: "Sedang",
+    value: dashboardData?.proporsi_risiko?.sedang?.percentage || 0,
+  },
+  {
+    name: "Tinggi",
+    value: dashboardData?.proporsi_risiko?.tinggi?.percentage || 0,
+  },
+];
+
+  const topRiskStudents = dashboardData?.top_intervensi || [];
+
+  const performanceData = (dashboardData?.trend_performa || []).map((item) => ({
+    month: item.label,
+    performance: item.rata_rata_nilai,
+    attendance: item.rata_rata_presensi,
+  }));
+
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -167,7 +119,9 @@ function DashboardPage() {
 
         console.log("Dashboard API:", result);
 
-        setDashboardData(result.data);
+        if (result.success) {
+          setDashboardData(result.data);
+        }
       } catch (error) {
         console.error("Gagal mengambil dashboard:", error);
       }
@@ -232,9 +186,9 @@ function DashboardPage() {
                       Total Siswa
                     </p>
 
-                    <h3 className="fw-bold mb-1">
-                      {dashboardData ? dashboardData.summary.total_siswa : "..."}
-                    </h3>
+                  <h3 className="fw-bold mb-1">
+                    {dashboardData ? dashboardData.summary.total_siswa : "..."}
+                  </h3>
 
                     <small className="text-success">
                       ↑ 8.2% dari tahun lalu
@@ -358,7 +312,7 @@ function DashboardPage() {
 
           <div className="chart-container">
             <ResponsiveContainer width="100%" height={220}>
-              <LineChart data={performanceData}>
+              <LineChart data={dashboardData?.trend_performa || []}>
 
                 <CartesianGrid strokeDasharray="3 3" />
 
@@ -369,19 +323,11 @@ function DashboardPage() {
                 <Tooltip />
 
                 <Line
-                  type="monotone"
-                  dataKey="performance"
-                  stroke="#6840d9"
-                  strokeWidth={3}
-                  dot={false}
+                  dataKey="rata_rata_nilai"
                 />
 
                 <Line
-                  type="monotone"
-                  dataKey="attendance"
-                  stroke="#22a06b"
-                  strokeWidth={3}
-                  dot={false}
+                  dataKey="rata_rata_presensi"
                 />
 
               </LineChart>
@@ -426,17 +372,13 @@ function DashboardPage() {
                   outerRadius={80}
                   paddingAngle={3}
                 >
-                  {riskData.map((entry) => (
+                  {riskData.map((entry, index) => (
                     <Cell
-                      key={entry.name}
+                      key={`cell-${index}`}
                       fill={riskColors[entry.name]}
                     />
                   ))}
                 </Pie>
-
-                <Tooltip />
-
-                <Legend />
 
               </PieChart>
             </ResponsiveContainer>
@@ -476,35 +418,35 @@ function DashboardPage() {
 
             <tbody>
               {topRiskStudents.map((student) => (
-                <tr key={student.id}>
+                <tr key={student.nisn}>
 
                   <td>
                     <span className="fw-semibold">
-                      {student.name}
+                      {student.nama}
                     </span>
                   </td>
 
                   <td>
-                    {student.className}
+                    {student.kelas}
                   </td>
 
                   <td>
-                    {student.score}
+                    {student.nilai}
                   </td>
 
                   <td>
-                    {student.attendance}%
+                    {student.kehadiran}%
                   </td>
 
                   <td>
                     <span
                       className={
-                        student.risk === "Tinggi"
+                        student.status_risk === "Tinggi"
                           ? "badge text-bg-danger"
                           : "badge text-bg-warning"
                       }
                     >
-                      {student.risk}
+                      {student.status_risk}
                     </span>
                   </td>
 

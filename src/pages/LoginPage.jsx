@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assets/logo purple.png";
 import "../styles/login-page.css";
 import api from "../services/api";
 
 function LoginPage() {
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,7 +24,15 @@ const handleSubmit = async (event) => {
 
     console.log("=== LOGIN SUCCESS ===");
     console.log("STATUS:", response.status);
-    console.log("DATA:", response.data);
+    console.log(
+        "LOGIN DATA JSON:",
+        JSON.stringify(response.data.data, null, 2)
+      );
+
+    localStorage.setItem("accessToken", response.data.data.access_token);
+    localStorage.setItem("refreshToken", response.data.data.refresh_token);
+
+    navigate("/dashboard");
 
   } catch (error) {
     console.log("=== LOGIN ERROR ===");

@@ -2,7 +2,24 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    "https://9c00-2402-8780-1018-1ae8-d4f5-24d2-a607-cbad.ngrok-free.app/api",
+    "https://bd66-2402-8780-1018-1ae8-d539-418c-f41e-b4b0.ngrok-free.app/api",
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+
+  console.log("REQUEST:", config.url);
+  console.log("TOKEN:", token ? "ADA" : "TIDAK ADA");
+  console.log("TOKEN TYPE:", typeof token);
+  console.log("TOKEN LENGTH:", token?.length);
+
+  if (token && !config.url.includes("/auth/login/")) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  config.headers["ngrok-skip-browser-warning"] = "true";
+
+  return config;
 });
 
 export const getDashboardSummary = async (angkatan) => {
