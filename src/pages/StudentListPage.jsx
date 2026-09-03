@@ -1,94 +1,61 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import "../styles/student-list-page.css";
+import { getStudents } from "../services/api";
 
-const studentsData = [
-  {
-    id: 1,
-    nis: "2023001",
-    name: "Ahmad Rizky",
-    className: "X IPA 1",
-    gender: "Laki-laki",
-    attendance: 62,
-    score: 58,
-    risk: "Tinggi",
-  },
-  {
-    id: 2,
-    nis: "2023002",
-    name: "Siti Aisyah",
-    className: "X IPA 2",
-    gender: "Perempuan",
-    attendance: 68,
-    score: 61,
-    risk: "Tinggi",
-  },
-  {
-    id: 3,
-    nis: "2023003",
-    name: "Budi Santoso",
-    className: "XI IPA 1",
-    gender: "Laki-laki",
-    attendance: 71,
-    score: 64,
-    risk: "Sedang",
-  },
-  {
-    id: 4,
-    nis: "2023004",
-    name: "Citra Putri",
-    className: "XI IPA 2",
-    gender: "Perempuan",
-    attendance: 74,
-    score: 67,
-    risk: "Sedang",
-  },
-  {
-    id: 5,
-    nis: "2023005",
-    name: "Dina Lestari",
-    className: "XII IPA 1",
-    gender: "Perempuan",
-    attendance: 88,
-    score: 82,
-    risk: "Rendah",
-  },
-  {
-    id: 6,
-    nis: "2023006",
-    name: "Fajar Maulana",
-    className: "XII IPS 1",
-    gender: "Laki-laki",
-    attendance: 91,
-    score: 86,
-    risk: "Rendah",
-  },
-];
 
 function StudentListPage() {
-const [search, setSearch] = useState("");
-const [classFilter, setClassFilter] = useState("Semua");
-const [riskFilter, setRiskFilter] = useState("Semua");
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-const filteredStudents = studentsData.filter((student) => {
+  const [search, setSearch] = useState("");
+  const [classFilter, setClassFilter] = useState("Semua");
+  const [riskFilter, setRiskFilter] = useState("Semua");
+
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const result = await getStudents();
+
+        console.log("Students API:", result);
+        console.log("HASIL RESULTS:", result.results);
+
+        setStudents(result.results);
+      } catch (error) {
+        console.error("STATUS:", error.response?.status);
+        console.error("DATA:", error.response?.data);
+        console.error("HEADERS:", error.response?.headers);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  fetchStudents();
+}, []);
+
+
+const filteredStudents = students.filter((student) => {
   const matchesSearch =
-    student.name.toLowerCase().includes(search.toLowerCase()) ||
-    student.nis.includes(search);
+    student.nama.toLowerCase().includes(search.toLowerCase()) ||
+    student.nisn.includes(search);
 
   const matchesClass =
     classFilter === "Semua" ||
-    student.className === classFilter;
+    student.kelas?.nama_kelas === classFilter;
 
   const matchesRisk =
     riskFilter === "Semua" ||
-    student.risk === riskFilter;
+    student.status_risk === riskFilter;
 
   return matchesSearch && matchesClass && matchesRisk;
 });
 
-const riskStudents = studentsData.filter(
-  (student) => student.risk === "Tinggi"
+const riskStudents = students.filter(
+  (student) => student.status_risk === "HIGH"
 );
 
 return (
@@ -225,21 +192,21 @@ return (
                   }
                 >
 
-                  <option value="Semua">
-                    Semua Risiko
-                  </option>
+                <option value="Semua">
+                  Semua Risiko
+                </option>
 
-                  <option value="Tinggi">
-                    Tinggi
-                  </option>
+                <option value="HIGH">
+                  Tinggi
+                </option>
 
-                  <option value="Sedang">
-                    Sedang
-                  </option>
+                <option value="MEDIUM">
+                  Sedang
+                </option>
 
-                  <option value="Rendah">
-                    Rendah
-                  </option>
+                <option value="LOW">
+                  Rendah
+                </option>
 
                 </select>
 
@@ -293,7 +260,7 @@ return (
                 <thead>
 
                   <tr>
-                    <th>NIS</th>
+                    <th>NISN</th>
                     <th>Nama Siswa</th>
                     <th>Kelas</th>
                     <th>Gender</th>
@@ -313,17 +280,17 @@ return (
                     <tr key={student.id}>
 
                       <td>
-                        {student.nis}
+                        {student.nisn}
                       </td>
 
                       <td>
                         <span className="fw-semibold">
-                          {student.name}
+                          {student.nama}
                         </span>
                       </td>
 
                       <td>
-                        {student.className}
+                        {student.kelas?.nama_kelas}
                       </td>
 
                       <td>
@@ -335,23 +302,27 @@ return (
                       </td>
 
                       <td>
-                        {student.score}
+                        {student.nilai}
                       </td>
 
                       <td>
 
-                        <span
-                          className={`badge risk-badge risk-${student.risk.toLowerCase()}`}
-                        >
-                          {student.risk}
-                        </span>
+                      <span
+                        className={`badge risk-badge risk-${student.status_risk.toLowerCase()}`}
+                      >
+                        {student.status_risk === "HIGH"
+                          ? "Tinggi"
+                          : student.status_risk === "MEDIUM"
+                          ? "Sedang"
+                          : "Rendah"}
+                      </span>
 
                       </td>
 
                       <td>
 
                         <Link
-                          to={`/detail-siswa/${student.id}`}
+                          to={`/detail-siswa/${student.nisn}`}
                           className="btn btn-sm btn-outline-dark"
                         >
                           Detail
@@ -402,7 +373,7 @@ return (
                 <thead>
 
                   <tr>
-                    <th>NIS</th>
+                    <th>NISN</th>
                     <th>Nama</th>
                     <th>Kelas</th>
                     <th>Presensi</th>
@@ -416,28 +387,28 @@ return (
 
                   {riskStudents.map((student) => (
 
-                    <tr key={student.id}>
+                    <tr key={student.nisn}>
 
                       <td>
-                        {student.nis}
+                        {student.nisn}
                       </td>
 
                       <td>
                         <span className="fw-semibold">
-                          {student.name}
+                          {student.nama}
                         </span>
                       </td>
 
                       <td>
-                        {student.className}
+                        {student.kelas?.nama_kelas}
                       </td>
 
                       <td>
-                        {student.attendance}%
+                        {student.presensi}%
                       </td>
 
                       <td>
-                        {student.score}
+                        {student.nilai}
                       </td>
 
                     </tr>

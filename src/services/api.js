@@ -29,6 +29,40 @@ export const getDashboardSummary = async (angkatan) => {
     },
   });
 
+  console.log("Dashboard API:", response);
+  console.log("Dashboard DATA:", response.data);
+  console.log("SUMMARY:", response.data?.summary);
+
+  return response.data;
+};
+
+export const getSchoolAnalytics = async ({
+  angkatan,
+  kelas_id,
+  mapel_id,
+}) => {
+  const params = {
+    angkatan,
+  };
+
+  if (kelas_id) {
+    params.kelas_id = kelas_id;
+  }
+
+  if (mapel_id) {
+    params.mapel_id = mapel_id;
+  }
+
+  const response = await api.get("/v1/dashboard/analytics/", {
+    params,
+  });
+
+  return response.data;
+};
+
+export const getStudents = async () => {
+  const response = await api.get("/v1/academic/siswa/");
+
   return response.data;
 };
 

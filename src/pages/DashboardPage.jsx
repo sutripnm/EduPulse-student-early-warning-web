@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
-import { getDashboardSummary } from "../services/api";
+import { Link } from "react-router-dom";
+import {
+  getDashboardSummary,
+  getSchoolAnalytics,
+} from "../services/api";
 import Sidebar from "../components/Sidebar";
 import "../styles/dashboard-page.css";
 import {
@@ -32,48 +36,6 @@ const riskColors = {
 
 
 // ==============================================================
-// Data School Analytics Section
-// ==============================================================
-const riskByClassData = [
-  {
-    className: "X",
-    low: 70,
-    medium: 15,
-    high: 5,
-  },
-  {
-    className: "XI",
-    low: 65,
-    medium: 20,
-    high: 10,
-  },
-  {
-    className: "XII",
-    low: 75,
-    medium: 12,
-    high: 8,
-  },
-];
-
-// ==============================================================
-// Data dummy risk factors for ML model
-// ==============================================================
-const riskFactorData = [
-  {
-    name: "Presensi Rendah",
-    value: 45,
-  },
-  {
-    name: "Nilai Ujian < KKM",
-    value: 35,
-  },
-  {
-    name: "Nilai Tugas",
-    value: 20,
-  },
-];
-
-// ==============================================================
 // Color mapping for risk factors
 // ==============================================================
 const riskFactorColors = [
@@ -82,11 +44,68 @@ const riskFactorColors = [
   "#22a06b",
 ];
 
+const topHighRiskClasses = [
+  {
+    className: "XI IPA 1",
+    count: 8,
+  },
+  {
+    className: "XII IPS 1",
+    count: 6,
+  },
+  {
+    className: "X IPA 2",
+    count: 5,
+  },
+  {
+    className: "XI IPA 2",
+    count: 4,
+  },
+  {
+    className: "XII IPA 1",
+    count: 3,
+  },
+];
+
+const topLowRiskClasses = [
+  {
+    className: "XII IPA 1",
+    count: 30,
+  },
+  {
+    className: "XII IPS 1",
+    count: 28,
+  },
+  {
+    className: "XI IPA 1",
+    count: 25,
+  },
+  {
+    className: "X IPA 1",
+    count: 24,
+  },
+  {
+    className: "XI IPS 1",
+    count: 22,
+  },
+];
+
 
 
 
 function DashboardPage() {
   const [dashboardData, setDashboardData] = useState(null);
+  const [schoolAnalyticsData, setSchoolAnalyticsData] = useState(null);
+
+  const riskByClassData =
+  schoolAnalyticsData?.perbandingan_risiko_kelas || [];
+
+  const riskFactorData =
+  schoolAnalyticsData?.faktor_utama_risiko?.map((item) => ({
+    name: item.faktor,
+    value: item.percentage,
+  })) || [];
+
 
   const riskData = [
   {
@@ -105,23 +124,28 @@ function DashboardPage() {
 
   const topRiskStudents = dashboardData?.top_intervensi || [];
 
-  const performanceData = (dashboardData?.trend_performa || []).map((item) => ({
-    month: item.label,
-    performance: item.rata_rata_nilai,
-    attendance: item.rata_rata_presensi,
-  }));
-
 
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const result = await getDashboardSummary(2023);
+        const result = await getDashboardSummary();
 
         console.log("Dashboard API:", result);
 
         if (result.success) {
           setDashboardData(result.data);
         }
+
+        const analyticsResult = await getSchoolAnalytics({
+          angkatan: dashboardData?.summary?.angkatan || "",
+        });
+
+        console.log("School Analytics API:", analyticsResult);
+
+        if (analyticsResult.success) {
+          setSchoolAnalyticsData(analyticsResult.data);
+        }
+
       } catch (error) {
         console.error("Gagal mengambil dashboard:", error);
       }
@@ -129,6 +153,7 @@ function DashboardPage() {
 
     fetchDashboard();
   }, []);
+
 
 
   return (
@@ -144,15 +169,6 @@ function DashboardPage() {
           <div>
             <h1 className="mb-2">Dashboard</h1>
 
-            <div className="d-flex gap-2">
-              <button className="btn btn-primary rounded-pill">
-                Tahun Masuk
-              </button>
-
-              <button className="btn btn-primary rounded-pill">
-                2023
-              </button>
-            </div>
           </div>
 
           <div className="d-flex align-items-center gap-2">
@@ -190,9 +206,6 @@ function DashboardPage() {
                     {dashboardData ? dashboardData.summary.total_siswa : "..."}
                   </h3>
 
-                    <small className="text-success">
-                      ↑ 8.2% dari tahun lalu
-                    </small>
                   </div>
 
                   <div className="kpi-icon">
@@ -214,11 +227,13 @@ function DashboardPage() {
                     </p>
 
                     <h3 className="fw-bold mb-1 text-danger">
-                      15
+                      {dashboardData ? dashboardData.summary.risiko_tinggi : "..."}
                     </h3>
 
                     <small className="text-danger">
-                      ↑ 3 siswa dari bulan lalu
+                      {dashboardData
+                        ? `${dashboardData.proporsi_risiko.tinggi.percentage}% dari total siswa`
+                        : "..."}
                     </small>
                   </div>
 
@@ -241,11 +256,13 @@ function DashboardPage() {
                     </p>
 
                     <h3 className="fw-bold mb-1 text-warning">
-                      25
+                      {dashboardData ? dashboardData.summary.risiko_sedang : "..."}
                     </h3>
 
                     <small className="text-secondary">
-                      8.3% dari total siswa
+                      {dashboardData
+                        ? `${dashboardData.proporsi_risiko.sedang.percentage}% dari total siswa`
+                        : "..."}
                     </small>
                   </div>
 
@@ -268,11 +285,15 @@ function DashboardPage() {
                     </p>
 
                     <h3 className="fw-bold mb-1 text-success">
-                      260
+                      {dashboardData
+                        ? dashboardData.proporsi_risiko.rendah.count
+                        : "..."}
                     </h3>
 
                     <small className="text-success">
-                      86.7% dari total siswa
+                      {dashboardData
+                        ? `${dashboardData.proporsi_risiko.rendah.percentage}% dari total siswa`
+                        : "..."}
                     </small>
                   </div>
 
@@ -316,7 +337,7 @@ function DashboardPage() {
 
                 <CartesianGrid strokeDasharray="3 3" />
 
-                <XAxis dataKey="month" />
+                <XAxis dataKey="label" />
 
                 <YAxis />
 
@@ -474,69 +495,67 @@ function DashboardPage() {
 // Today's Summary Section / Ringkasan Hari Ini
 // ==============================================================
 */}
-  <div className="col-lg-3">
+<div className="col-lg-3">
 
-    <div className="dashboard-box today-summary h-100">
+  <div className="dashboard-box today-summary h-100">
 
-      <h6 className="mb-4">
-        Ringkasan hari ini
-      </h6>
+    <h6 className="mb-4">
+      Insight Kelas
+    </h6>
 
-      <div className="mb-4">
-        <small className="text-secondary">
-          Siswa perlu perhatian
-        </small>
+    {/* High Risk */}
+    <div className="mb-4">
 
-        <h3 className="fw-bold mt-1">
-          8 siswa
-        </h3>
-      </div>
+      <p className="fw-semibold mb-3">
+        🏫 High Risk Terbanyak
+      </p>
 
-      <div className="mb-4">
-        <small className="text-secondary">
-          Kehadiran terendah
-        </small>
+      {topHighRiskClasses.map((item, index) => (
+        <div
+          key={item.className}
+          className="d-flex justify-content-between align-items-center mb-2"
+        >
+          <span className="small">
+            {index + 1}. {item.className}
+          </span>
 
-        <h3 className="fw-bold mt-1">
-          68%
-        </h3>
-      </div>
+          <span className="small fw-semibold text-danger">
+            {item.count} siswa
+          </span>
+        </div>
+      ))}
 
-      <div className="mb-4">
-        <small className="text-secondary">
-          Siswa risiko tinggi
-        </small>
+    </div>
 
-        <h3 className="fw-bold mt-1 text-danger">
-          15
-        </h3>
-      </div>
+    <hr />
 
-      <hr />
+    {/* Low Risk */}
+    <div className="mt-4">
 
-      <div>
-        <p className="mb-2 fw-semibold">
-          Prioritas hari ini
-        </p>
+      <p className="fw-semibold mb-3">
+        ✅ Low Risk Terbanyak
+      </p>
 
-        <ul className="small ps-3 mb-0">
-          <li className="mb-2">
-            Review siswa dengan absensi di bawah 70%.
-          </li>
+      {topLowRiskClasses.map((item, index) => (
+        <div
+          key={item.className}
+          className="d-flex justify-content-between align-items-center mb-2"
+        >
+          <span className="small">
+            {index + 1}. {item.className}
+          </span>
 
-          <li className="mb-2">
-            Periksa siswa dengan nilai di bawah KKM.
-          </li>
-
-          <li>
-            Follow up siswa dengan risiko tinggi.
-          </li>
-        </ul>
-      </div>
+          <span className="small fw-semibold text-success">
+            {item.count} siswa
+          </span>
+        </div>
+      ))}
 
     </div>
 
   </div>
+
+</div>
 
 </section>
 
@@ -552,9 +571,6 @@ function DashboardPage() {
     </h5>
 
     <div className="d-flex gap-2 mb-3">
-      <button className="btn btn-primary rounded-pill">
-        Tahun Masuk
-      </button>
 
       <button className="btn btn-primary rounded-pill">
         Filter Kelas
@@ -582,37 +598,23 @@ function DashboardPage() {
 
             <ResponsiveContainer width="100%" height={260}>
 
-              <BarChart data={riskByClassData}>
+            <BarChart data={riskByClassData}>
 
-                <CartesianGrid strokeDasharray="3 3" />
+              <CartesianGrid strokeDasharray="3 3" />
 
-                <XAxis dataKey="className" />
+              <XAxis dataKey="nama_kelas" />
 
-                <YAxis />
+              <YAxis />
 
-                <Tooltip />
+              <Tooltip />
 
-                <Legend />
+              <Bar
+                dataKey="jumlah_high_risk"
+                name="Risiko Tinggi"
+                fill="#dc3545"
+              />
 
-                <Bar
-                  dataKey="low"
-                  name="Rendah"
-                  fill="#22a06b"
-                />
-
-                <Bar
-                  dataKey="medium"
-                  name="Sedang"
-                  fill="#f5b82e"
-                />
-
-                <Bar
-                  dataKey="high"
-                  name="Tinggi"
-                  fill="#dc3545"
-                />
-
-              </BarChart>
+            </BarChart>
 
             </ResponsiveContainer>
 
