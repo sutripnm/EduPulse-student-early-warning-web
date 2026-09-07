@@ -66,4 +66,10 @@ export const getStudents = async () => {
   return response.data;
 };
 
+export const getStudentByNisn = async (nisn) => {
+  const response = await api.get(`/v1/academic/siswa/${nisn}/`);
+
+  return response.data;
+};
+
 export default api;

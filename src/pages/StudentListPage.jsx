@@ -277,7 +277,7 @@ return (
 
                   {filteredStudents.map((student) => (
 
-                    <tr key={student.id}>
+                    <tr key={student.nisn}>
 
                       <td>
                         {student.nisn}
@@ -298,7 +298,7 @@ return (
                       </td>
 
                       <td>
-                        {student.attendance}%
+                        {student.presensi}%
                       </td>
 
                       <td>
@@ -306,17 +306,25 @@ return (
                       </td>
 
                       <td>
-
-                      <span
-                        className={`badge risk-badge risk-${student.status_risk.toLowerCase()}`}
-                      >
-                        {student.status_risk === "HIGH"
-                          ? "Tinggi"
-                          : student.status_risk === "MEDIUM"
-                          ? "Sedang"
-                          : "Rendah"}
-                      </span>
-
+                        <span
+                          className={
+                            student.status_risk === "HIGH"
+                              ? "badge text-bg-danger"
+                              : student.status_risk === "MEDIUM"
+                              ? "badge text-bg-warning"
+                              : student.status_risk === "LOW"
+                              ? "badge text-bg-success"
+                              : "badge text-bg-secondary"
+                          }
+                        >
+                          {student.status_risk === "HIGH"
+                            ? "Tinggi"
+                            : student.status_risk === "MEDIUM"
+                            ? "Sedang"
+                            : student.status_risk === "LOW"
+                            ? "Rendah"
+                            : "-"}
+                        </span>
                       </td>
 
                       <td>
@@ -356,7 +364,7 @@ return (
             <div className="mb-3">
 
               <h5 className="fw-bold mb-1">
-                Daftar Siswa Berisiko
+                Daftar Siswa Berisiko Tinggi
               </h5>
 
               <small className="text-secondary">
@@ -370,52 +378,42 @@ return (
 
               <table className="table align-middle mb-0">
 
-                <thead>
-
-                  <tr>
-                    <th>NISN</th>
-                    <th>Nama</th>
-                    <th>Kelas</th>
-                    <th>Presensi</th>
-                    <th>Nilai</th>
-                  </tr>
-
-                </thead>
+            <thead>
+              <tr>
+                <th>Nama</th>
+                <th>Kelas</th>
+                <th>Status Risiko</th>
+              </tr>
+            </thead>
 
 
-                <tbody>
+<tbody>
 
-                  {riskStudents.map((student) => (
+  {riskStudents.map((student) => (
 
-                    <tr key={student.nisn}>
+    <tr key={student.nisn}>
 
-                      <td>
-                        {student.nisn}
-                      </td>
+      <td>
+        <span className="fw-semibold">
+          {student.nama}
+        </span>
+      </td>
 
-                      <td>
-                        <span className="fw-semibold">
-                          {student.nama}
-                        </span>
-                      </td>
+      <td>
+        {student.kelas?.nama_kelas}
+      </td>
 
-                      <td>
-                        {student.kelas?.nama_kelas}
-                      </td>
+      <td>
+        <span className="badge text-bg-danger">
+          Tinggi
+        </span>
+      </td>
 
-                      <td>
-                        {student.presensi}%
-                      </td>
+    </tr>
 
-                      <td>
-                        {student.nilai}
-                      </td>
+  ))}
 
-                    </tr>
-
-                  ))}
-
-                </tbody>
+</tbody>
 
               </table>
 

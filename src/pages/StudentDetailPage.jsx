@@ -1,61 +1,68 @@
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { getStudentByNisn } from "../services/api";
 import "../styles/student-detail-page.css";
-
-const studentData = {
-  1: {
-    nis: "2023001",
-    name: "Ahmad Rizky",
-    className: "X IPA 1",
-    gender: "Laki-laki",
-
-    attendance: 68,
-    score: 60.02,
-    taskScore: 50,
-    studyHour: 5,
-
-    risk: "Tinggi",
-
-    riskFactors: [
-      "Absensi di bawah batas 70%.",
-      "Nilai Matematika & Fisika < KKM.",
-    ],
-
-    recommendations: [
-      "Terbitkan Surat Pemberitahuan Wali.",
-      "Jadwalkan konseling individu (BK).",
-    ],
-  },
-
-  2: {
-    nis: "2023002",
-    name: "Siti Aisyah",
-    className: "X IPA 2",
-    gender: "Perempuan",
-
-    attendance: 68,
-    score: 61,
-    taskScore: 55,
-    studyHour: 6,
-
-    risk: "Tinggi",
-
-    riskFactors: [
-      "Absensi di bawah batas 70%.",
-      "Nilai tugas masih rendah.",
-    ],
-
-    recommendations: [
-      "Jadwalkan konseling individu (BK).",
-      "Berikan pendampingan belajar.",
-    ],
-  },
-};
 
 function StudentDetailPage() {
   const { id } = useParams();
 
-  const student = studentData[id];
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    const fetchStudent = async () => {
+      try {
+        const result = await getStudentByNisn(id);
+
+        console.log("Student Detail API:", result);
+
+        setStudent(result.data || result);
+      } catch (error) {
+        console.error("Gagal mengambil detail siswa:", error);
+        console.error("STATUS:", error.response?.status);
+        console.error("DATA:", error.response?.data);
+
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStudent();
+  }, [id]);
+
+  if (loading) {
+    return (
+      <main className="student-detail-page d-flex">
+        <Sidebar />
+
+        <section className="student-detail-main flex-grow-1 p-4">
+          <p>Loading...</p>
+        </section>
+      </main>
+    );
+  }
+
+  if (error || !student) {
+    return (
+      <main className="student-detail-page d-flex">
+        <Sidebar />
+
+        <section className="student-detail-main flex-grow-1 p-4">
+          <p>Gagal mengambil data siswa.</p>
+
+          <Link
+            to="/student-list"
+            className="btn btn-outline-dark"
+          >
+            ← Kembali
+          </Link>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="student-detail-page d-flex">
@@ -68,13 +75,15 @@ function StudentDetailPage() {
         <div className="d-flex justify-content-between align-items-center mb-4">
 
           <div>
+
             <h1 className="h4 fw-bold mb-1">
-              Detail Profil Siswa & Analisis Risiko
+              Detail Profil Siswa
             </h1>
 
             <p className="text-secondary mb-0">
-              Informasi siswa dan hasil analisis risiko
+              Informasi siswa dan status risiko
             </p>
+
           </div>
 
           <Link
@@ -87,34 +96,50 @@ function StudentDetailPage() {
         </div>
 
 
-        {/* ========================= */}
-        {/* PROFIL SISWA */}
-        {/* ========================= */}
-
+        {/* =========================
+            PROFIL SISWA
+        ========================== */}
         <section className="student-profile-info mb-4">
 
           <div className="student-info-item">
-            Nama Siswa
+            <small>Nama Siswa</small>
+            <strong>{student.nama}</strong>
           </div>
 
           <div className="student-info-item">
-            NIS
+            <small>NISN</small>
+            <strong>{student.nisn}</strong>
           </div>
 
           <div className="student-info-item">
-            Kelas
+            <small>Kelas</small>
+            <strong>
+              {student.kelas?.nama_kelas || "-"}
+            </strong>
+          </div>
+
+          <div className="student-info-item">
+            <small>Gender</small>
+            <strong>
+              {student.gender || "-"}
+            </strong>
+          </div>
+
+          <div className="student-info-item">
+            <small>Angkatan</small>
+            <strong>
+              {student.angkatan || "-"}
+            </strong>
           </div>
 
         </section>
 
 
-        {/* ========================= */}
-        {/* METRIK SISWA */}
-        {/* ========================= */}
+        {/* =========================
+            METRIK SISWA
+        ========================== */}
+        <section className="student-metrics mb-4">
 
-        <section className="student-metrics mb-3">
-
-          {/* Kehadiran */}
           <div className="metric-card">
 
             <span>
@@ -122,63 +147,39 @@ function StudentDetailPage() {
             </span>
 
             <strong>
-              {student.attendance}%
+              {student.presensi ?? 0}%
             </strong>
 
           </div>
 
 
-          {/* Rata-rata Nilai */}
           <div className="metric-card">
 
             <span>
-              Rata-rata Nilai
+              Nilai
             </span>
 
             <strong>
-              {student.score}
+              {student.nilai ?? "-"}
             </strong>
 
           </div>
 
 
-          {/* Nilai Tugas */}
-          <div className="metric-card">
-
-            <span>
-              Rata-rata Nilai Tugas
-            </span>
-
-            <strong>
-              {student.taskScore}
-            </strong>
-
-          </div>
-
-
-          {/* Study Hour */}
-          <div className="metric-card">
-
-            <span>
-              Study Hour
-            </span>
-
-            <strong>
-              {student.studyHour} Jam
-            </strong>
-
-          </div>
-
-
-          {/* Risk */}
           <div className="metric-card metric-risk">
 
             <span>
-              Result Status Risk
+              Status Risiko
             </span>
 
             <strong>
-              {student.risk}
+              {student.status_risk === "HIGH"
+                ? "Tinggi"
+                : student.status_risk === "MEDIUM"
+                ? "Sedang"
+                : student.status_risk === "LOW"
+                ? "Rendah"
+                : "-"}
             </strong>
 
           </div>
@@ -186,59 +187,38 @@ function StudentDetailPage() {
         </section>
 
 
-        {/* ========================= */}
-        {/* INDIKATOR */}
-        {/* ========================= */}
-
+        {/* =========================
+            STATUS RISIKO
+        ========================== */}
         <p className="fw-semibold mb-2">
-          📊 Indikator Metrik Utama Siswa
+          📊 Analisis Risiko Siswa
         </p>
-
 
         <section className="risk-analysis-card">
 
-          {/* Faktor Risiko */}
           <div className="risk-analysis-section">
 
             <h6 className="fw-semibold">
-              🚨 Tingkat Risiko: {student.risk} (High Risk)
+              🚨 Status Risiko
             </h6>
 
-            <h6 className="fw-semibold mt-3">
-              📌 Faktor Penentu ML:
-            </h6>
+            <p className="mb-0">
 
-            <ol className="mb-0">
+              Siswa saat ini memiliki status risiko{" "}
 
-              {student.riskFactors.map((factor, index) => (
-                <li key={index}>
-                  {factor}
-                </li>
-              ))}
+              <strong>
 
-            </ol>
+                {student.status_risk === "HIGH"
+                  ? "Tinggi"
+                  : student.status_risk === "MEDIUM"
+                  ? "Sedang"
+                  : student.status_risk === "LOW"
+                  ? "Rendah"
+                  : "-"}
 
-          </div>
+              </strong>.
 
-
-          {/* Rekomendasi */}
-          <div className="risk-analysis-section">
-
-            <h6 className="fw-semibold">
-              💡 Rekomendasi Tindakan
-            </h6>
-
-            <ul className="mb-0">
-
-              {student.recommendations.map(
-                (recommendation, index) => (
-                  <li key={index}>
-                    {recommendation}
-                  </li>
-                )
-              )}
-
-            </ul>
+            </p>
 
           </div>
 

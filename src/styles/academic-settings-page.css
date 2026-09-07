@@ -35,3 +35,36 @@
   background-color: #5732bd;
   border-color: #5732bd;
 }
+
+.academic-form-box {
+  background-color: #f5f2ff;
+  border: 1px solid #a995f0;
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.academic-settings-card {
+  background-color: #ffffff;
+  border: 1px solid #222;
+  border-radius: 20px;
+  padding: 28px;
+}
+
+.academic-settings-card .table th {
+  font-weight: 600;
+}
+
+.academic-settings-card .table td,
+.academic-settings-card .table th {
+  padding: 14px 12px;
+}
+
+.academic-settings-card .btn-primary {
+  background-color: #6840d9;
+  border-color: #6840d9;
+}
+
+.academic-settings-card .btn-primary:hover {
+  background-color: #5732bd;
+  border-color: #5732bd;
+}
