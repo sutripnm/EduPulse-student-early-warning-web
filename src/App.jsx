@@ -7,6 +7,7 @@ import StudentDetailPage from "./pages/StudentDetailPage";
 import AddStudentPage from "./pages/AddStudentPage";
 import InputNilaiAbsensiPage from "./pages/InputNilaiAbsensiPage";
 import SettingsPage from "./pages/SettingsPage";
+import AcademicSettingsPage from "./pages/AcademicSettingsPage";
 
 function App() {
   return (
@@ -51,6 +52,11 @@ function App() {
         <Route
           path="/pengaturan"
           element={<SettingsPage />}
+        />
+
+        <Route
+          path="/pengaturan-akademik"
+          element={<AcademicSettingsPage />}
         />
 
       </Routes>

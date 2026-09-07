@@ -1,69 +1,80 @@
 import { useState } from "react";
 import Sidebar from "../components/Sidebar";
 import "../styles/settings-page.css";
+import { Link } from "react-router-dom";
 
 function SettingsPage() {
+  const [showSubjectForm, setShowSubjectForm] = useState(false);
+  const [showClassForm, setShowClassForm] = useState(false);
+
+  const [subjectName, setSubjectName] = useState("");
+  const [className, setClassName] = useState("");
+
+  // =========================
+  // PROFIL PENGGUNA
+  // =========================
   const [profile, setProfile] = useState({
     name: "Agus Guru",
     email: "agus@sekolah.sch.id",
     role: "Guru",
   });
 
+  // =========================
+  // PENGATURAN SEKOLAH
+  // =========================
   const [school, setSchool] = useState({
     name: "SMA EduPulse",
     academicYear: "2026/2027",
+    subject: "Matematika",
+    className: "XI IPA 1",
+    semester: "Ganjil",
   });
 
+  // =========================
+  // PENGATURAN RISIKO
+  // =========================
   const [risk, setRisk] = useState({
-    attendanceLimit: 70,
-    minimumScore: 75,
+    attendance: 70,
+    studyTime: 5,
+    quiz1: 70,
+    assessment: 70,
+    quiz2: 70,
   });
 
-  const [notification, setNotification] = useState(true);
+  // =========================
+  // TAMPILAN
+  // =========================
+  const [theme, setTheme] = useState("light");
 
-  const handleProfileChange = (event) => {
-    const { name, value } = event.target;
-
-    setProfile({
-      ...profile,
-      [name]: value,
-    });
-  };
-
+  // =========================
+  // HANDLER
+  // ==========================
   const handleSchoolChange = (event) => {
     const { name, value } = event.target;
 
-    setSchool({
-      ...school,
+    setSchool((prev) => ({
+      ...prev,
       [name]: value,
-    });
+    }));
   };
 
   const handleRiskChange = (event) => {
     const { name, value } = event.target;
 
-    setRisk({
-      ...risk,
+    setRisk((prev) => ({
+      ...prev,
       [name]: value,
-    });
-  };
-
-  const handleProfileSubmit = (event) => {
-    event.preventDefault();
-
-    console.log("Profil:", profile);
+    }));
   };
 
   const handleSchoolSubmit = (event) => {
     event.preventDefault();
-
     console.log("Sekolah:", school);
   };
 
   const handleRiskSubmit = (event) => {
     event.preventDefault();
-
-    console.log("Pengaturan risiko:", risk);
+    console.log("Risiko:", risk);
   };
 
   return (
@@ -73,7 +84,9 @@ function SettingsPage() {
 
       <section className="settings-main flex-grow-1 p-4">
 
-        {/* Header */}
+        {/* =========================
+            HEADER
+        ========================== */}
         <header className="mb-4">
 
           <p className="text-secondary mb-1">
@@ -85,7 +98,7 @@ function SettingsPage() {
           </h1>
 
           <p className="text-secondary mb-0">
-            Kelola akun dan pengaturan sistem EduPulse.
+            Kelola akun, sekolah, risiko, dan tampilan EduPulse.
           </p>
 
         </header>
@@ -93,30 +106,26 @@ function SettingsPage() {
 
         <div className="settings-container">
 
-
-          {/* ========================= */}
-          {/* PROFIL PENGGUNA */}
-          {/* ========================= */}
-
+          {/* =========================
+              1. PROFIL PENGGUNA
+          ========================== */}
           <section className="settings-card mb-4">
 
-            <div className="settings-card-header">
-              <div>
-                <h5 className="fw-bold mb-1">
-                  👤 Profil Pengguna
-                </h5>
+            <div className="mb-4">
 
-                <p className="text-secondary mb-0">
-                  Informasi akun pengguna.
-                </p>
-              </div>
+              <h5 className="fw-bold mb-1">
+                👤 Profil Pengguna
+              </h5>
+
+              <p className="text-secondary mb-0">
+                Informasi akun pengguna yang sedang login.
+              </p>
+
             </div>
-
-
-            <form onSubmit={handleProfileSubmit}>
 
               <div className="row g-3">
 
+                {/* Nama */}
                 <div className="col-md-6">
 
                   <label
@@ -129,15 +138,15 @@ function SettingsPage() {
                   <input
                     type="text"
                     id="profile-name"
-                    name="name"
                     className="form-control"
                     value={profile.name}
-                    onChange={handleProfileChange}
+                    readOnly
                   />
 
                 </div>
 
 
+                {/* Email */}
                 <div className="col-md-6">
 
                   <label
@@ -147,18 +156,18 @@ function SettingsPage() {
                     Email
                   </label>
 
-                  <input
+                 <input
                     type="email"
                     id="profile-email"
-                    name="email"
                     className="form-control"
                     value={profile.email}
-                    onChange={handleProfileChange}
+                    readOnly
                   />
 
                 </div>
 
 
+                {/* Role */}
                 <div className="col-md-6">
 
                   <label
@@ -173,30 +182,18 @@ function SettingsPage() {
                     id="profile-role"
                     className="form-control"
                     value={profile.role}
-                    disabled
+                    readOnly
                   />
 
                 </div>
 
               </div>
-
-
-              <button
-                type="submit"
-                className="btn btn-primary mt-4"
-              >
-                Simpan Profil
-              </button>
-
-            </form>
-
           </section>
 
 
-          {/* ========================= */}
-          {/* SEKOLAH */}
-          {/* ========================= */}
-
+          {/* =========================
+              2. PENGATURAN SEKOLAH
+          ========================== */}
           <section className="settings-card mb-4">
 
             <div className="mb-4">
@@ -206,76 +203,109 @@ function SettingsPage() {
               </h5>
 
               <p className="text-secondary mb-0">
-                Informasi sekolah yang digunakan dalam sistem.
+                Kelola informasi sekolah dan pengaturan akademik.
               </p>
 
             </div>
 
-
             <form onSubmit={handleSchoolSubmit}>
 
-              <div className="row g-3">
+<div className="row g-3">
 
-                <div className="col-md-6">
+  {/* Nama Sekolah */}
+  <div className="col-md-6">
 
-                  <label
-                    htmlFor="school-name"
-                    className="form-label fw-semibold"
-                  >
-                    Nama Sekolah
-                  </label>
+    <label
+      htmlFor="school-name"
+      className="form-label fw-semibold"
+    >
+      Nama Sekolah
+    </label>
 
-                  <input
-                    type="text"
-                    id="school-name"
-                    name="name"
-                    className="form-control"
-                    value={school.name}
-                    onChange={handleSchoolChange}
-                  />
+    <input
+      type="text"
+      id="school-name"
+      name="name"
+      className="form-control"
+      value={school.name}
+      onChange={handleSchoolChange}
+    />
 
-                </div>
-
-
-                <div className="col-md-6">
-
-                  <label
-                    htmlFor="academic-year"
-                    className="form-label fw-semibold"
-                  >
-                    Tahun Ajaran
-                  </label>
-
-                  <input
-                    type="text"
-                    id="academic-year"
-                    name="academicYear"
-                    className="form-control"
-                    value={school.academicYear}
-                    onChange={handleSchoolChange}
-                  />
-
-                </div>
-
-              </div>
+  </div>
 
 
-              <button
-                type="submit"
-                className="btn btn-primary mt-4"
-              >
-                Simpan Pengaturan
-              </button>
+  {/* Tahun Ajaran */}
+  <div className="col-md-6">
+
+    <label
+      htmlFor="academic-year"
+      className="form-label fw-semibold"
+    >
+      Tahun Ajaran
+    </label>
+
+    <input
+      type="text"
+      id="academic-year"
+      name="academicYear"
+      className="form-control"
+      value={school.academicYear}
+      onChange={handleSchoolChange}
+    />
+
+  </div>
+
+
+  {/* Semester */}
+  <div className="col-md-6">
+
+    <label
+      htmlFor="semester"
+      className="form-label fw-semibold"
+    >
+      Semester
+    </label>
+
+    <input
+      type="text"
+      id="semester"
+      name="semester"
+      className="form-control"
+      value={school.semester}
+      readOnly
+    />
+
+  </div>
+
+</div>
+
+
+<div className="d-flex gap-2 mt-4">
+
+  <button
+    type="submit"
+    className="btn btn-primary"
+  >
+    Simpan Pengaturan
+  </button>
+
+  <Link
+    to="/pengaturan-akademik"
+    className="btn btn-outline-dark"
+  >
+    + Kelola Data Akademik
+  </Link>
+
+</div>
 
             </form>
 
           </section>
 
 
-          {/* ========================= */}
-          {/* RISIKO */}
-          {/* ========================= */}
-
+          {/* =========================
+              3. PENGATURAN RISIKO
+          ========================== */}
           <section className="settings-card mb-4">
 
             <div className="mb-4">
@@ -285,35 +315,35 @@ function SettingsPage() {
               </h5>
 
               <p className="text-secondary mb-0">
-                Atur batas dasar yang digunakan untuk indikator risiko.
+                Atur batas indikator yang digunakan untuk analisis risiko siswa.
               </p>
 
             </div>
-
 
             <form onSubmit={handleRiskSubmit}>
 
               <div className="row g-3">
 
+                {/* Absensi */}
                 <div className="col-md-6">
 
                   <label
-                    htmlFor="attendance-limit"
+                    htmlFor="attendance"
                     className="form-label fw-semibold"
                   >
-                    Batas Minimum Kehadiran
+                    Absensi
                   </label>
 
                   <div className="input-group">
 
                     <input
                       type="number"
-                      id="attendance-limit"
-                      name="attendanceLimit"
+                      id="attendance"
+                      name="attendance"
                       className="form-control"
                       min="0"
                       max="100"
-                      value={risk.attendanceLimit}
+                      value={risk.attendance}
                       onChange={handleRiskChange}
                     />
 
@@ -326,23 +356,104 @@ function SettingsPage() {
                 </div>
 
 
+                {/* Study Time */}
                 <div className="col-md-6">
 
                   <label
-                    htmlFor="minimum-score"
+                    htmlFor="study-time"
                     className="form-label fw-semibold"
                   >
-                    KKM / Nilai Minimum
+                    Study Time
+                  </label>
+
+                  <div className="input-group">
+
+                    <input
+                      type="number"
+                      id="study-time"
+                      name="studyTime"
+                      className="form-control"
+                      min="0"
+                      step="0.5"
+                      value={risk.studyTime}
+                      onChange={handleRiskChange}
+                    />
+
+                    <span className="input-group-text">
+                      jam
+                    </span>
+
+                  </div>
+
+                </div>
+
+
+                {/* Quiz 1 */}
+                <div className="col-md-4">
+
+                  <label
+                    htmlFor="quiz-1"
+                    className="form-label fw-semibold"
+                  >
+                    Quiz 1 / Pretest
                   </label>
 
                   <input
                     type="number"
-                    id="minimum-score"
-                    name="minimumScore"
+                    id="quiz-1"
+                    name="quiz1"
                     className="form-control"
                     min="0"
                     max="100"
-                    value={risk.minimumScore}
+                    value={risk.quiz1}
+                    onChange={handleRiskChange}
+                  />
+
+                </div>
+
+
+                {/* Assessment */}
+                <div className="col-md-4">
+
+                  <label
+                    htmlFor="assessment"
+                    className="form-label fw-semibold"
+                  >
+                    Tugas / Assessment
+                  </label>
+
+                  <input
+                    type="number"
+                    id="assessment"
+                    name="assessment"
+                    className="form-control"
+                    min="0"
+                    max="100"
+                    value={risk.assessment}
+                    onChange={handleRiskChange}
+                  />
+
+                </div>
+
+
+                {/* Quiz 2 */}
+                <div className="col-md-4">
+
+                  <label
+                    htmlFor="quiz-2"
+                    className="form-label fw-semibold"
+                  >
+                    Quiz 2 / Posttest
+                  </label>
+
+                  <input
+                    type="number"
+                    id="quiz-2"
+                    name="quiz2"
+                    className="form-control"
+                    min="0"
+                    max="100"
+                    value={risk.quiz2}
                     onChange={handleRiskChange}
                   />
 
@@ -363,65 +474,61 @@ function SettingsPage() {
           </section>
 
 
-          {/* ========================= */}
-          {/* NOTIFIKASI */}
-          {/* ========================= */}
-
+          {/* =========================
+              4. TAMPILAN
+          ========================== */}
           <section className="settings-card mb-4">
 
-            <div className="d-flex justify-content-between align-items-center">
+            <div className="mb-4">
 
-              <div>
+              <h5 className="fw-bold mb-1">
+                🎨 Tampilan
+              </h5>
 
-                <h5 className="fw-bold mb-1">
-                  🔔 Notifikasi
-                </h5>
+              <p className="text-secondary mb-0">
+                Atur tampilan aplikasi sesuai preferensi.
+              </p>
 
-                <p className="text-secondary mb-0">
-                  Terima pemberitahuan ketika terdapat siswa berisiko.
-                </p>
-
-              </div>
+            </div>
 
 
-              <div className="form-check form-switch">
+            <div>
 
-                <input
-                  className="form-check-input"
-                  type="checkbox"
-                  id="notification"
-                  checked={notification}
-                  onChange={(event) =>
-                    setNotification(event.target.checked)
-                  }
-                />
+              <label className="form-label fw-semibold">
+                Tema
+              </label>
 
-                <label
-                  className="form-check-label"
-                  htmlFor="notification"
+              <div className="d-flex gap-3">
+
+                <button
+                  type="button"
+                  className={`btn ${
+                    theme === "light"
+                      ? "btn-primary"
+                      : "btn-outline-dark"
+                  }`}
+                  onClick={() => setTheme("light")}
                 >
-                  {notification ? "Aktif" : "Nonaktif"}
-                </label>
+                  ☀ Light
+                </button>
+
+                <button
+                  type="button"
+                  className={`btn ${
+                    theme === "dark"
+                      ? "btn-primary"
+                      : "btn-outline-dark"
+                  }`}
+                  onClick={() => setTheme("dark")}
+                >
+                  🌙 Dark
+                </button>
 
               </div>
 
             </div>
 
           </section>
-
-
-          {/* Logout */}
-          <div className="text-end">
-
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={() => console.log("Logout")}
-            >
-              Logout
-            </button>
-
-          </div>
 
         </div>
 
