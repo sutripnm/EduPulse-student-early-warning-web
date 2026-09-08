@@ -142,13 +142,13 @@ const getDayName = (date) => {
   if (!date) return "";
 
   const days = [
-    "Minggu",
     "Senin",
     "Selasa",
     "Rabu",
     "Kamis",
     "Jumat",
     "Sabtu",
+    "Minggu",
   ];
 
   return days[
