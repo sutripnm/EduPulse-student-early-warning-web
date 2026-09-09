@@ -30,6 +30,11 @@ function useLogin() {
     localStorage.setItem("accessToken", response.data.data.access_token);
     localStorage.setItem("refreshToken", response.data.data.refresh_token);
 
+    localStorage.setItem(
+      "user",
+      JSON.stringify(response.data.data.user)
+    );
+
     navigate("/dashboard");
 
   } catch (error) {
