@@ -1,7 +1,7 @@
+import "../styles/login-page.css";
 import LoginBrandPanel from "../components/login/LoginBrandPanel";
 import LoginForm from "../components/login/LoginForm";
 import useLogin from "../hooks/useLogin";
-import "../styles/login-page.css";
 
 function LoginPage() {
   const { email, setEmail, password, setPassword, handleSubmit } = useLogin();

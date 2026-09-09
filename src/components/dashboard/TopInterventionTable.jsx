@@ -1,11 +1,7 @@
-import React from "react";
-// 1. Import hook useDashboardData
-import useDashboardData from "../../hooks/useDashboardData";
-
-function TopInterventionTable() {
-  // 2. Extrak topRiskStudents dari hook
-  const { topRiskStudents = [] } = useDashboardData();
-
+// Catatan: status_risk di sini bernilai "Tinggi" / "Sedang" (bukan
+// "HIGH"/"MEDIUM" seperti di StudentListPage), jadi badge-nya dibuat
+// inline di sini, bukan pakai components/common/RiskBadge.
+function TopInterventionTable({ students }) {
   return (
     <section className="mt-3">
       <h6>📋 Top 5 Siswa Membutuhkan Intervensi</h6>
@@ -18,14 +14,13 @@ function TopInterventionTable() {
               <th>Kelas</th>
               <th>Nilai</th>
               <th>Kehadiran</th>
-              <th>Status Risiko</th>
+              <th>Status Risk</th>
               <th>Action</th>
             </tr>
           </thead>
 
           <tbody>
-            {/* 3. Render array topRiskStudents */}
-            {topRiskStudents.map((student) => (
+            {students.map((student) => (
               <tr key={student.nisn}>
                 <td>
                   <span className="fw-semibold">{student.nama}</span>
@@ -36,7 +31,7 @@ function TopInterventionTable() {
                 <td>
                   <span
                     className={
-                      student.status_risk === "HIGH" || student.status_risk === "Tinggi"
+                      student.status_risk === "Tinggi"
                         ? "badge text-bg-danger"
                         : "badge text-bg-warning"
                     }
