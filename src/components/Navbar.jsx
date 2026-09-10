@@ -19,7 +19,7 @@ function Navbar() {
           />
 
           <span className="fw-bold fs-4">
-            Edu<span className="text-purple">Pulse</span>
+            Edu<span className="text-purple">Pulse</span> 
           </span>
         </a>
 
