@@ -18,6 +18,12 @@ function DashboardPage() {
     topRiskStudents,
     topHighRiskClasses,
     topLowRiskClasses,
+    mapelOptions,
+    selectedMapel,
+    setSelectedMapel,
+    kelasOptions,
+    selectedKelas,
+    setSelectedKelas,
   } = useDashboardData();
 
   return (
@@ -31,15 +37,17 @@ function DashboardPage() {
 
         <section className="row g-3">
           <div className="col-lg-9">
-            <div className="row g-3">
-              <div className="col-md-8">
-                <PerformanceTrendChart data={dashboardData?.trend_performa || []} />
-              </div>
+<div className="row g-3 align-items-stretch">
+  <div className="col-md-8 d-flex">
+    <PerformanceTrendChart
+      data={dashboardData?.trend_performa || []}
+    />
+  </div>
 
-              <div className="col-md-4">
-                <RiskDonutChart data={riskData} />
-              </div>
-            </div>
+  <div className="col-md-4 d-flex">
+    <RiskDonutChart data={riskData} />
+  </div>
+</div>
 
             <TopInterventionTable students={topRiskStudents} />
           </div>
@@ -55,6 +63,12 @@ function DashboardPage() {
         <SchoolAnalyticsSection
           riskByClassData={riskByClassData}
           riskFactorData={riskFactorData}
+          mapelOptions={mapelOptions}
+          selectedMapel={selectedMapel}
+          onMapelChange={setSelectedMapel}
+          kelasOptions={kelasOptions}
+          selectedKelas={selectedKelas}
+          onKelasChange={setSelectedKelas}
         />
       </section>
     </main>

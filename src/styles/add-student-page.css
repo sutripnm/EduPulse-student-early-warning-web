@@ -1,6 +1,6 @@
 .add-student-page {
   min-height: 100vh;
-  background-color: #eeeeff;
+  background-color: #f4f2f7;
 }
 
 .add-student-main {
@@ -13,8 +13,8 @@
 .add-student-container {
   width: 100%;
   max-width: 480px;
-  background-color: #ffffff;
-  border: 1px solid #222;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 14px;
   padding: 24px;
 }
@@ -22,24 +22,24 @@
 .add-student-container .form-control,
 .add-student-container .form-select {
   border-radius: 8px;
-  border: 1px solid #8b78d8;
-  background-color: #f5f2ff;
+  border: 1px solid #c4bed6;
+  background-color: var(--edupulse-primary-soft);
 }
 
 .add-student-container .form-control:focus,
 .add-student-container .form-select:focus {
-  border-color: #6f4ed8;
-  box-shadow: 0 0 0 0.2rem rgba(111, 78, 216, 0.2);
-  background-color: #ffffff;
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 0.2rem rgba(111, 99, 168, 0.12);
+  background-color: var(--edupulse-surface);
 }
 
 .add-student-container .btn-primary {
-  background-color: #6f4ed8;
-  border-color: #6f4ed8;
+  background-color: var(--edupulse-primary);
+  border-color: var(--edupulse-primary);
   border-radius: 8px;
 }
 
 .add-student-container .btn-primary:hover {
-  background-color: #5d3bc7;
-  border-color: #5d3bc7;
+  background-color: var(--edupulse-primary-hover);
+  border-color: var(--edupulse-primary-hover);
 }

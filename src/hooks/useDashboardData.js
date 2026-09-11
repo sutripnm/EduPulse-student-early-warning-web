@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { getDashboardSummary, getSchoolAnalytics } from "../services/api";
+import {
+  getDashboardSummary,
+  getSchoolAnalytics,
+  getMapel,
+  getKelas,
+} from "../services/api";
 
 export const riskColors = {
   Rendah: "#22a06b",
@@ -9,25 +14,15 @@ export const riskColors = {
 
 export const riskFactorColors = ["#6840d9", "#f5b82e", "#22a06b"];
 
-const topHighRiskClasses = [
-  { className: "XI IPA 1", count: 8 },
-  { className: "XII IPS 1", count: 6 },
-  { className: "X IPA 2", count: 5 },
-  { className: "XI IPA 2", count: 4 },
-  { className: "XII IPA 1", count: 3 },
-];
-
-const topLowRiskClasses = [
-  { className: "XII IPA 1", count: 30 },
-  { className: "XII IPS 1", count: 28 },
-  { className: "XI IPA 1", count: 25 },
-  { className: "X IPA 1", count: 24 },
-  { className: "XI IPS 1", count: 22 },
-];
-
 function useDashboardData() {
   const [dashboardData, setDashboardData] = useState(null);
   const [schoolAnalyticsData, setSchoolAnalyticsData] = useState(null);
+
+  const [mapelOptions, setMapelOptions] = useState([]);
+  const [selectedMapel, setSelectedMapel] = useState("");
+
+  const [kelasOptions, setKelasOptions] = useState([]);
+  const [selectedKelas, setSelectedKelas] = useState("");
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -35,8 +30,18 @@ function useDashboardData() {
         const result = await getDashboardSummary();
         if (result.success) setDashboardData(result.data);
 
+        // Fetch mapel options
+        const mapelResult = await getMapel();
+        setMapelOptions(mapelResult.results || []);
+        
+        // Fetch kelas options
+        const kelasResult = await getKelas();
+        setKelasOptions(kelasResult.results || []);
+
         const analyticsResult = await getSchoolAnalytics({
           angkatan: result?.data?.summary?.angkatan || "",
+          mapel_id: selectedMapel,
+          kelas_id: selectedKelas,
         });
         if (analyticsResult.success) setSchoolAnalyticsData(analyticsResult.data);
       } catch (error) {
@@ -45,7 +50,7 @@ function useDashboardData() {
     };
 
     fetchDashboard();
-  }, []);
+  }, [selectedMapel, selectedKelas]);
 
   const riskByClassData = schoolAnalyticsData?.perbandingan_risiko_kelas || [];
 
@@ -61,7 +66,20 @@ function useDashboardData() {
     { name: "Tinggi", value: dashboardData?.proporsi_risiko?.tinggi?.percentage || 0 },
   ];
 
-  const topRiskStudents = dashboardData?.top_intervensi || [];
+  const topRiskStudents =
+    dashboardData?.top_intervensi || [];
+
+  const topHighRiskClasses =
+    dashboardData?.insight_kelas?.high_risk_terbanyak?.map((item) => ({
+      className: item.nama_kelas,
+      count: item.jumlah_siswa,
+    })) || [];
+
+  const topLowRiskClasses =
+    dashboardData?.insight_kelas?.low_risk_terbanyak?.map((item) => ({
+      className: item.nama_kelas,
+      count: item.jumlah_siswa,
+    })) || [];
 
   return {
     dashboardData,
@@ -71,6 +89,14 @@ function useDashboardData() {
     topRiskStudents,
     topHighRiskClasses,
     topLowRiskClasses,
+
+    mapelOptions,
+    selectedMapel,
+    setSelectedMapel,
+
+    kelasOptions,
+    selectedKelas,
+    setSelectedKelas,
   };
 }
 

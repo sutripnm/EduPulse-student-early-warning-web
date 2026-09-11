@@ -7,5 +7,5 @@
 }
 
 .text-purple {
-  color: #6840d9;
+  color: var(--edupulse-primary);
 }

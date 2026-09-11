@@ -3,49 +3,49 @@
 }
 
 .academic-settings-main {
-  background-color: #f3f1ff;
+  background-color: var(--edupulse-primary-soft);
 }
 
 .academic-settings-card {
-  background-color: #ffffff;
-  border: 1px solid #222;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 20px;
   padding: 28px;
   height: 100%;
 }
 
 .academic-settings-card .form-control {
-  background-color: #f5f2ff;
-  border: 1px solid #a995f0;
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
   border-radius: 10px;
   padding: 12px 14px;
 }
 
 .academic-settings-card .form-control:focus {
-  border-color: #6840d9;
-  box-shadow: 0 0 0 0.15rem rgba(104, 64, 217, 0.15);
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 0.15rem rgba(111, 99, 168, 0.12);
 }
 
 .academic-settings-card .btn-primary {
-  background-color: #6840d9;
-  border-color: #6840d9;
+  background-color: var(--edupulse-primary);
+  border-color: var(--edupulse-primary);
 }
 
 .academic-settings-card .btn-primary:hover {
-  background-color: #5732bd;
-  border-color: #5732bd;
+  background-color: var(--edupulse-primary-hover);
+  border-color: var(--edupulse-primary-hover);
 }
 
 .academic-form-box {
-  background-color: #f5f2ff;
-  border: 1px solid #a995f0;
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
   border-radius: 14px;
   padding: 20px;
 }
 
 .academic-settings-card {
-  background-color: #ffffff;
-  border: 1px solid #222;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 20px;
   padding: 28px;
 }
@@ -60,11 +60,11 @@
 }
 
 .academic-settings-card .btn-primary {
-  background-color: #6840d9;
-  border-color: #6840d9;
+  background-color: var(--edupulse-primary);
+  border-color: var(--edupulse-primary);
 }
 
 .academic-settings-card .btn-primary:hover {
-  background-color: #5732bd;
-  border-color: #5732bd;
+  background-color: var(--edupulse-primary-hover);
+  border-color: var(--edupulse-primary-hover);
 }

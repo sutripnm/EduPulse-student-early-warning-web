@@ -10,7 +10,7 @@ import {
 
 function PerformanceTrendChart({ data }) {
   return (
-    <div className="dashboard-box dashboard-chart-box">
+    <div className="dashboard-box performance-trend-box">
       <h6 className="mb-1">📊 Tren Performa & Presensi</h6>
       <p className="small mb-3">Grafik rata-rata per bulan</p>
 

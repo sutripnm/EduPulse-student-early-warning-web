@@ -1,0 +1,88 @@
+:root {
+  /* =========================
+     Brand
+     ========================= */
+
+  --edupulse-primary: #7d70c4;
+  --edupulse-primary-hover: #6d60ad;
+
+  --edupulse-primary-soft: #eeecfa;
+  --edupulse-primary-soft-strong: #e3dff5;
+
+
+  /* =========================
+     Semantic
+     ========================= */
+
+  /* Low Risk / Success */
+  --edupulse-success: #55a277;
+  --edupulse-success-soft: #eaf6ef;
+
+  /* Medium Risk / Warning */
+  --edupulse-warning: #d0a044;
+  --edupulse-warning-soft: #fbf3e2;
+
+  /* High Risk / Danger */
+  --edupulse-danger: #cf5968;
+  --edupulse-danger-soft: #fbecef;
+
+  /* Info */
+  --edupulse-info: #5f8fbe;
+  --edupulse-info-soft: #eaf3fa;
+
+
+  /* =========================
+     Neutrals
+     ========================= */
+
+  --edupulse-bg: #f6f5fa;
+  --edupulse-surface: #ffffff;
+  --edupulse-surface-muted: #faf9fc;
+
+  --edupulse-border: #e0dce8;
+  --edupulse-border-strong: #d1ccdc;
+
+  --edupulse-text: #30303a;
+  --edupulse-text-muted: #6d6b77;
+  --edupulse-text-soft: #888591;
+
+  --edupulse-dark-surface: #343541;
+  --edupulse-dark-muted: #b2afbb;
+
+
+  /* =========================
+     Bootstrap
+     ========================= */
+
+  --bs-primary: var(--edupulse-primary);
+  --bs-primary-rgb: 125, 112, 196;
+
+  --bs-secondary: #74737f;
+  --bs-secondary-rgb: 116, 115, 127;
+
+  --bs-success: var(--edupulse-success);
+  --bs-success-rgb: 85, 162, 119;
+
+  --bs-danger: var(--edupulse-danger);
+  --bs-danger-rgb: 207, 89, 104;
+
+  --bs-warning: var(--edupulse-warning);
+  --bs-warning-rgb: 208, 160, 68;
+
+  --bs-info: var(--edupulse-info);
+  --bs-info-rgb: 95, 143, 190;
+
+  --bs-light: var(--edupulse-bg);
+  --bs-light-rgb: 246, 245, 250;
+
+  --bs-dark: var(--edupulse-text);
+  --bs-dark-rgb: 48, 48, 58;
+
+  --bs-body-bg: var(--edupulse-bg);
+  --bs-body-color: var(--edupulse-text);
+
+  --bs-border-color: var(--edupulse-border);
+
+  --bs-link-color: var(--edupulse-primary);
+  --bs-link-hover-color: var(--edupulse-primary-hover);
+}

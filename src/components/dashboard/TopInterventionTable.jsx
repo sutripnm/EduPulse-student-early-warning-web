@@ -29,15 +29,15 @@ function TopInterventionTable({ students }) {
                 <td>{student.nilai}</td>
                 <td>{student.kehadiran}%</td>
                 <td>
-                  <span
-                    className={
-                      student.status_risk === "Tinggi"
-                        ? "badge text-bg-danger"
-                        : "badge text-bg-warning"
-                    }
-                  >
-                    {student.status_risk}
-                  </span>
+<span
+  className={`risk-badge ${
+    student.status_risk === "HIGH"
+      ? "risk-high"
+      : "risk-medium"
+  }`}
+>
+  {student.status_risk}
+</span>
                 </td>
                 <td>
                   <button className="btn btn-sm btn-outline-dark">

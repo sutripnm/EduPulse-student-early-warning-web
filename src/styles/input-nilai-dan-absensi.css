@@ -1,6 +1,6 @@
 .input-nilai-page {
   min-height: 100vh;
-  background-color: #eeeeff;
+  background-color: #f4f2f7;
 }
 
 .input-nilai-main {
@@ -19,8 +19,8 @@
 
 .input-form-card,
 .attendance-form-card {
-  background-color: #ffffff;
-  border: 1px solid #222;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 16px;
   padding: 24px;
   min-height: 430px;
@@ -30,8 +30,8 @@
 .input-form-card .form-select,
 .attendance-form-card .form-control,
 .attendance-form-card .form-select {
-  background-color: #f5f2ff;
-  border: 1px solid #8b78d8;
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #c4bed6;
   border-radius: 8px;
 }
 
@@ -39,25 +39,25 @@
 .input-form-card .form-select:focus,
 .attendance-form-card .form-control:focus,
 .attendance-form-card .form-select:focus {
-  border-color: #6f4ed8;
-  box-shadow: 0 0 0 0.2rem rgba(111, 78, 216, 0.2);
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 0.2rem rgba(111, 99, 168, 0.12);
 }
 
 .input-form-card .btn-primary,
 .attendance-form-card .btn-primary {
-  background-color: #6f4ed8;
-  border-color: #6f4ed8;
+  background-color: var(--edupulse-primary);
+  border-color: var(--edupulse-primary);
   border-radius: 8px;
 }
 
 .input-form-card .btn-primary:hover,
 .attendance-form-card .btn-primary:hover {
-  background-color: #5d3bc7;
-  border-color: #5d3bc7;
+  background-color: var(--edupulse-primary-hover);
+  border-color: var(--edupulse-primary-hover);
 }
 
 .input-nilai-main {
-  background-color: #f3f1ff;
+  background-color: var(--edupulse-primary-soft);
   min-height: 100vh;
   padding: 40px;
 }
@@ -68,19 +68,19 @@
 }
 
 .input-page-header h1 {
-  color: #171717;
+  color: var(--edupulse-text);
 }
 
 .selected-class-info {
-  background-color: #ffffff;
-  border: 1px solid #222;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 12px;
   padding: 14px 18px;
 }
 
 .input-data-card {
-  background-color: #ffffff;
-  border: 1px solid #222;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 20px;
   padding: 28px;
 }
@@ -90,7 +90,7 @@
 }
 
 .input-data-card .table th {
-  white-space: nowrap;
+  var(--edupulse-surface)-space: nowrap;
 }
 
 .input-data-card .table td {
@@ -104,21 +104,21 @@
 }
 
 .attendance-btn {
-  border: 1px solid #777;
-  background-color: #ffffff;
+  border: 1px solid #aaa7b0;
+  background-color: var(--edupulse-surface);
   border-radius: 8px;
   padding: 7px 14px;
   cursor: pointer;
 }
 
 .attendance-btn:hover {
-  border-color: #6840d9;
+  border-color: var(--edupulse-primary);
 }
 
 .attendance-btn.active {
-  color: #ffffff;
-  border-color: #6840d9;
-  background-color: #6840d9;
+  color: var(--edupulse-surface);
+  border-color: var(--edupulse-primary);
+  background-color: var(--edupulse-primary);
 }
 
 .attendance-summary {
@@ -127,34 +127,34 @@
   flex-wrap: wrap;
   margin-top: 20px;
   padding: 14px 16px;
-  background-color: #f5f2ff;
+  background-color: var(--edupulse-primary-soft);
   border-radius: 10px;
 }
 
 .score-input {
   min-width: 100px;
-  background-color: #f5f2ff;
-  border: 1px solid #a995f0;
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
 }
 
 .score-input:focus {
-  border-color: #6840d9;
-  box-shadow: 0 0 0 0.15rem rgba(104, 64, 217, 0.15);
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 0.15rem rgba(111, 99, 168, 0.12);
 }
 
 .input-data-card .btn-primary {
-  background-color: #6840d9;
-  border-color: #6840d9;
+  background-color: var(--edupulse-primary);
+  border-color: var(--edupulse-primary);
 }
 
 .input-data-card .btn-primary:hover {
-  background-color: #5732bd;
-  border-color: #5732bd;
+  background-color: var(--edupulse-primary-hover);
+  border-color: var(--edupulse-primary-hover);
 }
 
 .input-nilai-main {
   min-height: 100vh;
-  background-color: #f3f1ff;
+  background-color: var(--edupulse-primary-soft);
   padding: 40px;
 }
 
@@ -164,12 +164,12 @@
 }
 
 .input-page-header h1 {
-  color: #171717;
+  color: var(--edupulse-text);
 }
 
 .input-data-card {
-  background-color: #ffffff;
-  border: 1px solid #222;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 20px;
   padding: 28px;
 }
@@ -179,8 +179,8 @@
 }
 
 .selected-period-info {
-  background-color: #f5f2ff;
-  border: 1px solid #a995f0;
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
   border-radius: 12px;
   padding: 14px 18px;
 }
@@ -194,9 +194,9 @@
 }
 
 .input-data-card .table th {
-  white-space: nowrap;
+  var(--edupulse-surface)-space: nowrap;
   vertical-align: middle;
-  background-color: #f5f2ff;
+  background-color: var(--edupulse-primary-soft);
 }
 
 .input-data-card .table td,
@@ -220,23 +220,23 @@
 }
 
 .attendance-select.status-hadir {
-  background-color: #eefaf3;
-  border-color: #85c99f;
+  background-color: var(--edupulse-success-soft);
+  border-color: #a9c9b6;
 }
 
 .attendance-select.status-izin {
-  background-color: #fff8e7;
-  border-color: #e7bf5d;
+  background-color: var(--edupulse-warning-soft);
+  border-color: #d6bd8a;
 }
 
 .attendance-select.status-sakit {
-  background-color: #eef5ff;
-  border-color: #8eb3e8;
+  background-color: var(--edupulse-info-soft);
+  border-color: #a9bed4;
 }
 
 .attendance-select.status-alpha {
-  background-color: #fff0f0;
-  border-color: #e59a9a;
+  background-color: var(--edupulse-danger-soft);
+  border-color: #d2a2a8;
 }
 
 .attendance-summary {
@@ -246,7 +246,7 @@
   margin-top: 20px;
   padding: 15px 18px;
   border-radius: 12px;
-  background-color: #f5f2ff;
+  background-color: var(--edupulse-primary-soft);
 }
 
 /* =========================
@@ -257,23 +257,23 @@
   display: block;
   margin-top: 3px;
   font-weight: 400;
-  color: #6c757d;
+  color: var(--edupulse-text-muted);
 }
 
 .score-input {
   min-width: 110px;
-  background-color: #f5f2ff;
-  border: 1px solid #a995f0;
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
 }
 
 .score-input:focus {
-  border-color: #6840d9;
-  box-shadow: 0 0 0 0.15rem rgba(104, 64, 217, 0.15);
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 0.15rem rgba(111, 99, 168, 0.12);
 }
 
 .score-summary {
   margin-top: 20px;
-  color: #6c757d;
+  color: var(--edupulse-text-muted);
   font-size: 14px;
 }
 
@@ -282,11 +282,11 @@
 ========================= */
 
 .input-data-card .btn-primary {
-  background-color: #6840d9;
-  border-color: #6840d9;
+  background-color: var(--edupulse-primary);
+  border-color: var(--edupulse-primary);
 }
 
 .input-data-card .btn-primary:hover {
-  background-color: #5732bd;
-  border-color: #5732bd;
+  background-color: var(--edupulse-primary-hover);
+  border-color: var(--edupulse-primary-hover);
 }

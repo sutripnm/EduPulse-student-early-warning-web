@@ -1,6 +1,6 @@
 .dashboard-page {
   min-height: 100vh;
-  background-color: #eeecfa;
+  background-color: #f3f1f7;
 }
 
 .dashboard-main {
@@ -10,8 +10,8 @@
 .dashboard-kpi {
   min-height: 90px;
   padding: 12px;
-  background-color: white;
-  border: 3px solid #6834d9;
+  background-color: var(--edupulse-surface);
+  border: 3px solid var(--edupulse-primary);
   border-radius: 18px;
   text-align: center;
 }
@@ -31,14 +31,21 @@
 }
 
 .dashboard-box {
+  width: 100%;
   padding: 24px;
-  background-color: #ffffff;
+  background-color: var(--edupulse-surface);
   border-radius: 18px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
 }
 
 .dashboard-chart-box {
   min-height: 115px;
+}
+
+.dashboard-table {
+  padding: 12px;
+  background-color: var(--edupulse-surface);
+  border-radius: 18px;
 }
 
 .dashboard-table {
@@ -48,12 +55,12 @@
 }
 
 .dashboard-table .table {
-  background-color: transparent;
+  background-color: #ffffff;
+  --bs-table-bg: #ffffff;
 }
 
-.dashboard-table th,
-.dashboard-table td {
-  background-color: transparent;
+.dashboard-table .table > :not(caption) > * > * {
+  background-color: #ffffff;
 }
 
 .analytics-box {
@@ -65,9 +72,9 @@
 }
 
 .dashboard-kpi {
-  background-color: #ffffff;
+  background-color: var(--edupulse-surface);
   border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
 }
 
 .kpi-icon {
@@ -77,8 +84,8 @@
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  background-color: #efedff;
-  color: #6840d9;
+  background-color: var(--edupulse-primary-soft);
+  color: var(--edupulse-primary);
   font-size: 20px;
 }
 
@@ -96,4 +103,85 @@
 
 .analytics-chart-container {
   width: 100%;
+}
+
+.performance-trend-box,
+.risk-donut-box {
+  height: 100%;
+}
+
+.risk-donut-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.risk-donut-chart-container {
+  width: 100%;
+  height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.risk-donut-detail {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 16px;
+  margin-top: 4px;
+}
+
+.risk-donut-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.risk-donut-dot {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.risk-donut-label {
+  color: var(--edupulse-text-muted);
+}
+
+.risk-donut-value {
+  font-weight: 600;
+  color: var(--edupulse-text);
+}
+
+.risk-donut-percentage {
+  color: var(--edupulse-text-muted);
+}
+
+.risk-badge {
+  display: inline-block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.risk-high {
+  background-color: var(--edupulse-danger);
+  color: #ffffff;
+}
+
+.risk-medium {
+  background-color: var(--edupulse-warning);
+  color: #ffffff;
+}
+
+@media (max-width: 576px) {
+  .risk-donut-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+.performance-trend-box,
+.risk-donut-box {
+  height: 100%;
 }

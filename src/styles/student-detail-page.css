@@ -1,6 +1,6 @@
 .student-detail-page {
   min-height: 100vh;
-  background-color: #eeeeff;
+  background-color: #f4f2f7;
 }
 
 .student-detail-main {
@@ -17,9 +17,9 @@
 }
 
 .student-info-item {
-  background-color: #7056d8;
-  color: white;
-  border: 1px solid #111;
+  background-color: var(--edupulse-primary);
+  color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 20px;
   padding: 7px 14px;
   margin-bottom: 5px;
@@ -35,15 +35,15 @@
   grid-template-columns: repeat(4, 1fr) 2.5fr;
   gap: 8px;
 
-  background-color: #9182df;
-  border: 1px solid #111;
+  background-color: #b8b1ce;
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 16px;
   padding: 10px;
 }
 
 .metric-card {
-  background-color: white;
-  border: 1px solid #111;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 14px;
 
   min-height: 105px;
@@ -66,7 +66,7 @@
 }
 
 .metric-risk strong {
-  color: #dc3545;
+  color: var(--edupulse-danger);
 }
 
 
@@ -75,9 +75,9 @@
 /* ========================= */
 
 .risk-analysis-card {
-  background-color: white;
+  background-color: var(--edupulse-surface);
 
-  border: 1px solid #111;
+  border: 1px solid var(--edupulse-border-strong);
   border-radius: 16px;
 
   padding: 28px;
