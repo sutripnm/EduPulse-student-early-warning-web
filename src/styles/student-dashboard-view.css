@@ -1,0 +1,48 @@
+.student-dashboard-page {
+  min-height: 100vh;
+  background-color: #eeecfa;
+}
+
+.student-dashboard-main {
+  min-width: 0;
+}
+
+.dashboard-box {
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-chart-box {
+  min-height: 115px;
+}
+
+.student-profile-box {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.profile-item {
+  display: flex;
+  flex-direction: column;
+  min-width: 140px;
+}
+
+.profile-item small {
+  color: #6c757d;
+  margin-bottom: 4px;
+}
+
+.profile-item strong {
+  font-size: 16px;
+}
+
+.risk-recommendation-box ul {
+  padding-left: 20px;
+}
+
+.risk-recommendation-box li {
+  margin-bottom: 6px;
+}
