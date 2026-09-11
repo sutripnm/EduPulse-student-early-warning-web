@@ -60,8 +60,38 @@ export const getSchoolAnalytics = async ({
   return response.data;
 };
 
-export const getStudents = async () => {
-  const response = await api.get("/v1/academic/siswa/");
+export const getStudents = async ({
+  limit = 10,
+  offset = 0,
+  search = "",
+  kelas_id = "",
+  risk = "",
+} = {}) => {
+  const params = {
+    limit,
+    offset,
+  };
+
+  if (search) {
+    params.search = search;
+  }
+
+  if (kelas_id) {
+    params.kelas_id = kelas_id;
+  }
+
+  if (risk) {
+    params.risk = risk;
+  }
+
+  console.log("PARAMS SISWA:", params);
+
+  const response = await api.get("/v1/academic/siswa/", {
+    params,
+  });
+
+  console.log("URL REQUEST:", response.config.url);
+  console.log("DATA SISWA:", response.data);
 
   return response.data;
 };

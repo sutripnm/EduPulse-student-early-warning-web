@@ -1,14 +1,21 @@
 import { Link } from "react-router-dom";
 import RiskBadge from "../common/RiskBadge";
 
-function StudentTable({ students }) {
+function StudentTable({
+  students,
+  page,
+  totalStudents,
+}) {
   return (
     <section className="student-table-card">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h5 className="fw-bold mb-1">Data Siswa</h5>
           <small className="text-secondary">
-            Menampilkan {students.length} siswa
+            Menampilkan{" "}
+            {students.length > 0 ? (page - 1) * 10 + 1 : 0}
+            –
+            {Math.min(page * 10, totalStudents)} dari {totalStudents} siswa
           </small>
         </div>
       </div>
