@@ -1,6 +1,10 @@
+/* =========================================================
+   STUDENT DETAIL PAGE
+   ========================================================= */
+
 .student-detail-page {
   min-height: 100vh;
-  background-color: #f4f2f7;
+  background-color: var(--edupulse-bg);
 }
 
 .student-detail-main {
@@ -8,61 +12,207 @@
 }
 
 
-/* ========================= */
-/* PROFIL SISWA */
-/* ========================= */
+/* =========================
+   PROFILE SISWA
+   ========================= */
 
-.student-profile-info {
-  width: 310px;
+.student-profile-card {
+  width: 100%;
+  padding: 20px;
+
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 18px;
+
+  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
+}
+
+.student-section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.student-section-title span {
+  font-size: 18px;
+}
+
+.student-section-title h6 {
+  margin: 0;
+  color: var(--edupulse-text);
+  font-weight: 600;
+}
+
+.student-profile-grid {
+  width: 100%;
+
+  display: flex !important;
+  flex-direction: row !important;
+
+  gap: 12px;
 }
 
 .student-info-item {
-  background-color: var(--edupulse-primary);
-  color: var(--edupulse-surface);
-  border: 1px solid var(--edupulse-border-strong);
-  border-radius: 20px;
-  padding: 7px 14px;
-  margin-bottom: 5px;
+  flex: 1 1 0;
+  min-width: 0;
+
+  padding: 18px 20px;
+
+  background-color: var(--edupulse-primary-soft);
+  border-radius: 14px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  box-sizing: border-box;
 }
 
+.student-info-item small {
+  font-size: 14px;
+  color: var(--edupulse-text-muted);
+}
 
-/* ========================= */
-/* METRIK */
-/* ========================= */
+.student-info-item strong {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--edupulse-text);
+}
+
+/* =========================
+   METRICS
+   ========================= */
 
 .student-metrics {
   display: grid;
-  grid-template-columns: repeat(4, 1fr) 2.5fr;
-  gap: 8px;
-
-  background-color: #b8b1ce;
-  border: 1px solid var(--edupulse-border-strong);
-  border-radius: 16px;
-  padding: 10px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
 .metric-card {
-  background-color: var(--edupulse-surface);
-  border: 1px solid var(--edupulse-border-strong);
-  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
 
-  min-height: 105px;
+  min-height: 110px;
+  padding: 20px;
+
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 18px;
+
+  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
+}
+
+.metric-card span {
+  font-size: 13px;
+  color: var(--edupulse-text-muted);
+}
+
+.metric-card strong {
+  font-size: 25px;
+  color: var(--edupulse-text);
+}
+
+/* Risk metric */
+
+.metric-risk {
+  background-color: var(--edupulse-danger-soft);
+  border-color: rgba(182, 110, 119, 0.25);
+}
+
+.metric-risk strong {
+  color: var(--edupulse-danger);
+}
+
+/* =========================
+   RISK ANALYSIS
+   ========================= */
+
+.risk-analysis-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  padding: 20px;
+
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 18px;
+
+  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
+}
+
+.risk-analysis-section {
+  min-height: 180px;
+  padding: 20px;
+
+  background-color: var(--edupulse-surface-muted);
+  border-radius: 14px;
+  border: 1px solid var(--edupulse-border);
+}
+
+.risk-analysis-section h6 {
+  margin-bottom: 12px;
+  color: var(--edupulse-text);
+}
+
+.risk-analysis-section p {
+  color: var(--edupulse-text-muted);
+}
+
+/* =========================================================
+   STUDENT METRICS
+   ========================================================= */
+
+.student-metrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+  gap: 8px;
+
+  padding: 10px;
+
+  background-color: var(--edupulse-primary-soft-strong);
+  border: 1px solid var(--edupulse-primary);
+  border-radius: 16px;
+}
+
+.metric-card {
+  min-height: 110px;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
+  padding: 16px;
+
+  background-color: var(--edupulse-surface);
+
+  border: 1px solid var(--edupulse-border);
+  border-radius: 14px;
+
   text-align: center;
 }
 
 .metric-card span {
+  margin-bottom: 4px;
+
   font-size: 14px;
+  color: var(--edupulse-text-muted);
 }
 
 .metric-card strong {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 18px;
+  color: var(--edupulse-text);
+}
+
+/* Status risk */
+
+.metric-risk {
+  background-color: var(--edupulse-surface);
 }
 
 .metric-risk strong {
@@ -70,30 +220,72 @@
 }
 
 
-/* ========================= */
-/* ANALISIS RISIKO */
-/* ========================= */
+/* =========================================================
+   RISK ANALYSIS
+   ========================================================= */
 
 .risk-analysis-card {
-  background-color: var(--edupulse-surface);
-
-  border: 1px solid var(--edupulse-border-strong);
-  border-radius: 16px;
-
-  padding: 28px;
-
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 10px;
 
-  gap: 40px;
+  padding: 10px;
 
-  min-height: 230px;
+  background-color: var(--edupulse-primary-soft-strong);
+
+  border: 1px solid var(--edupulse-primary);
+  border-radius: 16px;
 }
 
 .risk-analysis-section {
-  padding: 5px 20px;
+  min-height: 200px;
+
+  padding: 28px;
+
+  background-color: var(--edupulse-surface);
+
+  border: 1px solid var(--edupulse-border);
+  border-radius: 14px;
 }
 
-.risk-analysis-section li {
+.risk-analysis-section h6 {
+  margin-bottom: 14px;
+
+  color: var(--edupulse-text);
+  font-size: 16px;
+}
+
+.risk-analysis-section p {
+  color: var(--edupulse-text);
+}
+
+.risk-factor-list {
+  margin: 0;
+  padding-left: 22px;
+}
+
+.risk-factor-list li {
   margin-bottom: 8px;
+  color: var(--edupulse-text);
+}
+
+.risk-recommendation-list {
+  margin: 20px 0 0;
+  padding-left: 22px;
+}
+
+.risk-recommendation-list li {
+  margin-bottom: 8px;
+  color: var(--edupulse-text);
+}
+
+/* RESPONSIVE */
+@media (max-width: 576px) {
+  .student-profile-grid {
+    flex-direction: column !important;
+  }
+
+  .student-info-item {
+    width: 100%;
+  }
 }
