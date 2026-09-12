@@ -284,7 +284,7 @@
 
 /* Hover Icon Fitur di Brand Panel */
 .d-flex:hover .login-feature-icon {
-  transform: scale(1.15) rotate(6deg);
+  transform: scale(1.15);
   border-color: var(--edupulse-primary);
   background-color: rgba(255, 255, 255, 0.05);
 }
