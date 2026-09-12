@@ -1,4 +1,4 @@
-.login-page {
+/* .login-page {
   background-color: var(--edupulse-surface);
 }
 
@@ -85,4 +85,226 @@
   border: 1px solid var(--edupulse-border);
   border-radius: 16px;
   background-color: var(--edupulse-surface);
+} */
+
+/* ==========================================
+   BASE STYLES & LAYOUT
+   ========================================== */
+.login-page {
+  background-color: var(--edupulse-surface);
+  overflow-x: hidden; /* Menghindari scrollbar horizontal saat animasi slide */
+}
+
+.login-brand {
+  background-color: var(--edupulse-dark-surface);
+  color: var(--edupulse-dark-muted);
+  position: relative;
+  z-index: 2; /* Memastikan brand panel berada di atas form saat slide */
+}
+
+.login-logo {
+  width: 150px;
+}
+
+.login-label {
+  color: var(--edupulse-dark-muted);
+  font-size: 13px;
+  letter-spacing: 1.5px;
+}
+
+.login-label span {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 8px;
+  border-radius: 50%;
+  background-color: var(--edupulse-success);
+  /* Pulse animation untuk titik hijau */
+  animation: pulseGreen 2s infinite;
+}
+
+.login-title {
+  color: var(--edupulse-surface);
+  font-size: clamp(48px, 5vw, 72px);
+  line-height: 1;
+  font-weight: 500;
+}
+
+.login-title span {
+  color: var(--edupulse-primary);
+}
+
+.login-description {
+  max-width: 550px;
+  line-height: 1.6;
+}
+
+.login-feature-icon {
+  width: 42px;
+  height: 42px;
+  border: 1px solid #4a4b58;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--edupulse-primary);
+  font-size: 20px;
+  flex-shrink: 0;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.login-welcome {
+  color: var(--edupulse-primary);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.login-heading {
+  font-size: 42px;
+}
+
+.login-form-wrapper {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.forgot-password {
+  color: var(--edupulse-primary);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.demo-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px;
+  border: 1px solid var(--edupulse-border);
+  border-radius: 16px;
+  background-color: var(--edupulse-surface);
+}
+
+/* ==========================================
+   ANIMATIONS (Desktop & Tablet Large: col-lg)
+   ========================================== */
+@media (min-width: 992px) {
+  /* 1. Panel Brand meluncur dari kanan ke kiri */
+  .login-brand {
+    animation: brandSlideFromRight 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+  }
+
+  /* Konten dalam Brand Panel muncul perlahan */
+  .login-brand > * {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease forwards;
+    animation-delay: 0.6s;
+  }
+
+  /* 2. Form Login tersembunyi dulu, baru muncul setelah Brand Panel geser */
+  .login-form-wrapper {
+    opacity: 0;
+    transform: translateX(40px);
+    animation: formFadeIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) 1s forwards;
+  }
+}
+
+/* Fallback Animasi Mobile (Muncul Fade-in Sederhana) */
+@media (max-width: 991.98px) {
+  .login-brand,
+  .login-form-wrapper {
+    animation: fadeInUp 0.8s ease forwards;
+  }
+}
+
+/* ==========================================
+   KEYFRAMES DEFINITION
+   ========================================== */
+
+/* Animasi Brand Panel: Kanan -> Geser Kiri */
+@keyframes brandSlideFromRight {
+  0% {
+    transform: translateX(100%);
+  }
+  30% {
+    /* Tahan sebentar di kanan saat pertama dimuat */
+    transform: translateX(100%);
+  }
+  100% {
+    /* Pindah ke posisi aslinya di kiri */
+    transform: translateX(0);
+  }
+}
+
+/* Animasi Form Login muncul dari kanan */
+@keyframes formFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Animasi Fade In Up umum */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animasi Pulsing untuk Indicator Dot */
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(25, 135, 84, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+  }
+}
+
+/* ==========================================
+   HOVER & INTERACTION EFFECTS
+   ========================================== */
+
+/* Hover Icon Fitur di Brand Panel */
+.d-flex:hover .login-feature-icon {
+  transform: scale(1.15) rotate(6deg);
+  border-color: var(--edupulse-primary);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Input Focus Glow */
+.form-control:focus {
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 4px rgba(111, 66, 193, 0.15);
+}
+
+/* Tombol Sign In Interaction */
+.btn-dark {
+  transition: all 0.3s ease;
+}
+
+.btn-dark:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.btn-dark:active {
+  transform: translateY(0);
 }

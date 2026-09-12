@@ -3,7 +3,6 @@ import "../styles/settings-page.css";
 import useSettings from "../hooks/useSettings";
 import ProfileCard from "../components/settings/ProfileCard";
 import SchoolSettingsCard from "../components/settings/SchoolSettingsCard";
-import RiskSettingsCard from "../components/settings/RiskSettingsCard";
 import ThemeCard from "../components/settings/ThemeCard";
 
 function SettingsPage() {
@@ -39,12 +38,6 @@ function SettingsPage() {
             school={school}
             onChange={handleSchoolChange}
             onSubmit={handleSchoolSubmit}
-          />
-
-          <RiskSettingsCard
-            risk={risk}
-            onChange={handleRiskChange}
-            onSubmit={handleRiskSubmit}
           />
 
           <ThemeCard theme={theme} setTheme={setTheme} />

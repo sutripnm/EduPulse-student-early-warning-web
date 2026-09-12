@@ -1,30 +1,454 @@
-.hero {
+/* ==========================================
+   1. GLOBAL & RESET SETTINGS
+   ========================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ==========================================
+   2. KEYFRAMES ANIMATION DEFINITIONS
+   ========================================== */
+
+/* Elemen muncul dari bawah ke atas */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* KPI Card & Preview muncul dari kanan */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Efek berdenyut untuk indikator hijau */
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(25, 135, 84, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
+  }
+}
+
+/* Floating animation lembut untuk KPI Card pertama */
+@keyframes subtleFloat {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+
+/* ==========================================
+   3. NAVBAR
+   ========================================== */
+.navbar {
+  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.navbar.scrolled {
+  box-shadow: 0 4px 18px rgba(52, 52, 61, 0.06);
+}
+
+.navbar-menu a {
+  position: relative;
+  padding: 8px 14px;
+  border-radius: 10px;
+  color: var(--edupulse-text) !important;
+  transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
+}
+
+.navbar-menu a:hover {
+  color: var(--edupulse-primary) !important;
+  transform: translateY(-2px);
   background-color: var(--edupulse-primary-soft);
 }
 
+
+/* ==========================================
+   4. HERO SECTION
+   ========================================== */
+.hero {
+  background-color: var(--edupulse-primary-soft);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Staggered Entrance (Muncul bertahap) */
+.hero-label {
+  animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero-label span {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background-color: var(--edupulse-success);
+  animation: pulseGreen 2s infinite;
+}
+
 .hero-title {
-  font-size: 72px;
+  font-size: clamp(40px, 5vw, 72px);
   line-height: 1.05;
+  animation: fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
+  opacity: 0;
 }
 
 .hero-title span {
   color: var(--edupulse-primary);
 }
 
-.hero-label span {
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background-color: var(--edupulse-success);
+.hero-description {
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+  opacity: 0;
 }
 
-.dashboard-preview {
-  min-height: 450px;
-  border-radius: 20px;
+.hero .btn {
+  animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  opacity: 0;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+}
+
+.hero .btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(111, 66, 193, 0.25);
+}
+
+.hero .btn:active {
+  transform: translateY(0);
+}
+
+
+/* ==========================================
+   5. DASHBOARD & KPI PREVIEW (HERO RIGHT)
+   ========================================== */
+.landing-kpi-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  animation: fadeInRight 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  opacity: 0;
+}
+
+.landing-kpi-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.landing-kpi-card {
+  min-height: 160px;
+  padding: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(52, 52, 61, 0.05);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+}
+
+/* Staggered entrance untuk 4 KPI Card */
+.landing-kpi-row:nth-child(1) .landing-kpi-card:nth-child(1) { animation-delay: 0.4s; }
+.landing-kpi-row:nth-child(1) .landing-kpi-card:nth-child(2) { animation-delay: 0.5s; }
+.landing-kpi-row:nth-child(2) .landing-kpi-card:nth-child(1) { animation-delay: 0.6s; }
+.landing-kpi-row:nth-child(2) .landing-kpi-card:nth-child(2) { animation-delay: 0.7s; }
+
+.landing-kpi-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(52, 52, 61, 0.1);
+  border-color: var(--edupulse-primary);
+}
+
+.landing-kpi-card span {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--edupulse-text-muted);
+}
+
+.landing-kpi-card strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 32px;
+  line-height: 1;
+  color: var(--edupulse-text);
+}
+
+.landing-kpi-card small {
+  display: block;
+  font-size: 12px;
+  color: var(--edupulse-text-muted);
+}
+
+.landing-kpi-icon {
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 50px rgba(52, 52, 61, 0.07);
+  flex-shrink: 0;
+  border-radius: 12px;
+  background-color: var(--edupulse-primary-soft);
+  color: var(--edupulse-primary);
+  font-size: 20px;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease;
 }
 
+.landing-kpi-card:hover .landing-kpi-icon {
+  transform: scale(1.15);
+  background-color: var(--edupulse-primary);
+  color: #fff;
+}
+
+
+/* ==========================================
+   6. SECTIONS GENERAL STYLES
+   ========================================== */
+.landing-section {
+  padding: 100px 0;
+  background-color: var(--edupulse-surface);
+}
+
+.landing-section-muted {
+  background-color: var(--edupulse-bg);
+}
+
+.section-heading {
+  max-width: 700px;
+}
+
+.section-heading h2,
+.landing-section h2 {
+  color: var(--edupulse-text);
+  font-weight: 700;
+}
+
+.section-heading h2 span,
+.landing-section h2 span {
+  color: var(--edupulse-primary);
+}
+
+.section-heading > p:last-child {
+  color: var(--edupulse-text-muted);
+  line-height: 1.7;
+}
+
+.section-label {
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--edupulse-primary);
+}
+
+
+/* ==========================================
+   7. FEATURES SECTION
+   ========================================== */
+.feature-card {
+  height: 100%;
+  padding: 24px;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 18px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeUp 0.6s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Delay Animasi Bertahap untuk Setiap Kartu Fitur */
+.row > div:nth-child(1) .feature-card { animation-delay: 0.1s; }
+.row > div:nth-child(2) .feature-card { animation-delay: 0.2s; }
+.row > div:nth-child(3) .feature-card { animation-delay: 0.3s; }
+.row > div:nth-child(4) .feature-card { animation-delay: 0.4s; }
+
+.feature-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 28px rgba(52, 52, 61, 0.09);
+  border-color: rgba(111, 66, 193, 0.3);
+}
+
+.feature-icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 18px;
+  border-radius: 12px;
+  background-color: var(--edupulse-primary-soft);
+  font-size: 20px;
+  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.feature-card:hover .feature-icon {
+  transform: scale(1.15);
+}
+
+.feature-card h5 {
+  margin-bottom: 10px;
+  color: var(--edupulse-text);
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--edupulse-text-muted);
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   8. HOW IT WORKS SECTION
+   ========================================== */
+.process-card {
+  height: 100%;
+  padding: 28px;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 18px;
+  opacity: 0;
+  animation: fadeUp 0.6s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.col-md-4:nth-child(1) .process-card { animation-delay: 0.1s; }
+.col-md-4:nth-child(2) .process-card { animation-delay: 0.25s; }
+.col-md-4:nth-child(3) .process-card { animation-delay: 0.4s; }
+
+.process-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(52, 52, 61, 0.08);
+  border-color: var(--edupulse-primary);
+}
+
+.process-number {
+  display: inline-block;
+  margin-bottom: 18px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--edupulse-primary);
+  background-color: var(--edupulse-primary-soft);
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.process-card:hover .process-number {
+  transform: scale(1.1);
+  background-color: var(--edupulse-primary);
+  color: #fff;
+}
+
+.process-card h5 {
+  margin-bottom: 10px;
+}
+
+.process-card p {
+  margin: 0;
+  color: var(--edupulse-text-muted);
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   9. ABOUT SECTION
+   ========================================== */
+.about-card {
+  min-height: 320px;
+  display: flex;
+  align-items: flex-end;
+  padding: 32px;
+  background-color: var(--edupulse-primary-soft);
+  border-radius: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.about-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 36px rgba(111, 66, 193, 0.15);
+}
+
+.about-card small {
+  color: var(--edupulse-text-muted);
+}
+
+.about-card h4 {
+  margin-top: 8px;
+  color: var(--edupulse-primary);
+  line-height: 1.5;
+}
+
+
+/* ==========================================
+   10. CTA SECTION
+   ========================================== */
+.landing-cta {
+  padding: 80px 0;
+  background-color: var(--edupulse-bg);
+}
+
+.cta-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: 40px;
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 24px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cta-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 16px 40px rgba(52, 52, 61, 0.08);
+}
+
+.cta-card h2 {
+  margin: 0;
+  font-weight: 700;
+  color: var(--edupulse-text);
+}
+
+
+/* ==========================================
+   11. RESPONSIVE BREAKPOINTS
+   ========================================== */
+@media (max-width: 768px) {
+  .landing-section {
+    padding: 70px 0;
+  }
+
+  .cta-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .landing-kpi-row {
+    grid-template-columns: 1fr;
+  }
+}
