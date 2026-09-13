@@ -4,6 +4,8 @@ import Sidebar from "../components/Sidebar";
 import { getStudentDashboard } from "../services/api";
 import "../styles/dashboard-siswa-page.css";
 
+const HARI_LIST = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
+
 const MAPEL_OPTIONS = [
   { id: "", nama: "Semua Mapel" },
   { id: "matematika", nama: "Matematika" },
@@ -21,8 +23,14 @@ const riskLabel = {
 // biar tampilan tetap kelihatan lengkap
 const DUMMY_DASHBOARD = {
   profil: { nisn: "0051234567", nama: "Nadya Putri Ramadhani", kelas: "XI IPA 1" },
-  absensi: [{ label: "Minggu Ini", persen: 88 }],
-  study_time: [{ label: "Minggu Ini", jam: 6 }],
+  absensi_harian: [
+    { hari: "Senin", status: "Hadir" },
+    { hari: "Selasa", status: "Hadir" },
+    { hari: "Rabu", status: "Izin" },
+    { hari: "Kamis", status: "Hadir" },
+    { hari: "Jumat", status: "Alpha" },
+  ],
+  study_time: [{ label: "Minggu Ini", jam: 7 }],
   tugas_pretest: [{ label: "Minggu Ini", nilai: 78 }],
   assessment: [{ label: "Minggu Ini", nilai: 82 }],
   tugas_posttest: [{ label: "Minggu Ini", nilai: 85 }],
@@ -66,7 +74,6 @@ function DashboardSiswaPage() {
       } catch (error) {
         console.error("Gagal mengambil dashboard siswa, pakai data contoh:", error);
 
-        // sementara pakai data contoh biar tampilan tetap lengkap
         setDashboard(DUMMY_DASHBOARD);
         setIsDummy(true);
       } finally {
@@ -82,6 +89,7 @@ function DashboardSiswaPage() {
 
   const statusRisk = dashboard?.status_risk;
   const rekomendasi = dashboard?.rekomendasi || [];
+  const absensiHarian = dashboard?.absensi_harian || [];
 
 
   return (
@@ -164,13 +172,29 @@ function DashboardSiswaPage() {
             <section className="row g-3 mb-4">
 
               <div className="col-md-4">
-                <div className="dashboard-siswa-box h-100 text-center">
-                  <p className="small text-secondary mb-1">
+                <div className="dashboard-siswa-box h-100">
+                  <p className="small text-secondary mb-2">
                     Absen (Senin - Jumat)
                   </p>
-                  <h3 className="fw-bold mb-0">
-                    {lastValue(dashboard?.absensi, "persen")}%
-                  </h3>
+
+                  <div className="d-flex gap-2 flex-wrap">
+                    {HARI_LIST.map((hari) => {
+                      const data = absensiHarian.find(
+                        (item) => item.hari === hari
+                      );
+                      const status = data?.status || "-";
+
+                      return (
+                        <div
+                          key={hari}
+                          className={`absensi-chip absensi-${status.toLowerCase()}`}
+                        >
+                          <small>{hari.slice(0, 3)}</small>
+                          <strong>{status}</strong>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
 

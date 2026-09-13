@@ -33,6 +33,36 @@
   font-size: 14px;
 }
 
+.absensi-chip {
+  min-width: 56px;
+  padding: 8px 6px;
+  border-radius: 12px;
+  text-align: center;
+  background-color: #efedff;
+  color: #6840d9;
+}
+
+.absensi-chip strong {
+  display: block;
+  font-size: 12px;
+}
+
+.absensi-chip.absensi-hadir {
+  background-color: #e5f7ee;
+  color: #22a06b;
+}
+
+.absensi-chip.absensi-izin,
+.absensi-chip.absensi-sakit {
+  background-color: #fff6e0;
+  color: #f5b82e;
+}
+
+.absensi-chip.absensi-alpha {
+  background-color: #fdecee;
+  color: #dc3545;
+}
+
 .risk-recommendation-box {
   min-height: 120px;
 }
@@ -56,4 +86,17 @@
 .risk-badge.risk-high {
   background-color: #fdecee;
   color: #dc3545;
+}
+.hari-chip {
+  min-width: 56px;
+  padding: 8px 6px;
+  border-radius: 12px;
+  text-align: center;
+  background-color: #efedff;
+  color: #6840d9;
+}
+
+.hari-chip strong {
+  display: block;
+  font-size: 12px;
 }
