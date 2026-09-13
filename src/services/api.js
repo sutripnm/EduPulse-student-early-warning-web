@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    "https://950e-2402-8780-1018-1ae8-d0d4-dbf4-15d7-a35b.ngrok-free.app/api",
+     "https://d6ca-156-230-191-173.ngrok-free.app/api",
 });
 
 // ==============================================================
@@ -21,8 +21,16 @@ const api = axios.create({
 //   status_risk: "LOW" | "MEDIUM" | "HIGH",
 //   rekomendasi: ["...", "..."],
 // }
-export const getStudentDashboard = async (nisn) => {
-  const response = await api.get(`/v1/academic/siswa/${nisn}/dashboard/`);
+export const getStudentDashboard = async (nisn, mapel_id) => {
+  const params = {};
+
+  if (mapel_id) {
+    params.mapel_id = mapel_id;
+  }
+
+  const response = await api.get(`/v1/academic/siswa/${nisn}/dashboard/`, {
+    params,
+  });
 
   return response.data;
 };
