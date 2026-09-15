@@ -1,5 +1,3 @@
-import { getRiskLabel } from "../../utils/risk";
-
 function StudentMetrics({ student }) {
   const metrics = student?.metrik_kinerja;
   const risk = student?.analisis_ews;

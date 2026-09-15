@@ -11,22 +11,30 @@ function StudentProfileInfo({ student }) {
       <div className="student-profile-grid">
         <div className="student-info-item">
           <small>Nama Siswa</small>
-          <strong>{profile?.nama_siswa || "-"}</strong>
+          <strong>
+            {profile?.nama_siswa || "-"}
+          </strong>
         </div>
 
         <div className="student-info-item">
           <small>NISN</small>
-          <strong>{profile?.nisn || "-"}</strong>
+          <strong>
+            {profile?.nisn || "-"}
+          </strong>
         </div>
 
         <div className="student-info-item">
           <small>Kelas</small>
-          <strong>{profile?.kelas || "-"}</strong>
+          <strong>
+            {profile?.kelas || "-"}
+          </strong>
         </div>
 
         <div className="student-info-item">
           <small>Gender</small>
-          <strong>{profile?.gender || "-"}</strong>
+          <strong>
+            {profile?.gender || "-"}
+          </strong>
         </div>
       </div>
     </section>

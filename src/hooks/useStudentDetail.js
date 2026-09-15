@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  getStudentDetailRisk,
   getMapel,
+  getStudentDetailRisk,
 } from "../services/api";
 
 function useStudentDetail(nisn) {
@@ -13,9 +13,9 @@ function useStudentDetail(nisn) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  /* =========================
-     Ambil daftar mapel
-     ========================= */
+  // =========================
+  // Ambil daftar mata pelajaran
+  // =========================
 
   useEffect(() => {
     const fetchMapel = async () => {
@@ -34,12 +34,16 @@ function useStudentDetail(nisn) {
     fetchMapel();
   }, []);
 
-  /* =========================
-     Ambil detail siswa
-     ========================= */
+  // =========================
+  // Ambil detail siswa
+  // =========================
 
   useEffect(() => {
     const fetchStudent = async () => {
+      if (!nisn) {
+        return;
+      }
+
       setLoading(true);
       setError(false);
 
@@ -49,23 +53,26 @@ function useStudentDetail(nisn) {
           mapel_id: selectedMapel,
         });
 
-        setStudent(result.data || null);
+        if (result.success) {
+          setStudent(result.data);
+        } else {
+          setStudent(null);
+          setError(true);
+        }
       } catch (error) {
         console.error(
           "Gagal mengambil detail siswa:",
           error.response?.data || error.message
         );
 
-        setError(true);
         setStudent(null);
+        setError(true);
       } finally {
         setLoading(false);
       }
     };
 
-    if (nisn) {
-      fetchStudent();
-    }
+    fetchStudent();
   }, [nisn, selectedMapel]);
 
   return {

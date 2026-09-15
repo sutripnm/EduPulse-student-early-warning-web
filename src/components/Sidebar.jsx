@@ -1,60 +1,80 @@
-import { Link } from "react-router-dom";
-import logo from "../assets/logo black.png";
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import logo from "../assets/gemini-svg.svg";
 import "../styles/sidebar.css";
 
 function Sidebar() {
-  return (
-    <aside className="sidebar d-flex flex-column">
+  const [collapsed, setCollapsed] = useState(false);
 
-      {/* Logo */}
-      <div className="sidebar-logo mb-4">
-        <img
-          src={logo}
-          alt="EduPulse"
-          className="img-fluid"
-        />
+  const menuItems = [
+    { to: "/dashboard", label: "Dashboard", icon: "📊" },
+    { to: "/daftar-siswa", label: "Daftar Siswa", icon: "👨‍🎓" },
+    { to: "/input-nilai-dan-absensi", label: "Input Nilai & Absensi", icon: "📝" },
+    { to: "/pengaturan", label: "Pengaturan", icon: "⚙️" },
+  ];
+
+  return (
+    <aside
+      className={`sidebar d-flex flex-column ${
+        collapsed ? "sidebar-collapsed" : ""
+      }`}
+    >
+      {/* Floating Toggle Button */}
+      <button
+        type="button"
+        className="sidebar-toggle"
+        onClick={() => setCollapsed(!collapsed)}
+        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        title={collapsed ? "Buka Sidebar" : "Tutup Sidebar"}
+      >
+        {collapsed ? "→" : "←"}
+      </button>
+
+      {/* Header dengan Bingkai Latar Halaman */}
+      <div className="sidebar-header">
+        <div className="sidebar-brand-card">
+          <div className="sidebar-logo">
+            <img src={logo} alt="EduPulse Logo" />
+          </div>
+
+          <div className="sidebar-brand-text">
+            <strong className="brand-title">
+              <span className="text-edu">Edu</span>
+              <span className="text-pulse">Pulse</span>
+            </strong>
+            <span className="brand-subtitle">STUDENT EARLY WARNING SYSTEM</span>
+          </div>
+        </div>
       </div>
 
-      {/* Menu */}
-      <nav className="d-flex flex-column gap-2">
-
-        <Link
-          to="/dashboard"
-          className="sidebar-link"
-        >
-          Dashboard
-        </Link>
-
-        <Link
-          to="/daftar-siswa"
-          className="sidebar-link"
-        >
-          Daftar Siswa
-        </Link>
-
-        <Link
-          to="/input-nilai-dan-absensi"
-          className="sidebar-link"
-        >
-          Input Nilai & Absensi
-        </Link>
-
-        <Link
-          to="/pengaturan"
-          className="sidebar-link"
-        >
-          Pengaturan
-        </Link>
-
+      {/* Navigation Menu */}
+      <nav className="sidebar-menu">
+        {menuItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            data-tooltip={item.label}
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span className="sidebar-link-icon">{item.icon}</span>
+            <span className="sidebar-link-text">{item.label}</span>
+          </NavLink>
+        ))}
       </nav>
 
-      {/* Logout */}
-      <div className="mt-auto">
-        <button className="sidebar-logout">
-          Logout
+      {/* Logout Action */}
+      <div className="mt-auto pt-3">
+        <button
+          type="button"
+          className="sidebar-logout"
+          data-tooltip="Logout"
+        >
+          <span className="sidebar-link-icon">↪</span>
+          <span className="sidebar-link-text">Logout</span>
         </button>
       </div>
-
     </aside>
   );
 }

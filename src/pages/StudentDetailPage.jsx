@@ -13,11 +13,11 @@ function StudentDetailPage() {
 
   const {
     student,
-    loading,
-    error,
     mapelOptions,
     selectedMapel,
     setSelectedMapel,
+    loading,
+    error,
   } = useStudentDetail(id);
 
   if (loading) {
@@ -40,7 +40,7 @@ function StudentDetailPage() {
         <section className="student-detail-main flex-grow-1 p-4">
           <ErrorState
             message="Gagal mengambil data siswa."
-            backTo="/daftar-siswa"
+            backTo="/student-list"
           />
         </section>
       </main>
@@ -52,6 +52,7 @@ function StudentDetailPage() {
       <Sidebar />
 
       <section className="student-detail-main flex-grow-1 p-4">
+        {/* Header */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <div>
             <h1 className="h4 fw-bold mb-1">
@@ -64,7 +65,7 @@ function StudentDetailPage() {
           </div>
 
           <Link
-            to="/daftar-siswa"
+            to="/student-list"
             className="btn btn-outline-primary"
           >
             ← Kembali
@@ -103,10 +104,13 @@ function StudentDetailPage() {
           </select>
         </div>
 
+        {/* Informasi siswa */}
         <StudentProfileInfo student={student} />
 
+        {/* Metrics */}
         <StudentMetrics student={student} />
 
+        {/* Analisis risiko */}
         <RiskAnalysisCard student={student} />
       </section>
     </main>
