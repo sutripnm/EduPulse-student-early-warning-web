@@ -53,89 +53,87 @@ function LandingPage() {
             </div>
 
             {/* Dashboard Preview */}
-{/* Dashboard Preview */}
-<div className="col-lg-6">
-  <div className="landing-kpi-preview">
+            <div className="col-lg-6">
+              <div className="landing-kpi-preview">
 
-    {/* Baris 1 */}
-    <div className="landing-kpi-row">
+                {/* Baris 1 */}
+                <div className="landing-kpi-row">
 
-      <div className="landing-kpi-card">
-        <div>
-          <span>Total Siswa</span>
-          <strong>100</strong>
-        </div>
+                  <div className="landing-kpi-card">
+                    <div>
+                      <span>Total Siswa</span>
+                      <strong>100</strong>
+                    </div>
 
-        <div className="landing-kpi-icon">
-          👥
-        </div>
-      </div>
+                    <div className="landing-kpi-icon">
+                      👥
+                    </div>
+                  </div>
 
-      <div className="landing-kpi-card">
-        <div>
-          <span>Risiko Tinggi</span>
-          <strong className="text-danger">
-            5
-          </strong>
+                  <div className="landing-kpi-card">
+                    <div>
+                      <span>Risiko Tinggi</span>
+                      <strong className="text-danger">
+                        5
+                      </strong>
 
-          <small className="text-danger">
-            5% dari total siswa
-          </small>
-        </div>
+                      <small className="text-danger">
+                        5% dari total siswa
+                      </small>
+                    </div>
 
-        <div className="landing-kpi-icon">
-          ⚠️
-        </div>
-      </div>
+                    <div className="landing-kpi-icon">
+                      ⚠️
+                    </div>
+                  </div>
 
-    </div>
+                </div>
 
-    {/* Baris 2 */}
-    <div className="landing-kpi-row">
+                {/* Baris 2 */}
+                <div className="landing-kpi-row">
 
-      <div className="landing-kpi-card">
-        <div>
-          <span>Risiko Sedang</span>
-          <strong className="text-warning">
-            16
-          </strong>
+                  <div className="landing-kpi-card">
+                    <div>
+                      <span>Risiko Sedang</span>
+                      <strong className="text-warning">
+                        16
+                      </strong>
 
-          <small>
-            16% dari total siswa
-          </small>
-        </div>
+                      <small>
+                        16% dari total siswa
+                      </small>
+                    </div>
 
-        <div className="landing-kpi-icon">
-          ➖
-        </div>
-      </div>
+                    <div className="landing-kpi-icon">
+                      ➖
+                    </div>
+                  </div>
 
-      <div className="landing-kpi-card">
-        <div>
-          <span>Risiko Rendah</span>
-          <strong className="text-success">
-            79
-          </strong>
+                  <div className="landing-kpi-card">
+                    <div>
+                      <span>Risiko Rendah</span>
+                      <strong className="text-success">
+                        79
+                      </strong>
 
-          <small className="text-success">
-            79% dari total siswa
-          </small>
-        </div>
+                      <small className="text-success">
+                        79% dari total siswa
+                      </small>
+                    </div>
 
-        <div className="landing-kpi-icon">
-          ✓
-        </div>
-      </div>
+                    <div className="landing-kpi-icon">
+                      ✓
+                    </div>
+                  </div>
 
-    </div>
+                </div>
 
-  </div>
-</div>
+              </div>
+            </div>
 
           </div>
         </div>
       </section>
-
 
       {/* =========================
           FITUR
@@ -235,7 +233,6 @@ function LandingPage() {
         </div>
       </section>
 
-
       {/* =========================
           CARA KERJA
           ========================= */}
@@ -318,7 +315,6 @@ function LandingPage() {
         </div>
       </section>
 
-
       {/* =========================
           TENTANG
           ========================= */}
@@ -375,7 +371,6 @@ function LandingPage() {
 
         </div>
       </section>
-
 
       {/* =========================
           CTA

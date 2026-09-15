@@ -46,33 +46,50 @@ html {
   }
 }
 
-/* Floating animation lembut untuk KPI Card pertama */
-@keyframes subtleFloat {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 
 /* ==========================================
-   3. NAVBAR
+   3. NAVBAR (RIGHT ALIGNED & REFINED)
    ========================================== */
 .navbar {
-  transition: box-shadow 0.25s ease, background-color 0.25s ease;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 14px 0;
+  transition: box-shadow 0.25s ease, background-color 0.25s ease, padding 0.25s ease;
 }
 
 .navbar.scrolled {
+  padding: 10px 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 18px rgba(52, 52, 61, 0.06);
+}
+
+/* Pindah Menu ke Sisi Kanan (Berdampingan dengan Tombol Action) */
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto; /* Mendorong menu navigasi ke kanan */
+  margin-right: 12px;
+  padding: 4px 8px;
+  background-color: var(--edupulse-surface, #ffffff);
+  border-radius: 14px;
+  border: 1px solid var(--edupulse-border, rgba(0, 0, 0, 0.06));
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
 .navbar-menu a {
   position: relative;
-  padding: 8px 14px;
+  padding: 8px 16px;
   border-radius: 10px;
   color: var(--edupulse-text) !important;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
   transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
 }
 
@@ -92,7 +109,6 @@ html {
   overflow: hidden;
 }
 
-/* Staggered Entrance (Muncul bertahap) */
 .hero-label {
   animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
@@ -214,7 +230,7 @@ html {
   background-color: var(--edupulse-primary-soft);
   color: var(--edupulse-primary);
   font-size: 20px;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, color 0.3s ease;
 }
 
 .landing-kpi-card:hover .landing-kpi-icon {
@@ -275,12 +291,10 @@ html {
   border: 1px solid var(--edupulse-border);
   border-radius: 18px;
   opacity: 0;
-  transform: translateY(20px);
   animation: fadeUp 0.6s ease forwards;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
-/* Delay Animasi Bertahap untuk Setiap Kartu Fitur */
 .row > div:nth-child(1) .feature-card { animation-delay: 0.1s; }
 .row > div:nth-child(2) .feature-card { animation-delay: 0.2s; }
 .row > div:nth-child(3) .feature-card { animation-delay: 0.3s; }
@@ -438,6 +452,12 @@ html {
 /* ==========================================
    11. RESPONSIVE BREAKPOINTS
    ========================================== */
+@media (max-width: 991.98px) {
+  .navbar-menu {
+    margin-left: 0;
+  }
+}
+
 @media (max-width: 768px) {
   .landing-section {
     padding: 70px 0;
