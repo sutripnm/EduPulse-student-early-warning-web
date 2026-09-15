@@ -63,10 +63,21 @@ function StudentFilterBar({
             value={riskFilter}
             onChange={(event) => setRiskFilter(event.target.value)}
           >
-            <option value="">Semua Risiko</option>
-            <option value="2">Tinggi</option>
-            <option value="1">Sedang</option>
-            <option value="0">Rendah</option>
+<option value="">
+  Semua Risiko
+</option>
+
+<option value="HIGH">
+  Tinggi
+</option>
+
+<option value="MEDIUM">
+  Sedang
+</option>
+
+<option value="LOW">
+  Rendah
+</option>
           </select>
         </div>
 

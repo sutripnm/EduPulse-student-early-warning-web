@@ -16,48 +16,10 @@ import { riskFactorColors } from "../../utils/dashboardColors";
 function SchoolAnalyticsSection({
   riskByClassData,
   riskFactorData,
-  mapelOptions,
-  selectedMapel,
-  onMapelChange,
-  kelasOptions,
-  selectedKelas,
-  onKelasChange,
 }) {
   return (
     <section className="mt-5">
       <h5 className="mb-3">LAPORAN ANALITIS & STATISTIK SEKOLAH</h5>
-
-    <div className="d-flex gap-2 mb-3">
-      <select
-        className="form-select"
-        value={selectedKelas}
-        onChange={(e) => onKelasChange(e.target.value)}
-        style={{ maxWidth: "220px" }}
-      >
-        <option value="">Semua Kelas</option>
-
-        {kelasOptions?.map((kelas) => (
-          <option key={kelas.id} value={kelas.id}>
-            {kelas.nama_kelas}
-          </option>
-        ))}
-      </select>
-
-      <select
-        className="form-select"
-        value={selectedMapel}
-        onChange={(e) => onMapelChange(e.target.value)}
-        style={{ maxWidth: "250px" }}
-      >
-        <option value="">Semua Mata Pelajaran</option>
-
-        {mapelOptions?.map((mapel) => (
-          <option key={mapel.id} value={mapel.id}>
-            {mapel.nama_mapel}
-          </option>
-        ))}
-      </select>
-    </div>
 
       <div className="row g-3">
         <div className="col-lg-6">
@@ -97,7 +59,7 @@ function SchoolAnalyticsSection({
 
         <div className="col-lg-6">
           <div className="dashboard-box analytics-box">
-            <h6 className="mb-1">🎯 Faktor Utama Risiko ML</h6>
+            <h6 className="mb-1">🎯 Faktor Utama Risiko</h6>
             <p className="small mb-2">
               Faktor yang paling berkontribusi terhadap risiko siswa
             </p>

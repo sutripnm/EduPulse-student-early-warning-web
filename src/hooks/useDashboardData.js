@@ -2,57 +2,82 @@ import { useEffect, useState } from "react";
 import {
   getDashboardSummary,
   getSchoolAnalytics,
-  getMapel,
-  getKelas,
 } from "../services/api";
-
-export const riskColors = {
-  Rendah: "#22a06b",
-  Sedang: "#f5b82e",
-  Tinggi: "#dc3545",
-};
-
-export const riskFactorColors = ["#6840d9", "#f5b82e", "#22a06b"];
 
 function useDashboardData() {
   const [dashboardData, setDashboardData] = useState(null);
   const [schoolAnalyticsData, setSchoolAnalyticsData] = useState(null);
 
+  const [kelasOptions, setKelasOptions] = useState([]);
   const [mapelOptions, setMapelOptions] = useState([]);
+
+  const [selectedKelas, setSelectedKelas] = useState("");
   const [selectedMapel, setSelectedMapel] = useState("");
 
-  const [kelasOptions, setKelasOptions] = useState([]);
-  const [selectedKelas, setSelectedKelas] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchDashboard = async () => {
-      try {
-        const result = await getDashboardSummary();
-        if (result.success) setDashboardData(result.data);
+      setLoading(true);
+      setError(false);
 
-        // Fetch mapel options
-        const mapelResult = await getMapel();
-        setMapelOptions(mapelResult.results || []);
-        
-        // Fetch kelas options
-        const kelasResult = await getKelas();
-        setKelasOptions(kelasResult.results || []);
+      try {
+        // =========================
+        // Analytics
+        // =========================
 
         const analyticsResult = await getSchoolAnalytics({
-          angkatan: result?.data?.summary?.angkatan || "",
-          mapel_id: selectedMapel,
           kelas_id: selectedKelas,
+          mapel_id: selectedMapel,
         });
-        if (analyticsResult.success) setSchoolAnalyticsData(analyticsResult.data);
+
+        if (analyticsResult.success) {
+          setSchoolAnalyticsData(analyticsResult.data);
+
+          // Filter options berasal dari analytics
+          setKelasOptions(
+            analyticsResult.data?.filter_options?.kelas || []
+          );
+
+          setMapelOptions(
+            analyticsResult.data?.filter_options?.mapel || []
+          );
+        }
+
+        // =========================
+        // Summary
+        // =========================
+
+        const summaryResult = await getDashboardSummary({
+          kelas_id: selectedKelas,
+          mapel_id: selectedMapel,
+        });
+
+        if (summaryResult.success) {
+          setDashboardData(summaryResult.data);
+        }
       } catch (error) {
-        console.error("Gagal mengambil dashboard:", error);
+        console.error(
+          "Gagal mengambil dashboard:",
+          error.response?.data || error.message
+        );
+
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchDashboard();
-  }, [selectedMapel, selectedKelas]);
+  }, [selectedKelas, selectedMapel]);
 
-  const riskByClassData = schoolAnalyticsData?.perbandingan_risiko_kelas || [];
+  // =========================
+  // Analytics
+  // =========================
+
+  const riskByClassData =
+    schoolAnalyticsData?.perbandingan_risiko_kelas || [];
 
   const riskFactorData =
     schoolAnalyticsData?.faktor_utama_risiko?.map((item) => ({
@@ -60,43 +85,78 @@ function useDashboardData() {
       value: item.percentage,
     })) || [];
 
+  // =========================
+  // Risk Donut
+  // =========================
+
   const riskData = [
-    { name: "Rendah", value: dashboardData?.proporsi_risiko?.rendah?.percentage || 0 },
-    { name: "Sedang", value: dashboardData?.proporsi_risiko?.sedang?.percentage || 0 },
-    { name: "Tinggi", value: dashboardData?.proporsi_risiko?.tinggi?.percentage || 0 },
+    {
+      name: "Rendah",
+      value:
+        dashboardData?.proporsi_risiko?.rendah?.percentage || 0,
+    },
+    {
+      name: "Sedang",
+      value:
+        dashboardData?.proporsi_risiko?.sedang?.percentage || 0,
+    },
+    {
+      name: "Tinggi",
+      value:
+        dashboardData?.proporsi_risiko?.tinggi?.percentage || 0,
+    },
   ];
+
+  // =========================
+  // Top Intervention
+  // =========================
 
   const topRiskStudents =
     dashboardData?.top_intervensi || [];
 
+  // =========================
+  // Insight Kelas
+  // =========================
+
   const topHighRiskClasses =
-    dashboardData?.insight_kelas?.high_risk_terbanyak?.map((item) => ({
-      className: item.nama_kelas,
-      count: item.jumlah_siswa,
-    })) || [];
+    dashboardData?.insight_kelas?.high_risk_terbanyak?.map(
+      (item) => ({
+        className: item.nama_kelas,
+        count: item.jumlah_siswa,
+      })
+    ) || [];
 
   const topLowRiskClasses =
-    dashboardData?.insight_kelas?.low_risk_terbanyak?.map((item) => ({
-      className: item.nama_kelas,
-      count: item.jumlah_siswa,
-    })) || [];
+    dashboardData?.insight_kelas?.low_risk_terbanyak?.map(
+      (item) => ({
+        className: item.nama_kelas,
+        count: item.jumlah_siswa,
+      })
+    ) || [];
 
   return {
     dashboardData,
+    schoolAnalyticsData,
+
     riskByClassData,
     riskFactorData,
     riskData,
+
     topRiskStudents,
     topHighRiskClasses,
     topLowRiskClasses,
 
+    kelasOptions,
     mapelOptions,
+
+    selectedKelas,
+    setSelectedKelas,
+
     selectedMapel,
     setSelectedMapel,
 
-    kelasOptions,
-    selectedKelas,
-    setSelectedKelas,
+    loading,
+    error,
   };
 }
 

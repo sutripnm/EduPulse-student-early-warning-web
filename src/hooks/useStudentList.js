@@ -4,6 +4,7 @@ import { getStudents, getKelas } from "../services/api";
 function useStudentList() {
   const [students, setStudents] = useState([]);
   const [totalStudents, setTotalStudents] = useState(0);
+
   const [highRiskStudents, setHighRiskStudents] = useState([]);
 
   const [kelasOptions, setKelasOptions] = useState([]);
@@ -17,12 +18,7 @@ function useStudentList() {
 
   const [page, setPage] = useState(1);
 
-  const limit = 10;
-
-  // Reset halaman ketika filter berubah
-  useEffect(() => {
-    setPage(1);
-  }, [search, classFilter, riskFilter]);
+  const pageSize = 10;
 
   /* =========================
      Ambil daftar kelas
@@ -32,6 +28,7 @@ function useStudentList() {
     const fetchKelas = async () => {
       try {
         const result = await getKelas();
+
         setKelasOptions(result.results || []);
       } catch (error) {
         console.error(
@@ -45,6 +42,14 @@ function useStudentList() {
   }, []);
 
   /* =========================
+     Reset page saat filter berubah
+     ========================= */
+
+  useEffect(() => {
+    setPage(1);
+  }, [search, classFilter, riskFilter]);
+
+  /* =========================
      Ambil daftar siswa
      ========================= */
 
@@ -54,20 +59,13 @@ function useStudentList() {
       setError(false);
 
       try {
-        const offset = (page - 1) * limit;
-
-        console.log("PAGE:", page);
-        console.log("OFFSET:", offset);
-
         const result = await getStudents({
-          limit,
-          offset,
+          page,
+          page_size: pageSize,
           search,
           kelas_id: classFilter,
-          risk: riskFilter,
+          risk_status: riskFilter,
         });
-
-        console.log("HASIL PAGE:", result.results);
 
         setStudents(result.results || []);
         setTotalStudents(result.count || 0);
@@ -87,16 +85,16 @@ function useStudentList() {
   }, [page, search, classFilter, riskFilter]);
 
   /* =========================
-     Ambil siswa High Risk
+     Ambil High Risk
      ========================= */
 
   useEffect(() => {
     const fetchHighRiskStudents = async () => {
       try {
         const result = await getStudents({
-          limit: 5,
-          offset: 0,
-          risk: "2",
+          page: 1,
+          page_size: 10,
+          risk_status: "HIGH",
         });
 
         setHighRiskStudents(result.results || []);
@@ -115,7 +113,7 @@ function useStudentList() {
      Pagination
      ========================= */
 
-  const totalPages = Math.ceil(totalStudents / limit);
+  const totalPages = Math.ceil(totalStudents / pageSize);
 
   const goToPage = (newPage) => {
     if (newPage < 1 || newPage > totalPages) {
@@ -148,7 +146,7 @@ function useStudentList() {
     totalPages,
     goToPage,
 
-    limit,
+    pageSize,
   };
 }
 

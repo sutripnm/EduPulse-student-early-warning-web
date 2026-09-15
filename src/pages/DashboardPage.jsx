@@ -8,6 +8,7 @@ import RiskDonutChart from "../components/dashboard/RiskDonutChart";
 import TopInterventionTable from "../components/dashboard/TopInterventionTable";
 import ClassInsightPanel from "../components/dashboard/ClassInsightPanel";
 import SchoolAnalyticsSection from "../components/dashboard/SchoolAnalyticsSection";
+import DashboardFilterBar from "../components/dashboard/DashboardFilterBar";
 
 function DashboardPage() {
   const {
@@ -32,6 +33,15 @@ function DashboardPage() {
 
       <section className="dashboard-main flex-grow-1 p-4">
         <DashboardHeader />
+
+        <DashboardFilterBar
+          kelasOptions={kelasOptions}
+          mapelOptions={mapelOptions}
+          selectedKelas={selectedKelas}
+          selectedMapel={selectedMapel}
+          onKelasChange={setSelectedKelas}
+          onMapelChange={setSelectedMapel}
+        />
 
         <KpiCards dashboardData={dashboardData} />
 

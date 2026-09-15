@@ -1,26 +1,27 @@
-// Label & warna badge untuk status_risk berformat "HIGH" / "MEDIUM" / "LOW"
-// (dipakai di StudentListPage & StudentDetailPage).
-// Catatan: DashboardPage punya format status_risk yang berbeda
-// ("Tinggi" / "Sedang" langsung dari API top_intervensi), jadi
-// helper ini SENGAJA tidak dipakai di sana - lihat komponen
-// dashboard/TopInterventionTable.jsx untuk badge versi dashboard.
-
-export const RISK_LABELS = {
-  HIGH: "Tinggi",
-  MEDIUM: "Sedang",
-  LOW: "Rendah",
-};
-
-export const RISK_BADGE_CLASSES = {
-  HIGH: "badge text-bg-danger",
-  MEDIUM: "badge text-bg-warning",
-  LOW: "badge text-bg-success",
-};
-
 export function getRiskLabel(status) {
-  return RISK_LABELS[status] || "-";
+  const labels = {
+    HIGH: "Tinggi",
+    MEDIUM: "Sedang",
+    LOW: "Rendah",
+
+    Tinggi: "Tinggi",
+    Sedang: "Sedang",
+    Rendah: "Rendah",
+  };
+
+  return labels[status] || "-";
 }
 
 export function getRiskBadgeClass(status) {
-  return RISK_BADGE_CLASSES[status] || "badge text-bg-secondary";
+  const classes = {
+    HIGH: "risk-badge risk-high",
+    MEDIUM: "risk-badge risk-medium",
+    LOW: "risk-badge risk-low",
+
+    Tinggi: "risk-badge risk-high",
+    Sedang: "risk-badge risk-medium",
+    Rendah: "risk-badge risk-low",
+  };
+
+  return classes[status] || "risk-badge";
 }

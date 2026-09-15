@@ -1,6 +1,8 @@
 import { getRiskLabel } from "../../utils/risk";
 
 function RiskAnalysisCard({ student }) {
+  const risk = student?.analisis_ews;
+
   return (
     <>
       <p className="fw-semibold mb-2">
@@ -11,18 +13,19 @@ function RiskAnalysisCard({ student }) {
         {/* KIRI */}
         <div className="risk-analysis-section">
           <h6 className="fw-semibold">
-            🚨 Tingkat Risiko: {getRiskLabel(student.status_risk)}
+            🚨 Tingkat Risiko:{" "}
+            {risk?.tingkat_risiko_display ||
+              getRiskLabel(risk?.status_risiko)}
           </h6>
 
           <p className="fw-semibold mb-2">
             📌 Faktor Penentu ML:
           </p>
 
-          <ol className="risk-factor-list">
-            <li>
-              Absensi di bawah batas 70%.
-            </li>
-          </ol>
+          <p className="mb-0">
+            Data faktor penentu ML belum tersedia pada
+            response endpoint ini.
+          </p>
         </div>
 
         {/* KANAN */}
@@ -31,15 +34,9 @@ function RiskAnalysisCard({ student }) {
             💡 Rekomendasi Tindakan
           </h6>
 
-          <ul className="risk-recommendation-list">
-            <li>
-              Terbitkan Surat Pemberitahuan Wali.
-            </li>
-
-            <li>
-              Jadwalkan konseling individu (BK).
-            </li>
-          </ul>
+          <p className="text-center mt-4 mb-0">
+            {risk?.rekomendasi_tindakan || "-"}
+          </p>
         </div>
       </section>
     </>

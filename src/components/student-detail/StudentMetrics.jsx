@@ -1,36 +1,44 @@
 import { getRiskLabel } from "../../utils/risk";
 
 function StudentMetrics({ student }) {
+  const metrics = student?.metrik_kinerja;
+  const risk = student?.analisis_ews;
+
   return (
     <section className="student-metrics mb-3">
-      {/* Kehadiran */}
       <div className="metric-card">
         <span>Kehadiran</span>
-        <strong>{student.presensi ?? 0}%</strong>
+        <strong>
+          {metrics?.kehadiran_pct ?? 0}%
+        </strong>
       </div>
 
-      {/* Rata-rata Nilai */}
       <div className="metric-card">
         <span>Rata-rata Nilai</span>
-        <strong>{student.nilai ?? "-"}</strong>
+        <strong>
+          {metrics?.rata_rata_nilai ?? "-"}
+        </strong>
       </div>
 
-      {/* Rata-rata Nilai Tugas */}
       <div className="metric-card">
         <span>Rata-rata Nilai Tugas</span>
-        <strong>{student.nilai_tugas ?? "-"}</strong>
+        <strong>
+          {metrics?.rata_rata_tugas ?? "-"}
+        </strong>
       </div>
 
-      {/* Study Hour */}
       <div className="metric-card">
         <span>Study Hour</span>
-        <strong>{student.study_hour ?? "-"} Jam</strong>
+        <strong>
+          {metrics?.study_hour ?? "-"} Jam
+        </strong>
       </div>
 
-      {/* Status Risiko */}
       <div className="metric-card metric-risk">
         <span>Result Status Risk</span>
-        <strong>{getRiskLabel(student.status_risk)}</strong>
+        <strong>
+          {risk?.tingkat_risiko_display || "-"}
+        </strong>
       </div>
     </section>
   );

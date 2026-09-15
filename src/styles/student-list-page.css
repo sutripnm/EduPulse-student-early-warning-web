@@ -60,3 +60,26 @@
   padding: 20px;
   box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
 }
+
+.risk-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.risk-high {
+  background-color: var(--edupulse-danger);
+  color: #fff;
+}
+
+.risk-medium {
+  background-color: var(--edupulse-warning);
+  color: #fff;
+}
+
+.risk-low {
+  background-color: var(--edupulse-success);
+  color: #fff;
+}

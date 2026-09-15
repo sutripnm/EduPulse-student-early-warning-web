@@ -4,4 +4,8 @@ export const riskColors = {
   Tinggi: "var(--edupulse-danger)",
 };
 
-export const riskFactorColors = ["var(--edupulse-primary)", "var(--edupulse-warning)", "var(--edupulse-success)"];
+export const riskFactorColors = [
+  "var(--edupulse-primary)", 
+  "var(--edupulse-warning)", 
+  "var(--edupulse-success)"
+];

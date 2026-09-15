@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    "https://6dd9-2402-8780-1018-417c-64c2-8a42-1464-d260.ngrok-free.app/apis",
+    "https://02d1-156-230-191-173.ngrok-free.app/api",
 });
 
 api.interceptors.request.use((config) => {
@@ -22,16 +22,23 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export const getDashboardSummary = async (angkatan) => {
-  const response = await api.get("/v1/dashboard/summary/", {
-    params: {
-      angkatan,
-    },
-  });
+export const getDashboardSummary = async ({
+  kelas_id,
+  mapel_id,
+} = {}) => {
+  const params = {};
 
-  console.log("Dashboard API:", response);
-  console.log("Dashboard DATA:", response.data);
-  console.log("SUMMARY:", response.data?.summary);
+  if (kelas_id) {
+    params.kelas_id = kelas_id;
+  }
+
+  if (mapel_id) {
+    params.mapel_id = mapel_id;
+  }
+
+  const response = await api.get("/v1/dashboard/summary/", {
+    params,
+  });
 
   return response.data;
 };
@@ -40,10 +47,12 @@ export const getSchoolAnalytics = async ({
   angkatan,
   kelas_id,
   mapel_id,
-}) => {
-  const params = {
-    angkatan,
-  };
+} = {}) => {
+  const params = {};
+
+  if (angkatan) {
+    params.angkatan = angkatan;
+  }
 
   if (kelas_id) {
     params.kelas_id = kelas_id;
@@ -61,15 +70,15 @@ export const getSchoolAnalytics = async ({
 };
 
 export const getStudents = async ({
-  limit = 10,
-  offset = 0,
+  page = 1,
+  page_size = 10,
   search = "",
   kelas_id = "",
-  risk = "",
+  risk_status = "",
 } = {}) => {
   const params = {
-    limit,
-    offset,
+    page,
+    page_size,
   };
 
   if (search) {
@@ -80,15 +89,18 @@ export const getStudents = async ({
     params.kelas_id = kelas_id;
   }
 
-  if (risk) {
-    params.risk = risk;
+  if (risk_status) {
+    params.risk_status = risk_status;
   }
 
   console.log("PARAMS SISWA:", params);
 
-  const response = await api.get("/v1/academic/siswa/", {
-    params,
-  });
+  const response = await api.get(
+    "/v1/assessment/siswa-risk-summary/",
+    {
+      params,
+    }
+  );
 
   console.log("URL REQUEST:", response.config.url);
   console.log("DATA SISWA:", response.data);
@@ -102,13 +114,64 @@ export const getStudentByNisn = async (nisn) => {
   return response.data;
 };
 
-export const getMapel = async () => {
-  const response = await api.get("/v1/academic/mapel/");
+export const getHighRiskStudents = async ({
+  page = 1,
+  page_size = 10,
+  kelas_id = "",
+  search = "",
+} = {}) => {
+  const params = {
+    page,
+    page_size,
+    risk_status: "HIGH",
+  };
+
+  if (kelas_id) {
+    params.kelas_id = kelas_id;
+  }
+
+  if (search) {
+    params.search = search;
+  }
+
+  const response = await api.get(
+    "/v1/assessment/siswa-risk-summary/",
+    {
+      params,
+    }
+  );
+
   return response.data;
 };
 
 export const getKelas = async () => {
   const response = await api.get("/v1/academic/kelas/");
+  return response.data;
+};
+
+export const getMapel = async () => {
+  const response = await api.get("/v1/academic/mapel/");
+  return response.data;
+};
+
+
+export const getStudentDetailRisk = async ({
+  nisn,
+  mapel_id = "",
+}) => {
+  const params = {};
+
+  if (mapel_id) {
+    params.mapel_id = mapel_id;
+  }
+
+  const response = await api.get(
+    `/v1/assessment/detail-siswa/${nisn}/`,
+    {
+      params,
+    }
+  );
+
   return response.data;
 };
 

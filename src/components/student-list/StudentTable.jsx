@@ -1,16 +1,13 @@
 import { Link } from "react-router-dom";
 import RiskBadge from "../common/RiskBadge";
 
-function StudentTable({
-  students,
-  page,
-  totalStudents,
-}) {
+function StudentTable({ students, page, totalStudents }) {
   return (
     <section className="student-table-card">
       <div className="d-flex justify-content-between align-items-center mb-3">
         <div>
           <h5 className="fw-bold mb-1">Data Siswa</h5>
+
           <small className="text-secondary">
             Menampilkan{" "}
             {students.length > 0 ? (page - 1) * 10 + 1 : 0}
@@ -38,17 +35,44 @@ function StudentTable({
           <tbody>
             {students.map((student) => (
               <tr key={student.nisn}>
+                {/* NISN */}
                 <td>{student.nisn}</td>
+
+                {/* Nama */}
                 <td>
-                  <span className="fw-semibold">{student.nama}</span>
+                  <span className="fw-semibold">
+                    {student.nama_siswa}
+                  </span>
                 </td>
-                <td>{student.kelas?.nama_kelas}</td>
-                <td>{student.gender}</td>
-                <td>{student.presensi}%</td>
-                <td>{student.nilai}</td>
+
+                {/* Kelas */}
                 <td>
-                  <RiskBadge status={student.status_risk} />
+                  {student.kelas || "-"}
                 </td>
+
+                {/* Gender */}
+                <td>
+                  {student.gender || "-"}
+                </td>
+
+                {/* Presensi */}
+                <td>
+                  {student.presensi || "-"}
+                </td>
+
+                {/* Nilai */}
+                <td>
+                  {student.nilai ?? "-"}
+                </td>
+
+                {/* Status Risiko */}
+                <td>
+                  <RiskBadge
+                    status={student.status_risiko}
+                  />
+                </td>
+
+                {/* Aksi */}
                 <td>
                   <Link
                     to={`/detail-siswa/${student.nisn}`}

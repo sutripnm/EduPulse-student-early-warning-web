@@ -5,35 +5,61 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
+  Legend,
   ResponsiveContainer,
 } from "recharts";
 
 function PerformanceTrendChart({ data }) {
+  const successColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--edupulse-success")
+    .trim();
+
+  const primaryColor = getComputedStyle(document.documentElement)
+    .getPropertyValue("--edupulse-primary")
+    .trim();
+
   return (
     <div className="dashboard-box performance-trend-box">
       <h6 className="mb-1">📊 Tren Performa & Presensi</h6>
-      <p className="small mb-3">Grafik rata-rata per bulan</p>
+
+      <p className="small mb-3">
+        Grafik rata-rata per bulan
+      </p>
 
       <div className="chart-container">
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
+
             <XAxis dataKey="label" />
+
             <YAxis />
+
             <Tooltip />
-            <Line dataKey="rata_rata_nilai" />
-            <Line dataKey="rata_rata_presensi" />
+
+            <Legend />
+
+            <Line
+              type="monotone"
+              dataKey="rata_rata_nilai"
+              name="Performa"
+              stroke={successColor}
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+
+            <Line
+              type="monotone"
+              dataKey="rata_rata_presensi"
+              name="Presensi"
+              stroke={primaryColor}
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
           </LineChart>
         </ResponsiveContainer>
-      </div>
-
-      <div className="d-flex gap-3 small mt-2">
-        <span>
-          <strong>●</strong> Performa
-        </span>
-        <span>
-          <strong>●</strong> Presensi
-        </span>
       </div>
     </div>
   );
