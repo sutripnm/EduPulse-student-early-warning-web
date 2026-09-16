@@ -290,3 +290,23 @@
   background-color: var(--edupulse-primary-hover);
   border-color: var(--edupulse-primary-hover);
 }
+
+/* =========================================================
+   INPUT NILAI & ABSENSI - TWO COLUMN LAYOUT
+   ========================================================= */
+
+.input-section-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.input-section-column {
+  min-width: 0;
+}
+
+.input-section-column .input-data-card {
+  height: 100%;
+  margin-bottom: 0 !important;
+}

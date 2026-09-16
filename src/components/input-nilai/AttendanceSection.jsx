@@ -27,52 +27,71 @@ function AttendanceSection({
       </div>
 
       {/* FILTER ABSENSI */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-4">
-          <label htmlFor="attendance-class" className="form-label fw-semibold">
-            Kelas
-          </label>
-          <select
-            id="attendance-class"
-            className="form-select"
-            value={attendanceClass}
-            onChange={(event) => setAttendanceClass(event.target.value)}
-          >
-            <option value="">Pilih kelas</option>
-            {classOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+<div className="row g-3 mb-4">
+  <div className="col-12">
+    <label
+      htmlFor="attendance-class"
+      className="form-label fw-semibold"
+    >
+      Kelas
+    </label>
 
-        <div className="col-md-4">
-          <label htmlFor="start-date" className="form-label fw-semibold">
-            Tanggal Mulai
-          </label>
-          <input
-            type="date"
-            id="start-date"
-            className="form-control"
-            value={startDate}
-            onChange={(event) => setStartDate(event.target.value)}
-          />
-        </div>
+    <select
+      id="attendance-class"
+      className="form-select"
+      value={attendanceClass}
+      onChange={(event) =>
+        setAttendanceClass(event.target.value)
+      }
+    >
+      <option value="">Pilih kelas</option>
 
-        <div className="col-md-4">
-          <label htmlFor="end-date" className="form-label fw-semibold">
-            Tanggal Akhir
-          </label>
-          <input
-            type="date"
-            id="end-date"
-            className="form-control"
-            value={endDate}
-            onChange={(event) => setEndDate(event.target.value)}
-          />
-        </div>
-      </div>
+      {classOptions.map((option) => (
+        <option key={option} value={option}>
+          {option}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <div className="col-md-6">
+    <label
+      htmlFor="start-date"
+      className="form-label fw-semibold"
+    >
+      Tanggal Mulai
+    </label>
+
+    <input
+      type="date"
+      id="start-date"
+      className="form-control"
+      value={startDate}
+      onChange={(event) =>
+        setStartDate(event.target.value)
+      }
+    />
+  </div>
+
+  <div className="col-md-6">
+    <label
+      htmlFor="end-date"
+      className="form-label fw-semibold"
+    >
+      Tanggal Akhir
+    </label>
+
+    <input
+      type="date"
+      id="end-date"
+      className="form-control"
+      value={endDate}
+      onChange={(event) =>
+        setEndDate(event.target.value)
+      }
+    />
+  </div>
+</div>
 
       <div className="selected-period-info mb-4">
         <strong>Periode:</strong> {startDate || "Belum dipilih"}

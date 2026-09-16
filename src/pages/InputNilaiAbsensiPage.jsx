@@ -22,34 +22,39 @@ function InputNilaiAbsensiPage() {
               Input data absensi mingguan dan nilai pembelajaran siswa.
             </p>
           </header>
+            <div className="input-section-grid">
+              <div className="input-section-column">
+                <AttendanceSection
+                  attendanceClass={attendanceForm.attendanceClass}
+                  setAttendanceClass={attendanceForm.setAttendanceClass}
+                  startDate={attendanceForm.startDate}
+                  setStartDate={attendanceForm.setStartDate}
+                  endDate={attendanceForm.endDate}
+                  setEndDate={attendanceForm.setEndDate}
+                  attendance={attendanceForm.attendance}
+                  attendanceDates={attendanceForm.attendanceDates}
+                  attendanceSummary={attendanceForm.attendanceSummary}
+                  onAttendanceChange={attendanceForm.handleAttendanceChange}
+                  onSubmit={attendanceForm.handleAttendanceSubmit}
+                />
+              </div>
 
-          <AttendanceSection
-            attendanceClass={attendanceForm.attendanceClass}
-            setAttendanceClass={attendanceForm.setAttendanceClass}
-            startDate={attendanceForm.startDate}
-            setStartDate={attendanceForm.setStartDate}
-            endDate={attendanceForm.endDate}
-            setEndDate={attendanceForm.setEndDate}
-            attendance={attendanceForm.attendance}
-            attendanceDates={attendanceForm.attendanceDates}
-            attendanceSummary={attendanceForm.attendanceSummary}
-            onAttendanceChange={attendanceForm.handleAttendanceChange}
-            onSubmit={attendanceForm.handleAttendanceSubmit}
-          />
-
-          <ScoreSection
-            scoreClass={scoreForm.scoreClass}
-            setScoreClass={scoreForm.setScoreClass}
-            subject={scoreForm.subject}
-            setSubject={scoreForm.setSubject}
-            week={scoreForm.week}
-            setWeek={scoreForm.setWeek}
-            scoreDate={scoreForm.scoreDate}
-            setScoreDate={scoreForm.setScoreDate}
-            scores={scoreForm.scores}
-            onScoreChange={scoreForm.handleScoreChange}
-            onSubmit={scoreForm.handleScoreSubmit}
-          />
+              <div className="input-section-column">
+                <ScoreSection
+                  scoreClass={scoreForm.scoreClass}
+                  setScoreClass={scoreForm.setScoreClass}
+                  subject={scoreForm.subject}
+                  setSubject={scoreForm.setSubject}
+                  week={scoreForm.week}
+                  setWeek={scoreForm.setWeek}
+                  scoreDate={scoreForm.scoreDate}
+                  setScoreDate={scoreForm.setScoreDate}
+                  scores={scoreForm.scores}
+                  onScoreChange={scoreForm.handleScoreChange}
+                  onSubmit={scoreForm.handleScoreSubmit}
+                />
+              </div>
+            </div>
         </div>
       </section>
     </main>

@@ -1,4 +1,4 @@
-import logo from "../../assets/logo purple.png";
+import logo from "../../assets/gemini-svg.svg";
 
 function LoginBrandPanel() {
   return (
