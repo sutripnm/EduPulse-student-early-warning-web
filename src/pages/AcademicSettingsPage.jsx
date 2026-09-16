@@ -1,43 +1,74 @@
 import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import "../styles/academic-settings-page.css";
-import useCrudList from "../hooks/useCrudList";
+import useAcademicSettings from "../hooks/useAcademicSettings";
 import AcademicCrudCard from "../components/academic-settings/AcademicCrudCard";
-import { dummySubjects, dummyClasses } from "../data/academicDummyData";
 
 function AcademicSettingsPage() {
-  const subjectsCrud = useCrudList(
-    dummySubjects,
-    "Yakin ingin menghapus mata pelajaran ini?"
-  );
+  const {
+    subjects,
+    classes,
 
-  const classesCrud = useCrudList(
-    dummyClasses,
-    "Yakin ingin menghapus kelas ini?"
-  );
+    loadingSubjects,
+    loadingClasses,
+
+    error,
+
+    handleCreateMapel,
+    handleUpdateMapel,
+    handleDeleteMapel,
+
+    handleCreateKelas,
+    handleUpdateKelas,
+    handleDeleteKelas,
+  } = useAcademicSettings();
 
   return (
     <main className="academic-settings-page d-flex">
       <Sidebar />
 
       <section className="academic-settings-main flex-grow-1 p-4">
+        {/* Header */}
         <header className="mb-4">
-          <p className="text-secondary mb-1">Academic Management</p>
-          <h1 className="h3 fw-bold mb-1">Pengaturan Akademik</h1>
+          <p className="text-secondary mb-1">
+            Academic Management
+          </p>
+
+          <h1 className="h3 fw-bold mb-1">
+            Pengaturan Akademik
+          </h1>
+
           <p className="text-secondary mb-0">
             Kelola mata pelajaran dan kelas yang digunakan dalam sistem.
           </p>
         </header>
 
+        {/* Kembali */}
         <div className="mb-4">
-          <Link to="/pengaturan" className="btn btn-outline-dark">
+          <Link
+            to="/pengaturan"
+            className="btn btn-outline-dark"
+          >
             ← Kembali ke Pengaturan
           </Link>
         </div>
 
+        {/* Error */}
+        {error && (
+          <div className="alert alert-danger mb-4">
+            Gagal mengambil data akademik.
+          </div>
+        )}
+
+        {/* Content */}
         <div className="row g-4">
+
+          {/* =========================
+              MATA PELAJARAN
+              ========================= */}
           <div className="col-lg-6">
             <AcademicCrudCard
+              type="mapel"
               icon="📚"
               title="Mata Pelajaran"
               description="Daftar mata pelajaran saat ini."
@@ -45,15 +76,20 @@ function AcademicSettingsPage() {
               submitLabel="Tambah Mapel"
               addFormTitle="Tambah Mata Pelajaran"
               editFormTitle="Edit Mata Pelajaran"
-              inputLabel="Nama Mata Pelajaran"
-              inputPlaceholder="Contoh: Matematika"
-              columnLabel="Mata Pelajaran"
-              crud={subjectsCrud}
+              items={subjects}
+              loading={loadingSubjects}
+              onCreate={handleCreateMapel}
+              onUpdate={handleUpdateMapel}
+              onDelete={handleDeleteMapel}
             />
           </div>
 
+          {/* =========================
+              KELAS
+              ========================= */}
           <div className="col-lg-6">
             <AcademicCrudCard
+              type="kelas"
               icon="🏫"
               title="Kelas"
               description="Daftar kelas yang tersedia."
@@ -61,12 +97,14 @@ function AcademicSettingsPage() {
               submitLabel="Tambah Kelas"
               addFormTitle="Tambah Kelas"
               editFormTitle="Edit Kelas"
-              inputLabel="Nama Kelas"
-              inputPlaceholder="Contoh: XI IPA 3"
-              columnLabel="Nama Kelas"
-              crud={classesCrud}
+              items={classes}
+              loading={loadingClasses}
+              onCreate={handleCreateKelas}
+              onUpdate={handleUpdateKelas}
+              onDelete={handleDeleteKelas}
             />
           </div>
+
         </div>
       </section>
     </main>

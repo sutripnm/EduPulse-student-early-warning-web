@@ -7,7 +7,7 @@ function HighRiskSidebar({ students }) {
         </h5>
 
         <small className="text-secondary">
-          10 siswa dengan status risiko tinggi
+          Siswa dengan status risiko tinggi
         </small>
       </div>
 
@@ -21,27 +21,44 @@ function HighRiskSidebar({ students }) {
             </tr>
           </thead>
 
-<tbody>
-  {students.map((student) => (
-    <tr key={student.nisn}>
-      <td>
-        <span className="fw-semibold">
-          {student.nama_siswa}
-        </span>
-      </td>
+          <tbody>
+            {students.length === 0 ? (
+              <tr>
+                <td
+                  colSpan="3"
+                  className="text-center text-secondary py-3"
+                >
+                  Tidak ada siswa berisiko tinggi.
+                </td>
+              </tr>
+            ) : (
+              students.map((student) => (
+                <tr key={student.nisn}>
+                  <td>
+                    <span className="fw-semibold">
+                      {student.nama ||
+                        student.nama_siswa ||
+                        "-"}
+                    </span>
+                  </td>
 
-      <td>
-        {student.kelas || "-"}
-      </td>
+                  <td>
+                    {typeof student.kelas === "object"
+                      ? student.kelas?.nama_kelas || "-"
+                      : student.kelas || "-"}
+                  </td>
 
-      <td>
-        <span className="risk-badge risk-high">
-          {student.status_risiko}
-        </span>
-      </td>
-    </tr>
-  ))}
-</tbody>
+                  <td>
+                    <span className="badge text-bg-danger">
+                      {student.status_risk ||
+                        student.status_risiko ||
+                        "Tinggi"}
+                    </span>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
         </table>
       </div>
     </section>
