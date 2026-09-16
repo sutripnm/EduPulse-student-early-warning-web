@@ -6,10 +6,8 @@ html {
 }
 
 /* ==========================================
-   2. KEYFRAMES ANIMATION DEFINITIONS
+   2. KEYFRAMES ANIMATIONS
    ========================================== */
-
-/* Elemen muncul dari bawah ke atas */
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -21,7 +19,6 @@ html {
   }
 }
 
-/* KPI Card & Preview muncul dari kanan */
 @keyframes fadeInRight {
   from {
     opacity: 0;
@@ -33,22 +30,17 @@ html {
   }
 }
 
-/* Efek berdenyut untuk indikator hijau */
 @keyframes pulseGreen {
-  0% {
+  0%, 100% {
     box-shadow: 0 0 0 0 rgba(25, 135, 84, 0.6);
   }
   70% {
     box-shadow: 0 0 0 8px rgba(25, 135, 84, 0);
   }
-  100% {
-    box-shadow: 0 0 0 0 rgba(25, 135, 84, 0);
-  }
 }
 
-
 /* ==========================================
-   3. NAVBAR (RIGHT ALIGNED & REFINED)
+   3. NAVBAR
    ========================================== */
 .navbar {
   position: fixed;
@@ -57,7 +49,7 @@ html {
   right: 0;
   z-index: 1000;
   padding: 14px 0;
-  transition: box-shadow 0.25s ease, background-color 0.25s ease, padding 0.25s ease;
+  transition: padding 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .navbar.scrolled {
@@ -68,12 +60,11 @@ html {
   box-shadow: 0 4px 18px rgba(52, 52, 61, 0.06);
 }
 
-/* Pindah Menu ke Sisi Kanan (Berdampingan dengan Tombol Action) */
 .navbar-menu {
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-left: auto; /* Mendorong menu navigasi ke kanan */
+  margin-left: auto;
   margin-right: 12px;
   padding: 4px 8px;
   background-color: var(--edupulse-surface, #ffffff);
@@ -98,7 +89,6 @@ html {
   transform: translateY(-2px);
   background-color: var(--edupulse-primary-soft);
 }
-
 
 /* ==========================================
    4. HERO SECTION
@@ -129,7 +119,8 @@ html {
   opacity: 0;
 }
 
-.hero-title span {
+.hero-title span,
+.landing-section h2 span {
   color: var(--edupulse-primary);
 }
 
@@ -153,9 +144,8 @@ html {
   transform: translateY(0);
 }
 
-
 /* ==========================================
-   5. DASHBOARD & KPI PREVIEW (HERO RIGHT)
+   5. DASHBOARD & KPI PREVIEW
    ========================================== */
 .landing-kpi-preview {
   display: flex;
@@ -186,7 +176,7 @@ html {
   animation: fadeUp 0.6s ease forwards;
 }
 
-/* Staggered entrance untuk 4 KPI Card */
+/* Staggered entrance KPI Cards */
 .landing-kpi-row:nth-child(1) .landing-kpi-card:nth-child(1) { animation-delay: 0.4s; }
 .landing-kpi-row:nth-child(1) .landing-kpi-card:nth-child(2) { animation-delay: 0.5s; }
 .landing-kpi-row:nth-child(2) .landing-kpi-card:nth-child(1) { animation-delay: 0.6s; }
@@ -198,11 +188,15 @@ html {
   border-color: var(--edupulse-primary);
 }
 
-.landing-kpi-card span {
+.landing-kpi-card span,
+.landing-kpi-card small {
   display: block;
-  margin-bottom: 8px;
   font-size: 14px;
   color: var(--edupulse-text-muted);
+}
+
+.landing-kpi-card small {
+  font-size: 12px;
 }
 
 .landing-kpi-card strong {
@@ -213,13 +207,8 @@ html {
   color: var(--edupulse-text);
 }
 
-.landing-kpi-card small {
-  display: block;
-  font-size: 12px;
-  color: var(--edupulse-text-muted);
-}
-
-.landing-kpi-icon {
+.landing-kpi-icon,
+.feature-icon {
   width: 44px;
   height: 44px;
   display: flex;
@@ -228,9 +217,12 @@ html {
   flex-shrink: 0;
   border-radius: 12px;
   background-color: var(--edupulse-primary-soft);
-  color: var(--edupulse-primary);
   font-size: 20px;
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, color 0.3s ease;
+}
+
+.landing-kpi-icon {
+  color: var(--edupulse-primary);
 }
 
 .landing-kpi-card:hover .landing-kpi-icon {
@@ -239,9 +231,8 @@ html {
   color: #fff;
 }
 
-
 /* ==========================================
-   6. SECTIONS GENERAL STYLES
+   6. GENERAL SECTION STYLES
    ========================================== */
 .landing-section {
   padding: 100px 0;
@@ -256,15 +247,9 @@ html {
   max-width: 700px;
 }
 
-.section-heading h2,
 .landing-section h2 {
   color: var(--edupulse-text);
   font-weight: 700;
-}
-
-.section-heading h2 span,
-.landing-section h2 span {
-  color: var(--edupulse-primary);
 }
 
 .section-heading > p:last-child {
@@ -280,13 +265,12 @@ html {
   color: var(--edupulse-primary);
 }
 
-
 /* ==========================================
-   7. FEATURES SECTION
+   7. CARDS (FEATURES & PROCESS)
    ========================================== */
-.feature-card {
+.feature-card,
+.process-card {
   height: 100%;
-  padding: 24px;
   background-color: var(--edupulse-surface);
   border: 1px solid var(--edupulse-border);
   border-radius: 18px;
@@ -295,10 +279,23 @@ html {
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
+.feature-card {
+  padding: 24px;
+}
+
+.process-card {
+  padding: 28px;
+}
+
+/* Staggered Animations */
 .row > div:nth-child(1) .feature-card { animation-delay: 0.1s; }
 .row > div:nth-child(2) .feature-card { animation-delay: 0.2s; }
 .row > div:nth-child(3) .feature-card { animation-delay: 0.3s; }
 .row > div:nth-child(4) .feature-card { animation-delay: 0.4s; }
+
+.col-md-4:nth-child(1) .process-card { animation-delay: 0.1s; }
+.col-md-4:nth-child(2) .process-card { animation-delay: 0.25s; }
+.col-md-4:nth-child(3) .process-card { animation-delay: 0.4s; }
 
 .feature-card:hover {
   transform: translateY(-8px);
@@ -306,57 +303,31 @@ html {
   border-color: rgba(111, 66, 193, 0.3);
 }
 
+.process-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(52, 52, 61, 0.08);
+  border-color: var(--edupulse-primary);
+}
+
 .feature-icon {
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   margin-bottom: 18px;
-  border-radius: 12px;
-  background-color: var(--edupulse-primary-soft);
-  font-size: 20px;
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .feature-card:hover .feature-icon {
   transform: scale(1.15);
 }
 
-.feature-card h5 {
+.feature-card h5,
+.process-card h5 {
   margin-bottom: 10px;
   color: var(--edupulse-text);
 }
 
-.feature-card p {
+.feature-card p,
+.process-card p {
   margin: 0;
   color: var(--edupulse-text-muted);
   line-height: 1.6;
-}
-
-
-/* ==========================================
-   8. HOW IT WORKS SECTION
-   ========================================== */
-.process-card {
-  height: 100%;
-  padding: 28px;
-  background-color: var(--edupulse-surface);
-  border: 1px solid var(--edupulse-border);
-  border-radius: 18px;
-  opacity: 0;
-  animation: fadeUp 0.6s ease forwards;
-  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-.col-md-4:nth-child(1) .process-card { animation-delay: 0.1s; }
-.col-md-4:nth-child(2) .process-card { animation-delay: 0.25s; }
-.col-md-4:nth-child(3) .process-card { animation-delay: 0.4s; }
-
-.process-card:hover {
-  transform: translateY(-6px) scale(1.02);
-  box-shadow: 0 12px 28px rgba(52, 52, 61, 0.08);
-  border-color: var(--edupulse-primary);
 }
 
 .process-number {
@@ -377,19 +348,8 @@ html {
   color: #fff;
 }
 
-.process-card h5 {
-  margin-bottom: 10px;
-}
-
-.process-card p {
-  margin: 0;
-  color: var(--edupulse-text-muted);
-  line-height: 1.6;
-}
-
-
 /* ==========================================
-   9. ABOUT SECTION
+   8. ABOUT & CTA SECTIONS
    ========================================== */
 .about-card {
   min-height: 320px;
@@ -416,10 +376,6 @@ html {
   line-height: 1.5;
 }
 
-
-/* ==========================================
-   10. CTA SECTION
-   ========================================== */
 .landing-cta {
   padding: 80px 0;
   background-color: var(--edupulse-bg);
@@ -448,9 +404,8 @@ html {
   color: var(--edupulse-text);
 }
 
-
 /* ==========================================
-   11. RESPONSIVE BREAKPOINTS
+   9. RESPONSIVE BREAKPOINTS
    ========================================== */
 @media (max-width: 991.98px) {
   .navbar-menu {
