@@ -175,4 +175,28 @@ export const getStudentDetailRisk = async ({
   return response.data;
 };
 
+
+export const createPresensi = async (data) => {
+  const response = await api.post(
+    "/v1/assessment/presensi/",
+    data
+  );
+
+  return response.data;
+};
+
+export const createNilai = async (data) => {
+  const response = await api.post(
+    "/v1/assessment/nilai/",
+    data
+  );
+
+  return response.data;
+};
+
+export const getSemester = async () => {
+  const response = await api.get("/v1/academic/semester/");
+  return response.data;
+};
+
 export default api;

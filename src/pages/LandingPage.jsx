@@ -38,7 +38,7 @@ function LandingPage() {
               <div className="d-flex gap-3 mt-4">
                 <Link
                   to="/dashboard"
-                  className="btn btn-primary rounded-pill px-4"
+                  className="btn btn-dark rounded-pill px-4"
                 >
                   Explore Dashboard
                 </Link>
@@ -393,7 +393,7 @@ function LandingPage() {
 
             <Link
               to="/dashboard"
-              className="btn btn-primary rounded-pill px-4"
+              className="btn btn-dark rounded-pill px-4"
             >
               Open Dashboard
             </Link>

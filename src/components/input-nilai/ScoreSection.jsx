@@ -1,4 +1,3 @@
-import studentsDummy from "../../data/studentsDummy";
 import classOptions from "../../data/classOptions";
 
 const subjectOptions = [
@@ -18,15 +17,24 @@ const scoreFields = [
 function ScoreSection({
   scoreClass,
   setScoreClass,
+
+  kelasOptions,
+
   subject,
   setSubject,
-  week,
-  setWeek,
+
+  mapelOptions,
+
   scoreDate,
   setScoreDate,
+
+  students,
+
   scores,
   onScoreChange,
   onSubmit,
+
+  loading,
 }) {
   return (
     <section className="input-data-card">
@@ -40,84 +48,121 @@ function ScoreSection({
       </div>
 
       {/* FILTER NILAI */}
-      <div className="row g-3 mb-4">
-        <div className="col-md-3">
-          <label htmlFor="score-class" className="form-label fw-semibold">
-            Kelas
-          </label>
-          <select
-            id="score-class"
-            className="form-select"
-            value={scoreClass}
-            onChange={(event) => setScoreClass(event.target.value)}
-          >
-            <option value="">Pilih kelas</option>
-            {classOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+<div className="row g-3 mb-4">
 
-        <div className="col-md-3">
-          <label htmlFor="subject" className="form-label fw-semibold">
-            Mata Pelajaran
-          </label>
-          <select
-            id="subject"
-            className="form-select"
-            value={subject}
-            onChange={(event) => setSubject(event.target.value)}
-          >
-            <option value="">Pilih mata pelajaran</option>
-            {subjectOptions.map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        </div>
+  <div className="col-12">
+    <label
+      htmlFor="score-class"
+      className="form-label fw-semibold"
+    >
+      Kelas
+    </label>
 
-        <div className="col-md-3">
-          <label htmlFor="week" className="form-label fw-semibold">
-            Minggu
-          </label>
-          <select
-            id="week"
-            className="form-select"
-            value={week}
-            onChange={(event) => setWeek(event.target.value)}
-          >
-            {[1, 2, 3, 4, 5].map((num) => (
-              <option key={num} value={String(num)}>
-                Minggu {num}
-              </option>
-            ))}
-          </select>
-        </div>
+    <select
+      id="score-class"
+      className="form-select"
+      value={scoreClass}
+      onChange={(event) =>
+        setScoreClass(
+          event.target.value
+        )
+      }
+    >
+      <option value="">
+        Pilih kelas
+      </option>
 
-        <div className="col-md-3">
-          <label htmlFor="score-date" className="form-label fw-semibold">
-            Tanggal Input
-          </label>
-          <input
-            type="date"
-            id="score-date"
-            className="form-control"
-            value={scoreDate}
-            onChange={(event) => setScoreDate(event.target.value)}
-          />
-        </div>
-      </div>
+      {kelasOptions.map((kelas) => (
+        <option
+          key={kelas.id}
+          value={kelas.id}
+        >
+          {kelas.nama_kelas}
+        </option>
+      ))}
+    </select>
+  </div>
 
-      <div className="selected-period-info mb-4">
-        <strong>Kelas:</strong> {scoreClass || "Belum dipilih"}
-        <span className="mx-2">|</span>
-        <strong>Mapel:</strong> {subject || "Belum dipilih"}
-        <span className="mx-2">|</span>
-        <strong>Minggu:</strong> {week}
-      </div>
+  <div className="col-12">
+    <label
+      htmlFor="subject"
+      className="form-label fw-semibold"
+    >
+      Mata Pelajaran
+    </label>
+
+    <select
+      id="subject"
+      className="form-select"
+      value={subject}
+      onChange={(event) =>
+        setSubject(
+          event.target.value
+        )
+      }
+    >
+      <option value="">
+        Pilih mata pelajaran
+      </option>
+
+      {mapelOptions.map((mapel) => (
+        <option
+          key={mapel.id}
+          value={mapel.id}
+        >
+          {mapel.nama_mapel}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  <div className="col-12">
+    <label
+      htmlFor="score-date"
+      className="form-label fw-semibold"
+    >
+      Tanggal Input
+    </label>
+
+    <input
+      type="date"
+      id="score-date"
+      className="form-control"
+      value={scoreDate}
+      onChange={(event) =>
+        setScoreDate(
+          event.target.value
+        )
+      }
+    />
+  </div>
+
+</div>
+
+<div className="selected-period-info mb-4">
+  <strong>Kelas:</strong>{" "}
+  {scoreClass
+    ? kelasOptions.find(
+        (kelas) =>
+          String(kelas.id) === String(scoreClass)
+      )?.nama_kelas || "-"
+    : "Belum dipilih"}
+
+  <span className="mx-2">|</span>
+
+  <strong>Mapel:</strong>{" "}
+  {subject
+    ? mapelOptions.find(
+        (mapel) =>
+          String(mapel.id) === String(subject)
+      )?.nama_mapel || "-"
+    : "Belum dipilih"}
+
+  <span className="mx-2">|</span>
+
+  <strong>Tanggal:</strong>{" "}
+  {scoreDate || "Belum dipilih"}
+</div>
 
       {/* TABEL NILAI */}
       <form onSubmit={onSubmit}>
@@ -136,47 +181,74 @@ function ScoreSection({
               </tr>
             </thead>
 
-            <tbody>
-              {studentsDummy.map((student, index) => (
-                <tr key={student.nisn}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <span className="fw-semibold">{student.nama}</span>
-                    <small className="d-block text-secondary">
-                      {student.nisn}
-                    </small>
-                  </td>
+<tbody>
+  {students.length === 0 ? (
+    <tr>
+      <td
+        colSpan="6"
+        className="text-center text-secondary py-4"
+      >
+        Silakan pilih kelas terlebih dahulu.
+      </td>
+    </tr>
+  ) : (
+    students.map((student, index) => (
+      <tr key={student.nisn}>
+        <td>{index + 1}</td>
 
-                  {scoreFields.map((field) => (
-                    <td key={field.key}>
-                      <input
-                        type="number"
-                        className="form-control score-input"
-                        min={field.min}
-                        max={field.max}
-                        step={field.step}
-                        placeholder={field.placeholder}
-                        value={scores[student.nisn][field.key]}
-                        onChange={(event) =>
-                          onScoreChange(student.nisn, field.key, event.target.value)
-                        }
-                      />
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
+        <td>
+          <span className="fw-semibold">
+            {student.nama || student.nama_siswa || "-"}
+          </span>
+
+          <small className="d-block text-secondary">
+            {student.nisn}
+          </small>
+        </td>
+
+        {scoreFields.map((field) => (
+          <td key={field.key}>
+            <input
+              type="number"
+              className="form-control score-input"
+              min={field.min}
+              max={field.max}
+              step={field.step}
+              placeholder={field.placeholder}
+              value={
+                scores[student.nisn]?.[field.key] || ""
+              }
+              onChange={(event) =>
+                onScoreChange(
+                  student.nisn,
+                  field.key,
+                  event.target.value
+                )
+              }
+            />
+          </td>
+        ))}
+      </tr>
+    ))
+  )}
+</tbody>
           </table>
         </div>
 
         <div className="score-summary">
-          {studentsDummy.length} siswa • {studentsDummy.length * 4} nilai yang
+          {students.length} siswa • {students.length * 4} nilai yang
           akan disimpan
         </div>
 
-        <button type="submit" className="btn btn-primary mt-4">
-          Simpan Data Minggu Ini
-        </button>
+<button
+  type="submit"
+  className="btn btn-primary mt-4"
+  disabled={loading}
+>
+  {loading
+    ? "Menyimpan..."
+    : "Simpan Data Nilai"}
+</button>jad
       </form>
     </section>
   );

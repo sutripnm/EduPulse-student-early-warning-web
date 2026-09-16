@@ -1,19 +1,30 @@
-import studentsDummy from "../../data/studentsDummy";
-import classOptions from "../../data/classOptions";
 import { getDayName } from "../../utils/date";
+
 
 function AttendanceSection({
   attendanceClass,
   setAttendanceClass,
+  kelasOptions,
+
+  mapelId,
+  setMapelId,
+  mapelOptions,
+
   startDate,
   setStartDate,
   endDate,
   setEndDate,
+
+  students,
+
   attendance,
   attendanceDates,
   attendanceSummary,
+
   onAttendanceChange,
   onSubmit,
+
+  loading,
 }) {
   return (
     <section className="input-data-card mb-4">
@@ -28,6 +39,8 @@ function AttendanceSection({
 
       {/* FILTER ABSENSI */}
 <div className="row g-3 mb-4">
+
+  {/* Kelas */}
   <div className="col-12">
     <label
       htmlFor="attendance-class"
@@ -41,19 +54,61 @@ function AttendanceSection({
       className="form-select"
       value={attendanceClass}
       onChange={(event) =>
-        setAttendanceClass(event.target.value)
+        setAttendanceClass(
+          event.target.value
+        )
       }
     >
-      <option value="">Pilih kelas</option>
+      <option value="">
+        Pilih kelas
+      </option>
 
-      {classOptions.map((option) => (
-        <option key={option} value={option}>
-          {option}
+      {kelasOptions.map((kelas) => (
+        <option
+          key={kelas.id}
+          value={kelas.id}
+        >
+          {kelas.nama_kelas}
         </option>
       ))}
     </select>
   </div>
 
+  {/* Mapel */}
+  <div className="col-12">
+    <label
+      htmlFor="attendance-mapel"
+      className="form-label fw-semibold"
+    >
+      Mata Pelajaran
+    </label>
+
+    <select
+      id="attendance-mapel"
+      className="form-select"
+      value={mapelId}
+      onChange={(event) =>
+        setMapelId(
+          event.target.value
+        )
+      }
+    >
+      <option value="">
+        Pilih mata pelajaran
+      </option>
+
+      {mapelOptions.map((mapel) => (
+        <option
+          key={mapel.id}
+          value={mapel.id}
+        >
+          {mapel.nama_mapel}
+        </option>
+      ))}
+    </select>
+  </div>
+
+  {/* Tanggal */}
   <div className="col-md-6">
     <label
       htmlFor="start-date"
@@ -68,7 +123,9 @@ function AttendanceSection({
       className="form-control"
       value={startDate}
       onChange={(event) =>
-        setStartDate(event.target.value)
+        setStartDate(
+          event.target.value
+        )
       }
     />
   </div>
@@ -87,7 +144,9 @@ function AttendanceSection({
       className="form-control"
       value={endDate}
       onChange={(event) =>
-        setEndDate(event.target.value)
+        setEndDate(
+          event.target.value
+        )
       }
     />
   </div>
@@ -116,14 +175,19 @@ function AttendanceSection({
             </thead>
 
             <tbody>
-              {studentsDummy.map((student, index) => (
+              {students.map((student, index) => (
                 <tr key={student.nisn}>
                   <td>{index + 1}</td>
                   <td>
-                    <span className="fw-semibold">{student.nama}</span>
-                    <small className="d-block text-secondary">
-                      {student.nisn}
-                    </small>
+                    <td>
+                      <span className="fw-semibold">
+                        {student.nama_siswa || student.nama || "-"}
+                      </span>
+
+                      <small className="d-block text-secondary">
+                        {student.nisn}
+                      </small>
+                    </td>
                   </td>
 
                   {attendanceDates.map((date) => (
@@ -167,9 +231,15 @@ function AttendanceSection({
           </span>
         </div>
 
-        <button type="submit" className="btn btn-primary mt-4">
-          Simpan Absensi
-        </button>
+<button
+  type="submit"
+  className="btn btn-primary mt-4"
+  disabled={loading}
+>
+  {loading
+    ? "Menyimpan..."
+    : "Simpan Absensi"}
+</button>
       </form>
     </section>
   );

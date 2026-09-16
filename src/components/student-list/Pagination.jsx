@@ -16,7 +16,7 @@ function Pagination({ page, totalPages, onPageChange }) {
   return (
     <div className="student-pagination">
       <button
-        className="btn btn-outline-primary"
+        className="btn btn-outline-dark"
         disabled={page === 1}
         onClick={handlePrevious}
       >
@@ -28,7 +28,7 @@ function Pagination({ page, totalPages, onPageChange }) {
       </span>
 
       <button
-        className="btn btn-outline-primary"
+        className="btn btn-outline-dark"
         disabled={page === totalPages}
         onClick={handleNext}
       >

@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import "../styles/student-list-page.css";
 import useStudentList from "../hooks/useStudentList";
@@ -12,22 +13,16 @@ function StudentListPage() {
     totalStudents,
     loading,
     error,
-
     search,
     setSearch,
-
     classFilter,
     setClassFilter,
-
     riskFilter,
     setRiskFilter,
-
     kelasOptions,
-
     page,
     totalPages,
     goToPage,
-
     highRiskStudents,
   } = useStudentList();
 
@@ -36,6 +31,7 @@ function StudentListPage() {
       <Sidebar />
 
       <section className="student-list-main flex-grow-1 p-4">
+        {/* HEADER */}
         <header className="student-list-header mb-4">
           <div>
             <p className="text-secondary mb-1">
@@ -46,10 +42,17 @@ function StudentListPage() {
               Daftar Siswa
             </h1>
           </div>
+
+          <Link
+            to="/tambah-siswa"
+            className="btn btn-dark student-add-button"
+          >
+            + Tambah Siswa
+          </Link>
         </header>
 
         <div className="row g-4">
-          {/* Kiri */}
+          {/* KIRI */}
           <div className="col-lg-8">
             <StudentFilterBar
               search={search}
@@ -74,9 +77,11 @@ function StudentListPage() {
             />
           </div>
 
-          {/* Kanan */}
+          {/* KANAN */}
           <div className="col-lg-4">
-            <HighRiskSidebar students={highRiskStudents} />
+            <HighRiskSidebar
+              students={highRiskStudents}
+            />
           </div>
         </div>
       </section>

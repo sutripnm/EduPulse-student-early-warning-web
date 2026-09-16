@@ -1,5 +1,3 @@
-import { Link } from "react-router-dom";
-
 function StudentFilterBar({
   search,
   setSearch,
@@ -30,7 +28,7 @@ function StudentFilterBar({
         </div>
 
         {/* Filter Kelas */}
-        <div className="col-lg-2">
+        <div className="col-lg-3">
           <label htmlFor="class" className="form-label fw-semibold">
             Kelas
           </label>
@@ -52,7 +50,7 @@ function StudentFilterBar({
         </div>
 
         {/* Filter Risiko */}
-        <div className="col-lg-2">
+        <div className="col-lg-4">
           <label htmlFor="risk" className="form-label fw-semibold">
             Status Risiko
           </label>
@@ -80,14 +78,6 @@ function StudentFilterBar({
 </option>
           </select>
         </div>
-
-        {/* Tambah Siswa */}
-        <div className="col-lg-3">
-          <Link to="/tambah-siswa" className="btn btn-dark w-100">
-            + Tambah Siswa
-          </Link>
-        </div>
-
       </div>
     </section>
   );
