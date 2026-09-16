@@ -199,4 +199,14 @@ export const getSemester = async () => {
   return response.data;
 };
 
+export const getCurrentUser = async () => {
+  const response = await api.get("/v1/auth/me/");
+  return response.data;
+};
+
+export const getTahunAjaran = async () => {
+  const response = await api.get("/v1/academic/tahun-ajaran/");
+  return response.data;
+};
+
 export default api;

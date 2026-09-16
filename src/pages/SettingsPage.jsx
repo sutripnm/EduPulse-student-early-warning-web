@@ -7,16 +7,50 @@ import ThemeCard from "../components/settings/ThemeCard";
 
 function SettingsPage() {
   const {
-    profile,
-    school,
-    handleSchoolChange,
-    handleSchoolSubmit,
-    risk,
-    handleRiskChange,
-    handleRiskSubmit,
-    theme,
-    setTheme,
+    user,
+    activeTahunAjaran,
+    activeSemester,
+    loading,
+    error,
   } = useSettings();
+
+  const theme =
+    localStorage.getItem("theme") || "light";
+
+  const setTheme = (value) => {
+    localStorage.setItem("theme", value);
+
+    document.documentElement.setAttribute(
+      "data-theme",
+      value
+    );
+  };
+
+  if (loading) {
+    return (
+      <main className="settings-page d-flex">
+        <Sidebar />
+
+        <section className="settings-main flex-grow-1 p-4">
+          <p>Loading...</p>
+        </section>
+      </main>
+    );
+  }
+
+  if (error) {
+    return (
+      <main className="settings-page d-flex">
+        <Sidebar />
+
+        <section className="settings-main flex-grow-1 p-4">
+          <p className="text-danger">
+            Gagal mengambil data pengaturan.
+          </p>
+        </section>
+      </main>
+    );
+  }
 
   return (
     <main className="settings-page d-flex">
@@ -24,23 +58,35 @@ function SettingsPage() {
 
       <section className="settings-main flex-grow-1 p-4">
         <header className="mb-4">
-          <p className="text-secondary mb-1">System Management</p>
-          <h1 className="h3 fw-bold mb-1">Pengaturan</h1>
+          <p className="text-secondary mb-1">
+            System Management
+          </p>
+
+          <h1 className="h3 fw-bold mb-1">
+            Pengaturan
+          </h1>
+
           <p className="text-secondary mb-0">
-            Kelola akun, sekolah, risiko, dan tampilan EduPulse.
+            Kelola akun, sekolah, dan tampilan EduPulse.
           </p>
         </header>
 
         <div className="settings-container">
-          <ProfileCard profile={profile} />
+          <ProfileCard user={user} />
 
           <SchoolSettingsCard
-            school={school}
-            onChange={handleSchoolChange}
-            onSubmit={handleSchoolSubmit}
+            activeTahunAjaran={
+              activeTahunAjaran
+            }
+            activeSemester={
+              activeSemester
+            }
           />
 
-          <ThemeCard theme={theme} setTheme={setTheme} />
+          <ThemeCard
+            theme={theme}
+            setTheme={setTheme}
+          />
         </div>
       </section>
     </main>
