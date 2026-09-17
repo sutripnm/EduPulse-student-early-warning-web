@@ -1,18 +1,15 @@
-import { BsPersonFill } from "react-icons/bs";
-
 function StudentProfileInfo({ student }) {
-  // Data profil siswa (nama, NISN, kelas, gender) ada di dalam
-  // student.profil_siswa, bukan langsung di root object student.
   const profile = student?.profil_siswa;
 
   return (
     <section className="student-profile-card mb-4">
       <div className="student-section-title">
-        <span><BsPersonFill /></span>
+        <span>👤</span>
         <h6>Informasi Siswa</h6>
       </div>
 
       <div className="student-profile-grid">
+
         <div className="student-info-item">
           <small>Nama Siswa</small>
           <strong>
@@ -40,6 +37,7 @@ function StudentProfileInfo({ student }) {
             {profile?.gender || "-"}
           </strong>
         </div>
+
       </div>
     </section>
   );

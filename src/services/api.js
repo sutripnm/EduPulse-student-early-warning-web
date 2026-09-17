@@ -529,6 +529,40 @@ export const createStudent = async (data) => {
   return response.data;
 };
 
+/* =========================================================
+   Detail Page
+   ========================================================= */
+export const getStudentScores = async ({
+  nisn,
+  mapel_id,
+}) => {
+  const params = {
+    siswa_nisn: nisn,
+    mapel_id: Number(mapel_id),
+  };
+
+  const response = await api.get(
+    "/v1/assessment/nilai/",
+    {
+      params,
+    }
+  );
+
+  return response.data;
+};
+
+export const getStudentPrediction = async ({
+  nisn,
+  mapel_id,
+  minggu_ke,
+}) => {
+  const response = await api.get(
+    `/v1/assessment/detail-prediksi/${nisn}/${mapel_id}/${minggu_ke}/`
+  );
+
+  return response.data;
+};
+
 
 /* =========================================================
    EXPORT DEFAULT
