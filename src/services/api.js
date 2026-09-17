@@ -1,25 +1,33 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL:
-     "https://d6ca-156-230-191-173.ngrok-free.app/api",
+  baseURL: "https://0a35-2402-8780-1018-c90c-9800-a1d9-4813-cf12.ngrok-free.app/api",
+  headers: {
+    // Biar ngrok gak nampilin halaman warning ke request non-browser-navigasi
+    "ngrok-skip-browser-warning": "true",
+  },
 });
 
 // ==============================================================
-// Dashboard Siswa / Orang Tua
+// Dashboard Siswa
 // ==============================================================
-// TODO: konfirmasi ke tim backend endpoint & nama field yang benar.
-// Ini masih tebakan, dipakai sementara sampai backend kasih tau
-// endpoint aslinya. Struktur data yang diharapkan:
+// Endpoint asli dari backend (lihat swagger):
+// GET /api/v1/dashboard/student/{siswa_nisn}/
+//
+// Response shape:
 // {
-//   profil: { nisn, nama, kelas },
-//   absensi: [{ label, persen }],
-//   study_time: [{ label, jam }],
-//   tugas_pretest: [{ label, nilai }],
-//   assessment: [{ label, nilai }],
-//   tugas_posttest: [{ label, nilai }],
-//   status_risk: "LOW" | "MEDIUM" | "HIGH",
-//   rekomendasi: ["...", "..."],
+//   success, message,
+//   data: {
+//     profil: { nisn, nama_siswa, kelas },
+//     mapel_aktif: { id, nama_mapel },
+//     filter_opsi_mapel: [{ id, nama_mapel }],
+//     ringkasan_mingguan: {
+//       minggu_ke, study_time_jam,
+//       presensi_harian: [{ hari, status }],
+//       nilai: { tugas_1_pretest, tugas_2_posttest, assessment }
+//     },
+//     analisis_ews: { status_risiko, label_risiko_display, rekomendasi }
+//   }
 // }
 export const getStudentDashboard = async (nisn, mapel_id) => {
   const params = {};
@@ -28,7 +36,26 @@ export const getStudentDashboard = async (nisn, mapel_id) => {
     params.mapel_id = mapel_id;
   }
 
-  const response = await api.get(`/v1/academic/siswa/${nisn}/dashboard/`, {
+  const response = await api.get(`/v1/dashboard/student/${nisn}/`, {
+    params,
+  });
+
+  return response.data;
+};
+
+// ==============================================================
+// Dashboard Orang Tua
+// ==============================================================
+// Endpoint asli dari backend (lihat swagger):
+// GET /api/v1/dashboard/parent/{siswa_nisn}/
+export const getParentDashboard = async (nisn, mapel_id) => {
+  const params = {};
+
+  if (mapel_id) {
+    params.mapel_id = mapel_id;
+  }
+
+  const response = await api.get(`/v1/dashboard/parent/${nisn}/`, {
     params,
   });
 
