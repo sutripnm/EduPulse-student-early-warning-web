@@ -10,6 +10,8 @@ import AddStudentPage from "./pages/AddStudentPage";
 import InputNilaiAbsensiPage from "./pages/InputNilaiAbsensiPage";
 import SettingsPage from "./pages/SettingsPage";
 import AcademicSettingsPage from "./pages/AcademicSettingsPage";
+import DashboardSiswaPage from "./pages/DashboardSiswaPage";
+import DashboardOrtuPage from "./pages/DashboardOrtuPage";
 
 function App() {
   useTheme();
@@ -32,6 +34,8 @@ function App() {
           path="/pengaturan-akademik"
           element={<AcademicSettingsPage />}
         />
+        <Route path="/dashboard-siswa/:nisn" element={<DashboardSiswaPage />} />
+        <Route path="/dashboard-ortu/:nisn" element={<DashboardOrtuPage />} />
       </Routes>
     </BrowserRouter>
   );
