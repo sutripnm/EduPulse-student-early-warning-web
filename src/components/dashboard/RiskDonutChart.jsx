@@ -22,16 +22,16 @@ function RiskDonutChart({ data }) {
       </p>
 
       <div className="risk-donut-chart-container">
-        <ResponsiveContainer width="100%" height={240}>
+        <ResponsiveContainer width="100%" height="100%">
           <PieChart>
-            <Pie
-              data={data}
-              dataKey="value"
-              nameKey="name"
-              cx="50%"
-              cy="50%"
-              innerRadius={80}
-              outerRadius={110}
+          <Pie
+            data={data}
+            dataKey="value"
+            nameKey="name"
+            cx="50%"
+            cy="50%"
+            innerRadius="55%"
+            outerRadius="78%"
               paddingAngle={3}
               isAnimationActive
               animationDuration={800}

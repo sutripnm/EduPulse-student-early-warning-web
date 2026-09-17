@@ -4,9 +4,25 @@ function StudentMetrics({
 }) {
   const metrics = student?.metrik_kinerja;
 
+  const riskStatus = String(
+    riskSummary?.status_risiko || ""
+  ).toUpperCase();
+
+  const riskClass =
+    riskStatus === "HIGH" ||
+    riskStatus === "TINGGI"
+      ? "risk-high"
+      : riskStatus === "MEDIUM" ||
+        riskStatus === "SEDANG"
+      ? "risk-medium"
+      : riskStatus === "LOW" ||
+        riskStatus === "RENDAH"
+      ? "risk-low"
+      : "";
+
   return (
     <section className="student-metrics mb-3">
-      {/* Kehadiran */}
+
       <div className="metric-card">
         <span>Kehadiran</span>
         <strong>
@@ -14,7 +30,6 @@ function StudentMetrics({
         </strong>
       </div>
 
-      {/* Pretest */}
       <div className="metric-card">
         <span>Pretest</span>
         <strong>
@@ -22,7 +37,6 @@ function StudentMetrics({
         </strong>
       </div>
 
-      {/* Study Hour */}
       <div className="metric-card">
         <span>Study Hour</span>
         <strong>
@@ -30,7 +44,6 @@ function StudentMetrics({
         </strong>
       </div>
 
-      {/* Posttest */}
       <div className="metric-card">
         <span>Posttest</span>
         <strong>
@@ -38,7 +51,6 @@ function StudentMetrics({
         </strong>
       </div>
 
-      {/* Tugas - tinggi 2 baris */}
       <div className="metric-card metric-task">
         <span>Tugas</span>
         <strong>
@@ -46,13 +58,16 @@ function StudentMetrics({
         </strong>
       </div>
 
-      {/* Status Risk - tinggi 2 baris */}
-      <div className="metric-card metric-risk">
+      <div
+        className={`metric-card metric-risk ${riskClass}`}
+      >
         <span>Status Risk</span>
+
         <strong>
           {riskSummary?.status_risiko || "-"}
         </strong>
       </div>
+
     </section>
   );
 }

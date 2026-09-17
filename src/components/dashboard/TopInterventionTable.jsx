@@ -1,10 +1,40 @@
+import { Link } from "react-router-dom";
 import { BsClipboardCheck } from "react-icons/bs";
 
-// status_risk di sini bernilai "Tinggi" / "Sedang" (bukan "HIGH"/"MEDIUM"
-// seperti di StudentListPage), jadi badge-nya dibuat manual di sini,
-// bukan pakai components/common/RiskBadge.
 function getRiskBadgeClass(statusRisk) {
-  return statusRisk === "Tinggi" ? "risk-badge risk-high" : "risk-badge risk-medium";
+  const status = String(statusRisk || "").toUpperCase();
+
+  if (status === "HIGH" || status === "TINGGI") {
+    return "risk-badge risk-high";
+  }
+
+  if (status === "MEDIUM" || status === "SEDANG") {
+    return "risk-badge risk-medium";
+  }
+
+  if (status === "LOW" || status === "RENDAH") {
+    return "risk-badge risk-low";
+  }
+
+  return "risk-badge";
+}
+
+function getRiskLabel(statusRisk) {
+  const status = String(statusRisk || "").toUpperCase();
+
+  if (status === "HIGH" || status === "TINGGI") {
+    return "HIGH";
+  }
+
+  if (status === "MEDIUM" || status === "SEDANG") {
+    return "MEDIUM";
+  }
+
+  if (status === "LOW" || status === "RENDAH") {
+    return "LOW";
+  }
+
+  return statusRisk || "-";
 }
 
 function TopInterventionTable({ students }) {
@@ -32,20 +62,42 @@ function TopInterventionTable({ students }) {
             {students.map((student) => (
               <tr key={student.nisn}>
                 <td>
-                  <span className="fw-semibold">{student.nama}</span>
-                </td>
-                <td>{student.kelas}</td>
-                <td>{student.nilai}</td>
-                <td>{student.kehadiran}%</td>
-                <td>
-                  <span className={getRiskBadgeClass(student.status_risk)}>
-                    {student.status_risk}
+                  <span className="fw-semibold">
+                    {student.nama || "-"}
                   </span>
                 </td>
+
                 <td>
-                  <button className="btn btn-sm btn-outline-dark">
+                  {student.kelas || "-"}
+                </td>
+
+                <td>
+                  {student.nilai ?? "-"}
+                </td>
+
+                <td>
+                  {student.kehadiran ?? "-"}%
+                </td>
+
+                <td>
+                  <span
+                    className={getRiskBadgeClass(
+                      student.status_risk
+                    )}
+                  >
+                    {getRiskLabel(
+                      student.status_risk
+                    )}
+                  </span>
+                </td>
+
+                <td>
+                  <Link
+                    to={`/detail-siswa/${student.nisn}`}
+                    className="btn btn-sm btn-outline-dark"
+                  >
                     Detail
-                  </button>
+                  </Link>
                 </td>
               </tr>
             ))}

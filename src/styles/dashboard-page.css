@@ -98,10 +98,9 @@
 
 .risk-donut-chart-container {
   width: 100%;
-  height: 220px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
 }
 
 .risk-donut-detail {
