@@ -1,0 +1,312 @@
+:root {
+  /* =========================
+     Brand
+     ========================= */
+
+  --edupulse-primary: #7d70c4;
+  --edupulse-primary-hover: #6d60ad;
+
+  --edupulse-primary-soft: #eeecfa;
+  --edupulse-primary-soft-strong: #e3dff5;
+
+
+  /* =========================
+     Semantic
+     ========================= */
+
+  /* Low Risk / Success */
+  --edupulse-success: #55a277;
+  --edupulse-success-soft: #eaf6ef;
+
+  /* Medium Risk / Warning */
+  --edupulse-warning: #d0a044;
+  --edupulse-warning-soft: #fbf3e2;
+
+  /* High Risk / Danger */
+  --edupulse-danger: #cf5968;
+  --edupulse-danger-soft: #fbecef;
+
+  /* Info */
+  --edupulse-info: #5f8fbe;
+  --edupulse-info-soft: #eaf3fa;
+
+
+  /* =========================
+     Neutrals
+     ========================= */
+
+  --edupulse-bg: #f6f5fa;
+  --edupulse-surface: #ffffff;
+  --edupulse-surface-muted: #faf9fc;
+
+  --edupulse-border: #e0dce8;
+  --edupulse-border-strong: #d1ccdc;
+
+  --edupulse-text: #30303a;
+  --edupulse-text-muted: #6d6b77;
+  --edupulse-text-soft: #888591;
+
+  --edupulse-dark-surface: #343541;
+  --edupulse-dark-muted: #b2afbb;
+
+
+  /* =========================
+     Bootstrap
+     ========================= */
+
+  --bs-primary: var(--edupulse-primary);
+  --bs-primary-rgb: 125, 112, 196;
+
+  --bs-secondary: #74737f;
+  --bs-secondary-rgb: 116, 115, 127;
+
+  --bs-success: var(--edupulse-success);
+  --bs-success-rgb: 85, 162, 119;
+
+  --bs-danger: var(--edupulse-danger);
+  --bs-danger-rgb: 207, 89, 104;
+
+  --bs-warning: var(--edupulse-warning);
+  --bs-warning-rgb: 208, 160, 68;
+
+  --bs-info: var(--edupulse-info);
+  --bs-info-rgb: 95, 143, 190;
+
+  --bs-light: var(--edupulse-bg);
+  --bs-light-rgb: 246, 245, 250;
+
+  --bs-dark: var(--edupulse-text);
+  --bs-dark-rgb: 48, 48, 58;
+
+  --bs-body-bg: var(--edupulse-bg);
+  --bs-body-color: var(--edupulse-text);
+
+  --bs-border-color: var(--edupulse-border);
+
+  --bs-link-color: var(--edupulse-primary);
+  --bs-link-hover-color: var(--edupulse-primary-hover);
+
+
+  /* =========================
+     Shared "card" pattern
+     (dipakai di dashboard, student-list, student-detail)
+     ========================= */
+
+  --edupulse-card-radius: 18px;
+  --edupulse-card-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
+}
+
+
+/* =========================
+   Shared components
+   ========================= */
+
+/* Risk badge - dipakai lewat components/common/RiskBadge.jsx
+   di dashboard (TopInterventionTable) & daftar siswa (StudentTable) */
+.risk-badge {
+  display: inline-block;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.risk-high {
+  background-color: var(--edupulse-danger);
+  color: #ffffff;
+}
+
+.risk-medium {
+  background-color: var(--edupulse-warning);
+  color: #ffffff;
+}
+
+.risk-low {
+  background-color: var(--edupulse-success);
+  color: #ffffff;
+}
+
+/* =========================================================
+   DARK MODE
+   ========================================================= */
+
+[data-theme="dark"] {
+  /* Brand */
+  --edupulse-primary: #8b80ce;
+  --edupulse-primary-hover: #9b91dc;
+  --edupulse-primary-soft: #302d40;
+  --edupulse-primary-soft-strong: #39354b;
+
+  /* Semantic */
+  --edupulse-success: #70b58d;
+  --edupulse-success-soft: #263a30;
+
+  --edupulse-warning: #d4ae61;
+  --edupulse-warning-soft: #3b3425;
+
+  --edupulse-danger: #d97884;
+  --edupulse-danger-soft: #402d31;
+
+  --edupulse-info: #78a4d0;
+  --edupulse-info-soft: #2a3542;
+
+  /* Neutrals */
+  --edupulse-bg: #201f27;
+  --edupulse-surface: #292832;
+  --edupulse-surface-muted: #25242d;
+
+  --edupulse-border: #3b3946;
+  --edupulse-border-strong: #494653;
+
+  --edupulse-text: #eeecf3;
+  --edupulse-text-muted: #b2afbb;
+  --edupulse-text-soft: #918e9c;
+
+  --edupulse-dark-surface: #17161d;
+  --edupulse-dark-muted: #aaa6b5;
+
+  /* Bootstrap */
+  --bs-primary: var(--edupulse-primary);
+  --bs-primary-rgb: 139, 128, 206;
+
+  --bs-secondary: #a5a2ae;
+  --bs-secondary-rgb: 165, 162, 174;
+
+  --bs-success: var(--edupulse-success);
+  --bs-success-rgb: 112, 181, 141;
+
+  --bs-danger: var(--edupulse-danger);
+  --bs-danger-rgb: 217, 120, 132;
+
+  --bs-warning: var(--edupulse-warning);
+  --bs-warning-rgb: 212, 174, 97;
+
+  --bs-info: var(--edupulse-info);
+  --bs-info-rgb: 120, 164, 208;
+
+  --bs-light: var(--edupulse-surface);
+  --bs-light-rgb: 41, 40, 50;
+
+  --bs-dark: var(--edupulse-text);
+  --bs-dark-rgb: 238, 236, 243;
+
+  --bs-body-bg: var(--edupulse-bg);
+  --bs-body-color: var(--edupulse-text);
+  --bs-border-color: var(--edupulse-border);
+
+  --bs-link-color: var(--edupulse-primary);
+  --bs-link-hover-color: var(--edupulse-primary-hover);
+
+  /* Shadow */
+  --edupulse-card-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.18);
+
+  color-scheme: dark;
+}
+
+// =================
+// Animasi biar gak langsung loncat ke gelap
+// =================
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  background-color: var(--edupulse-bg);
+  color: var(--edupulse-text);
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
+}
+
+// =================
+// Form
+// =================
+
+.form-control,
+.form-select {
+  background-color: var(--edupulse-surface);
+  color: var(--edupulse-text);
+  border-color: var(--edupulse-border);
+}
+
+.form-control::placeholder {
+  color: var(--edupulse-text-soft);
+}
+
+.form-control:focus,
+.form-select:focus {
+  background-color: var(--edupulse-surface);
+  color: var(--edupulse-text);
+
+  border-color: var(--edupulse-primary);
+}
+
+// =================
+// Tabel
+// =================
+.table {
+  color: var(--edupulse-text);
+}
+
+.table > :not(caption) > * > * {
+  background-color: transparent;
+  color: var(--edupulse-text);
+  border-color: var(--edupulse-border);
+}
+
+.table thead th {
+  color: var(--edupulse-text);
+}
+
+.table tbody tr {
+  border-color: var(--edupulse-border);
+}
+
+// =================
+// Card
+// =================
+.dashboard-box,
+.settings-card,
+.academic-settings-card,
+.input-data-card,
+.student-table-card,
+.risk-student-card,
+.metric-card,
+.risk-analysis-card,
+.student-profile-card {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+[data-theme="dark"] body {
+  background-color: var(--edupulse-bg);
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] #root {
+  background-color: var(--edupulse-bg);
+  min-height: 100vh;
+}
+
+[data-theme="dark"] .student-list-page,
+[data-theme="dark"] .student-detail-page,
+[data-theme="dark"] .dashboard-page,
+[data-theme="dark"] .settings-page,
+[data-theme="dark"] .academic-settings-page,
+[data-theme="dark"] .input-nilai-page {
+  background-color: var(--edupulse-bg);
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] {
+  --edupulse-bg: #201f27;
+  --edupulse-surface: #292832;
+  --edupulse-text: #eeecf3;
+  --edupulse-text-muted: #b2afbb;
+}

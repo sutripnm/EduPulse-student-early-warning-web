@@ -1,6 +1,6 @@
 .dashboard-page {
   min-height: 100vh;
-  background-color: #eeecfa;
+  background-color: #f3f1f7;
 }
 
 .dashboard-main {
@@ -10,9 +10,10 @@
 .dashboard-kpi {
   min-height: 90px;
   padding: 12px;
-  background-color: white;
-  border: 3px solid #6834d9;
-  border-radius: 18px;
+  background-color: var(--edupulse-surface);
+  border: 3px solid var(--edupulse-primary);
+  border-radius: 16px;
+  box-shadow: var(--edupulse-card-shadow);
   text-align: center;
 }
 
@@ -26,14 +27,24 @@
 }
 
 .kpi-icon {
-  font-size: 28px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: var(--edupulse-primary-soft);
+  color: var(--edupulse-primary);
+  font-size: 20px;
   margin-bottom: 3px;
 }
 
 .dashboard-box {
+  width: 100%;
   padding: 24px;
-  background-color: #9486df;
-  border-radius: 18px;
+  background-color: var(--edupulse-surface);
+  border-radius: var(--edupulse-card-radius);
+  box-shadow: var(--edupulse-card-shadow);
 }
 
 .dashboard-chart-box {
@@ -41,10 +52,18 @@
 }
 
 .dashboard-table {
-  min-height: 205px;
-  padding: 16px;
-  background-color: #9486df;
+  padding: 12px;
+  background-color: var(--edupulse-surface);
   border-radius: 18px;
+}
+
+.dashboard-table .table {
+  background-color: var(--edupulse-surface);
+  --bs-table-bg: var(--edupulse-surface);
+}
+
+.dashboard-table .table > :not(caption) > * > * {
+  background-color: var(--edupulse-surface);
 }
 
 .analytics-box {
@@ -53,4 +72,73 @@
 
 .today-summary {
   min-height: 465px;
+}
+
+.chart-container {
+  width: 100%;
+}
+
+.risk-chart-container {
+  width: 100%;
+}
+
+.analytics-chart-container {
+  width: 100%;
+}
+
+.performance-trend-box,
+.risk-donut-box {
+  height: 100%;
+}
+
+.risk-donut-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.risk-donut-chart-container {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
+}
+
+.risk-donut-detail {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 16px;
+  margin-top: 4px;
+}
+
+.risk-donut-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13px;
+}
+
+.risk-donut-dot {
+  width: 9px;
+  height: 9px;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.risk-donut-label {
+  color: var(--edupulse-text-muted);
+}
+
+.risk-donut-value {
+  font-weight: 600;
+  color: var(--edupulse-text);
+}
+
+.risk-donut-percentage {
+  color: var(--edupulse-text-muted);
+}
+
+@media (max-width: 576px) {
+  .risk-donut-detail {
+    grid-template-columns: 1fr;
+  }
 }

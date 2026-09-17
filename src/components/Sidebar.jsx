@@ -1,69 +1,82 @@
-import { Link } from "react-router-dom";
-import logo from "../assets/logo black.png";
-import "../styles/sidebar.css";
+  import { NavLink } from "react-router-dom";
+  import { BsChevronLeft, BsChevronRight, BsBoxArrowRight } from "react-icons/bs";
+  import logo from "../assets/gemini-svg.svg";
+  import "../styles/sidebar.css";
+  import useSidebar from "../hooks/useSidebar";
+  import sidebarMenuItems from "../data/sidebarMenuItems";
 
-function Sidebar() {
-  return (
-    <aside className="sidebar d-flex flex-column">
+  function Sidebar() {
+    // Status buka/tutup sidebar (mode ringkas) + fungsi togglenya.
+    const { collapsed, toggleCollapsed } = useSidebar();
 
-      {/* Logo */}
-      <div className="sidebar-logo mb-4">
-        <img
-          src={logo}
-          alt="EduPulse"
-          className="img-fluid"
-        />
-      </div>
-
-      {/* Menu */}
-      <nav className="d-flex flex-column gap-2">
-
-        <Link
-          to="/dashboard"
-          className="sidebar-link"
+    return (
+      <aside
+        className={`sidebar d-flex flex-column ${
+          collapsed ? "sidebar-collapsed" : ""
+        }`}
+      >
+        {/* Floating Toggle Button */}
+        <button
+          type="button"
+          className="sidebar-toggle"
+          onClick={toggleCollapsed}
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          title={collapsed ? "Buka Sidebar" : "Tutup Sidebar"}
         >
-          Dashboard
-        </Link>
-
-        <Link
-          to="/daftar-siswa"
-          className="sidebar-link"
-        >
-          Daftar Siswa
-        </Link>
-
-        <Link
-          to="/detail-siswa"
-          className="sidebar-link"
-        >
-          Detail Siswa
-        </Link>
-
-        <Link
-          to="/statistik-siswa"
-          className="sidebar-link"
-        >
-          Statistik Siswa
-        </Link>
-
-        <Link
-          to="/pengaturan"
-          className="sidebar-link"
-        >
-          Pengaturan
-        </Link>
-
-      </nav>
-
-      {/* Logout */}
-      <div className="mt-auto">
-        <button className="sidebar-logout">
-          Logout
+          {collapsed ? <BsChevronRight /> : <BsChevronLeft />}
         </button>
-      </div>
 
-    </aside>
-  );
-}
+        {/* Header dengan Bingkai Latar Halaman */}
+        <div className="sidebar-header">
+          <div className="sidebar-brand-card">
+            <div className="sidebar-logo">
+              <img src={logo} alt="EduPulse Logo" />
+            </div>
 
-export default Sidebar;
+            <div className="sidebar-brand-text">
+              <strong className="brand-title">
+                <span className="text-edu">Edu</span>
+                <span className="text-pulse">Pulse</span>
+              </strong>
+              <span className="brand-subtitle">STUDENT EARLY WARNING SYSTEM</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation Menu */}
+        <nav className="sidebar-menu">
+          {sidebarMenuItems.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              data-tooltip={item.label}
+              className={({ isActive }) =>
+                `sidebar-link ${isActive ? "active" : ""}`
+              }
+            >
+              <span className="sidebar-link-icon">
+                <item.icon />
+              </span>
+              <span className="sidebar-link-text">{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* Logout Action */}
+        <div className="mt-auto pt-3">
+          <button
+            type="button"
+            className="sidebar-logout"
+            data-tooltip="Logout"
+          >
+            <span className="sidebar-link-icon">
+              <BsBoxArrowRight />
+            </span>
+            <span className="sidebar-link-text">Logout</span>
+          </button>
+        </div>
+      </aside>
+    );
+  }
+
+  export default Sidebar;

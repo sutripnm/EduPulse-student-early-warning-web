@@ -1,0 +1,167 @@
+.input-nilai-page {
+  min-height: 100vh;
+  background-color: #f4f2f7;
+}
+
+.input-nilai-main {
+  min-height: 100vh;
+  background-color: var(--edupulse-primary-soft);
+  padding: 40px;
+}
+
+.input-nilai-container {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.input-page-header h1 {
+  color: var(--edupulse-text);
+}
+
+.input-data-card {
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border-strong);
+  border-radius: 20px;
+  padding: 28px;
+}
+
+.input-section-header {
+  margin-bottom: 24px;
+}
+
+.selected-period-info {
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
+  border-radius: 12px;
+  padding: 14px 18px;
+}
+
+/* =========================
+   TABLE
+========================= */
+
+.input-data-card .table {
+  margin-bottom: 0;
+}
+
+.input-data-card .table th {
+  white-space: nowrap;
+  vertical-align: middle;
+  background-color: var(--edupulse-primary-soft);
+}
+
+.input-data-card .table td,
+.input-data-card .table th {
+  padding: 14px 12px;
+}
+
+.input-data-card .table td {
+  vertical-align: middle;
+}
+
+.attendance-table,
+.score-table {
+  min-width: 1050px;
+}
+
+/* =========================
+   ABSENSI
+========================= */
+
+.attendance-select {
+  min-width: 125px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.attendance-select.status-hadir {
+  background-color: var(--edupulse-success-soft);
+  border-color: #a9c9b6;
+}
+
+.attendance-select.status-izin {
+  background-color: var(--edupulse-warning-soft);
+  border-color: #d6bd8a;
+}
+
+.attendance-select.status-sakit {
+  background-color: var(--edupulse-info-soft);
+  border-color: #a9bed4;
+}
+
+.attendance-select.status-alpha {
+  background-color: var(--edupulse-danger-soft);
+  border-color: #d2a2a8;
+}
+
+.attendance-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 20px;
+  padding: 15px 18px;
+  border-radius: 12px;
+  background-color: var(--edupulse-primary-soft);
+}
+
+/* =========================
+   NILAI
+========================= */
+
+.score-table th small {
+  display: block;
+  margin-top: 3px;
+  font-weight: 400;
+  color: var(--edupulse-text-muted);
+}
+
+.score-input {
+  min-width: 110px;
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
+}
+
+.score-input:focus {
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 0.15rem rgba(111, 99, 168, 0.12);
+}
+
+.score-summary {
+  margin-top: 20px;
+  color: var(--edupulse-text-muted);
+  font-size: 14px;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.input-data-card .btn-primary {
+  background-color: var(--edupulse-primary);
+  border-color: var(--edupulse-primary);
+}
+
+.input-data-card .btn-primary:hover {
+  background-color: var(--edupulse-primary-hover);
+  border-color: var(--edupulse-primary-hover);
+}
+
+/* =========================================================
+   INPUT NILAI & ABSENSI - TWO COLUMN LAYOUT
+   ========================================================= */
+
+.input-section-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.input-section-column {
+  min-width: 0;
+}
+
+.input-section-column .input-data-card {
+  height: 100%;
+  margin-bottom: 0 !important;
+}
