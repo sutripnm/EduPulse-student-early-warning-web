@@ -1,6 +1,10 @@
+import { BsClipboardCheck } from "react-icons/bs";
 import { getDayName } from "../../utils/date";
 
-
+// Form input absensi: filter kelas/mapel/tanggal + tabel absensi harian.
+// Semua state & handler (attendance, attendanceDates, dst) datang dari
+// hook useAttendanceForm di InputNilaiAbsensiPage, komponen ini murni
+// menampilkan apa yang dikirim lewat props.
 function AttendanceSection({
   attendanceClass,
   setAttendanceClass,
@@ -30,7 +34,10 @@ function AttendanceSection({
     <section className="input-data-card mb-4">
       <div className="input-section-header">
         <div>
-          <h5 className="fw-bold mb-1">📋 Input Absensi</h5>
+          <h5 className="fw-bold mb-1">
+            <BsClipboardCheck className="me-2" />
+            Input Absensi
+          </h5>
           <p className="text-secondary mb-0">
             Input kehadiran siswa berdasarkan tanggal yang dipilih.
           </p>
@@ -179,15 +186,13 @@ function AttendanceSection({
                 <tr key={student.nisn}>
                   <td>{index + 1}</td>
                   <td>
-                    <td>
-                      <span className="fw-semibold">
-                        {student.nama_siswa || student.nama || "-"}
-                      </span>
+                    <span className="fw-semibold">
+                      {student.nama_siswa || student.nama || "-"}
+                    </span>
 
-                      <small className="d-block text-secondary">
-                        {student.nisn}
-                      </small>
-                    </td>
+                    <small className="d-block text-secondary">
+                      {student.nisn}
+                    </small>
                   </td>
 
                   {attendanceDates.map((date) => (

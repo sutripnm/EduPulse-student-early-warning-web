@@ -512,6 +512,23 @@ export const createNilai = async (
   return response.data;
 };
 
+/* =========================================================
+   ASSESSMENT - NILAI
+   ========================================================= */
+/*
+POST
+/api/v1/academic/siswa/
+Buat Siswa Baru (Auto Generate Akun)
+*/
+export const createStudent = async (data) => {
+  const response = await api.post(
+    "/v1/academic/siswa/",
+    data
+  );
+
+  return response.data;
+};
+
 
 /* =========================================================
    EXPORT DEFAULT

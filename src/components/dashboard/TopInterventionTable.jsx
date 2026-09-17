@@ -1,10 +1,19 @@
-// Catatan: status_risk di sini bernilai "Tinggi" / "Sedang" (bukan
-// "HIGH"/"MEDIUM" seperti di StudentListPage), jadi badge-nya dibuat
-// inline di sini, bukan pakai components/common/RiskBadge.
+import { BsClipboardCheck } from "react-icons/bs";
+
+// status_risk di sini bernilai "Tinggi" / "Sedang" (bukan "HIGH"/"MEDIUM"
+// seperti di StudentListPage), jadi badge-nya dibuat manual di sini,
+// bukan pakai components/common/RiskBadge.
+function getRiskBadgeClass(statusRisk) {
+  return statusRisk === "Tinggi" ? "risk-badge risk-high" : "risk-badge risk-medium";
+}
+
 function TopInterventionTable({ students }) {
   return (
     <section className="mt-3">
-      <h6>📋 Top 5 Siswa Membutuhkan Intervensi</h6>
+      <h6>
+        <BsClipboardCheck className="me-2" />
+        Top 5 Siswa Membutuhkan Intervensi
+      </h6>
 
       <div className="dashboard-table table-responsive">
         <table className="table align-middle mb-0">
@@ -29,15 +38,9 @@ function TopInterventionTable({ students }) {
                 <td>{student.nilai}</td>
                 <td>{student.kehadiran}%</td>
                 <td>
-<span
-  className={`risk-badge ${
-    student.status_risk === "HIGH"
-      ? "risk-high"
-      : "risk-medium"
-  }`}
->
-  {student.status_risk}
-</span>
+                  <span className={getRiskBadgeClass(student.status_risk)}>
+                    {student.status_risk}
+                  </span>
                 </td>
                 <td>
                   <button className="btn btn-sm btn-outline-dark">

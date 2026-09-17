@@ -1,72 +1,81 @@
-import classOptions from "../../data/classOptions";
-
-function AddStudentForm({ formData, onChange, onSubmit }) {
+function AddStudentForm({
+  formData,
+  onChange,
+  onSubmit,
+  kelasOptions,
+  loading,
+}) {
   return (
     <form onSubmit={onSubmit}>
-      {/* NIS */}
+      {/* NISN */}
       <div className="mb-3">
-        <label htmlFor="nis" className="form-label">
-          NIS
+        <label
+          htmlFor="nisn"
+          className="form-label"
+        >
+          NISN
         </label>
+
         <input
           type="text"
-          id="nis"
-          name="nis"
+          id="nisn"
+          name="nisn"
           className="form-control"
-          value={formData.nis}
+          value={formData.nisn}
           onChange={onChange}
-          placeholder="Masukkan NIS"
+          placeholder="Masukkan NISN"
+          required
         />
       </div>
 
       {/* Nama */}
       <div className="mb-3">
-        <label htmlFor="name" className="form-label">
+        <label
+          htmlFor="nama"
+          className="form-label"
+        >
           Nama Siswa
         </label>
+
         <input
           type="text"
-          id="name"
-          name="name"
+          id="nama"
+          name="nama"
           className="form-control"
-          value={formData.name}
+          value={formData.nama}
           onChange={onChange}
           placeholder="Masukkan nama siswa"
-        />
-      </div>
-
-      {/* Tahun Masuk */}
-      <div className="mb-3">
-        <label htmlFor="entryYear" className="form-label">
-          Tahun Masuk
-        </label>
-        <input
-          type="number"
-          id="entryYear"
-          name="entryYear"
-          className="form-control"
-          value={formData.entryYear}
-          onChange={onChange}
-          placeholder="Contoh: 2026"
+          required
         />
       </div>
 
       {/* Kelas */}
       <div className="mb-3">
-        <label htmlFor="className" className="form-label">
+        <label
+          htmlFor="kelas_id"
+          className="form-label"
+        >
           Pilih Kelas
         </label>
+
         <select
-          id="className"
-          name="className"
+          id="kelas_id"
+          name="kelas_id"
           className="form-select"
-          value={formData.className}
+          value={formData.kelas_id}
           onChange={onChange}
+          required
         >
-          <option value="">Pilih kelas</option>
-          {classOptions.map((option) => (
-            <option key={option} value={option}>
-              {option}
+          <option value="">
+            Pilih kelas
+          </option>
+
+          {kelasOptions.map((kelas) => (
+            <option
+              key={kelas.id}
+              value={kelas.id}
+            >
+              {kelas.nama_kelas}
             </option>
           ))}
         </select>
@@ -74,40 +83,88 @@ function AddStudentForm({ formData, onChange, onSubmit }) {
 
       {/* Gender */}
       <div className="mb-3">
-        <label htmlFor="gender" className="form-label">
+        <label
+          htmlFor="gender"
+          className="form-label"
+        >
           Gender
         </label>
+
         <select
           id="gender"
           name="gender"
           className="form-select"
           value={formData.gender}
           onChange={onChange}
+          required
         >
-          <option value="">Pilih gender</option>
-          <option value="Laki-laki">Laki-laki</option>
-          <option value="Perempuan">Perempuan</option>
+          <option value="">
+            Pilih gender
+          </option>
+
+          <option value="L">
+            Laki-laki
+          </option>
+
+          <option value="P">
+            Perempuan
+          </option>
         </select>
       </div>
 
       {/* Orang Tua */}
-      <div className="mb-4">
-        <label htmlFor="parent" className="form-label">
-          Orang Tua
+      <div className="mb-3">
+        <label
+          htmlFor="first_name_orang_tua"
+          className="form-label"
+        >
+          Nama Depan Orang Tua
         </label>
+
         <input
           type="text"
-          id="parent"
-          name="parent"
+          id="first_name_orang_tua"
+          name="first_name_orang_tua"
           className="form-control"
-          value={formData.parent}
+          value={
+            formData.first_name_orang_tua
+          }
           onChange={onChange}
-          placeholder="Nama orang tua"
+          placeholder="Contoh: Budi"
+          required
         />
       </div>
 
-      <button type="submit" className="btn btn-primary w-100">
-        Submit
+      <div className="mb-4">
+        <label
+          htmlFor="last_name_orang_tua"
+          className="form-label"
+        >
+          Nama Belakang Orang Tua
+        </label>
+
+        <input
+          type="text"
+          id="last_name_orang_tua"
+          name="last_name_orang_tua"
+          className="form-control"
+          value={
+            formData.last_name_orang_tua
+          }
+          onChange={onChange}
+          placeholder="Contoh: Santoso"
+          required
+        />
+      </div>
+
+      <button
+        type="submit"
+        className="btn btn-primary w-100"
+        disabled={loading}
+      >
+        {loading
+          ? "Menyimpan..."
+          : "Tambah Siswa"}
       </button>
     </form>
   );

@@ -4,6 +4,8 @@ import LoginForm from "../components/login/LoginForm";
 import useLogin from "../hooks/useLogin";
 
 function LoginPage() {
+  // State email/password + fungsi submit login ada di useLogin, biar
+  // halaman ini tinggal merakit LoginBrandPanel + LoginForm.
   const { email, setEmail, password, setPassword, handleSubmit } = useLogin();
 
   return (

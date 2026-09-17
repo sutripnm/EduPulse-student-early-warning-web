@@ -1,3 +1,4 @@
+import { BsPieChartFill } from "react-icons/bs";
 import {
   PieChart,
   Pie,
@@ -11,7 +12,10 @@ import { riskColors } from "../../utils/dashboardColors";
 function RiskDonutChart({ data }) {
   return (
     <div className="dashboard-box risk-donut-box">
-      <h5>🍩 Donut Chart: Proporsi Risiko</h5>
+      <h5>
+        <BsPieChartFill className="me-2" />
+        Donut Chart: Proporsi Risiko
+      </h5>
 
       <p className="small">
         Distribusi tingkat risiko siswa

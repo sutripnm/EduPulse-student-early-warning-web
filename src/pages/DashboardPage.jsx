@@ -11,6 +11,9 @@ import SchoolAnalyticsSection from "../components/dashboard/SchoolAnalyticsSecti
 import DashboardFilterBar from "../components/dashboard/DashboardFilterBar";
 
 function DashboardPage() {
+  // Semua data dashboard (KPI, tren performa, data risiko per kelas, dst)
+  // plus state filter kelas/mapel yang dipakai bareng oleh beberapa
+  // komponen (DashboardFilterBar & SchoolAnalyticsSection) ada di sini.
   const {
     dashboardData,
     riskByClassData,

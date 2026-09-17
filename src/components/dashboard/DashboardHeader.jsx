@@ -1,16 +1,8 @@
-import { useEffect, useState } from "react";
 import { FiUser } from "react-icons/fi";
+import useCurrentUser from "../../hooks/useCurrentUser";
 
 function DashboardHeader() {
-  const [user, setUser] = useState(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+  const user = useCurrentUser();
 
   return (
     <header className="d-flex justify-content-between align-items-center mb-3">

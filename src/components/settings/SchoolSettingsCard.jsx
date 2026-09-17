@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { BsBuildingFill } from "react-icons/bs";
 
 function SchoolSettingsCard({
   activeTahunAjaran,
@@ -8,7 +9,8 @@ function SchoolSettingsCard({
     <section className="settings-card mb-4">
       <div className="mb-4">
         <h5 className="fw-bold mb-1">
-          🏫 Pengaturan Sekolah
+          <BsBuildingFill className="me-2" />
+          Pengaturan Sekolah
         </h5>
 
         <p className="text-secondary mb-0">

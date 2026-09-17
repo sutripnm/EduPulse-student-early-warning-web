@@ -22,9 +22,8 @@
 
   background-color: var(--edupulse-surface);
   border: 1px solid var(--edupulse-border);
-  border-radius: 18px;
-
-  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
+  border-radius: var(--edupulse-card-radius);
+  box-shadow: var(--edupulse-card-shadow);
 }
 
 .student-section-title {
@@ -78,89 +77,6 @@
   font-size: 16px;
   font-weight: 600;
   color: var(--edupulse-text);
-}
-
-/* =========================
-   METRICS
-   ========================= */
-
-.student-metrics {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.metric-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 6px;
-
-  min-height: 110px;
-  padding: 20px;
-
-  background-color: var(--edupulse-surface);
-  border: 1px solid var(--edupulse-border);
-  border-radius: 18px;
-
-  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
-}
-
-.metric-card span {
-  font-size: 13px;
-  color: var(--edupulse-text-muted);
-}
-
-.metric-card strong {
-  font-size: 25px;
-  color: var(--edupulse-text);
-}
-
-/* Risk metric */
-
-.metric-risk {
-  background-color: var(--edupulse-danger-soft);
-  border-color: rgba(182, 110, 119, 0.25);
-}
-
-.metric-risk strong {
-  color: var(--edupulse-danger);
-}
-
-/* =========================
-   RISK ANALYSIS
-   ========================= */
-
-.risk-analysis-card {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-
-  padding: 20px;
-
-  background-color: var(--edupulse-surface);
-  border: 1px solid var(--edupulse-border);
-  border-radius: 18px;
-
-  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
-}
-
-.risk-analysis-section {
-  min-height: 180px;
-  padding: 20px;
-
-  background-color: var(--edupulse-surface-muted);
-  border-radius: 14px;
-  border: 1px solid var(--edupulse-border);
-}
-
-.risk-analysis-section h6 {
-  margin-bottom: 12px;
-  color: var(--edupulse-text);
-}
-
-.risk-analysis-section p {
-  color: var(--edupulse-text-muted);
 }
 
 /* =========================================================
@@ -256,26 +172,6 @@
 }
 
 .risk-analysis-section p {
-  color: var(--edupulse-text);
-}
-
-.risk-factor-list {
-  margin: 0;
-  padding-left: 22px;
-}
-
-.risk-factor-list li {
-  margin-bottom: 8px;
-  color: var(--edupulse-text);
-}
-
-.risk-recommendation-list {
-  margin: 20px 0 0;
-  padding-left: 22px;
-}
-
-.risk-recommendation-list li {
-  margin-bottom: 8px;
   color: var(--edupulse-text);
 }
 

@@ -1,3 +1,4 @@
+import { BsGraphUp } from "react-icons/bs";
 import {
   LineChart,
   Line,
@@ -10,6 +11,9 @@ import {
 } from "recharts";
 
 function PerformanceTrendChart({ data }) {
+  // Ambil warna garis chart langsung dari CSS variable tema (theme.css),
+  // biar warnanya ikut berubah kalau tema/palet warna diubah, tanpa
+  // perlu hardcode hex code di sini.
   const successColor = getComputedStyle(document.documentElement)
     .getPropertyValue("--edupulse-success")
     .trim();
@@ -20,7 +24,10 @@ function PerformanceTrendChart({ data }) {
 
   return (
     <div className="dashboard-box performance-trend-box">
-      <h6 className="mb-1">📊 Tren Performa & Presensi</h6>
+      <h6 className="mb-1">
+        <BsGraphUp className="me-2" />
+        Tren Performa & Presensi
+      </h6>
 
       <p className="small mb-3">
         Grafik rata-rata per bulan

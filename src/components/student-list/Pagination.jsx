@@ -1,26 +1,19 @@
+import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
+
 function Pagination({ page, totalPages, onPageChange }) {
   if (totalPages <= 1) {
     return null;
   }
-
-  const handleNext = () => {
-    console.log("NEXT DARI PAGE:", page);
-    onPageChange(page + 1);
-  };
-
-  const handlePrevious = () => {
-    console.log("PREVIOUS DARI PAGE:", page);
-    onPageChange(page - 1);
-  };
 
   return (
     <div className="student-pagination">
       <button
         className="btn btn-outline-dark"
         disabled={page === 1}
-        onClick={handlePrevious}
+        onClick={() => onPageChange(page - 1)}
       >
-        ← Sebelumnya
+        <BsChevronLeft className="me-1" />
+        Sebelumnya
       </button>
 
       <span>
@@ -30,9 +23,10 @@ function Pagination({ page, totalPages, onPageChange }) {
       <button
         className="btn btn-outline-dark"
         disabled={page === totalPages}
-        onClick={handleNext}
+        onClick={() => onPageChange(page + 1)}
       >
-        Berikutnya →
+        Berikutnya
+        <BsChevronRight className="ms-1" />
       </button>
     </div>
   );

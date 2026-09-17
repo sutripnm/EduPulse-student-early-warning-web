@@ -1,3 +1,12 @@
+// API bisa mengirim `kelas` sebagai object ({ nama_kelas }) atau string
+// polos tergantung endpoint-nya, jadi nama kelas perlu dicek dulu
+// bentuknya sebelum ditampilkan.
+function getKelasName(student) {
+  return typeof student.kelas === "object"
+    ? student.kelas?.nama_kelas || "-"
+    : student.kelas || "-";
+}
+
 function HighRiskSidebar({ students }) {
   return (
     <section className="risk-student-card">
@@ -43,9 +52,7 @@ function HighRiskSidebar({ students }) {
                   </td>
 
                   <td>
-                    {typeof student.kelas === "object"
-                      ? student.kelas?.nama_kelas || "-"
-                      : student.kelas || "-"}
+                    {getKelasName(student)}
                   </td>
 
                   <td>

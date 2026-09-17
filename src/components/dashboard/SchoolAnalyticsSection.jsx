@@ -1,3 +1,4 @@
+import { BsBarChartFill, BsBullseye } from "react-icons/bs";
 import {
   BarChart,
   Bar,
@@ -24,7 +25,10 @@ function SchoolAnalyticsSection({
       <div className="row g-3">
         <div className="col-lg-6">
           <div className="dashboard-box analytics-box">
-            <h6 className="mb-1">📊 Perbandingan Risiko per Kelas</h6>
+            <h6 className="mb-1">
+              <BsBarChartFill className="me-2" />
+              Perbandingan Risiko per Kelas
+            </h6>
             <p className="small mb-3">Jumlah siswa berdasarkan tingkat risiko</p>
 
             <div className="analytics-chart-container">
@@ -59,7 +63,10 @@ function SchoolAnalyticsSection({
 
         <div className="col-lg-6">
           <div className="dashboard-box analytics-box">
-            <h6 className="mb-1">🎯 Faktor Utama Risiko</h6>
+            <h6 className="mb-1">
+              <BsBullseye className="me-2" />
+              Faktor Utama Risiko
+            </h6>
             <p className="small mb-2">
               Faktor yang paling berkontribusi terhadap risiko siswa
             </p>

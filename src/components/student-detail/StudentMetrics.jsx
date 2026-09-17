@@ -1,4 +1,6 @@
 function StudentMetrics({ student }) {
+  // Ambil 2 bagian data siswa yang relevan buat kartu metrik ini:
+  // angka kinerja (kehadiran, nilai, dst) dan hasil analisis risiko.
   const metrics = student?.metrik_kinerja;
   const risk = student?.analisis_ews;
 

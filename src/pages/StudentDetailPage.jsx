@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { BsArrowLeft } from "react-icons/bs";
 import Sidebar from "../components/Sidebar";
 import "../styles/student-detail-page.css";
 import useStudentDetail from "../hooks/useStudentDetail";
@@ -9,8 +10,10 @@ import StudentMetrics from "../components/student-detail/StudentMetrics";
 import RiskAnalysisCard from "../components/student-detail/RiskAnalysisCard";
 
 function StudentDetailPage() {
+  // Ambil NISN siswa dari parameter URL (/detail-siswa/:id)
   const { id } = useParams();
 
+  // Data siswa + opsi filter mata pelajaran, plus status loading/error.
   const {
     student,
     mapelOptions,
@@ -20,6 +23,7 @@ function StudentDetailPage() {
     error,
   } = useStudentDetail(id);
 
+  // Tampilkan loading dulu selagi data siswa belum selesai di-fetch
   if (loading) {
     return (
       <main className="student-detail-page d-flex">
@@ -32,6 +36,8 @@ function StudentDetailPage() {
     );
   }
 
+  // Kalau fetch gagal atau siswanya gak ketemu, tampilkan pesan error
+  // dengan tombol kembali ke daftar siswa, dan hentikan render di sini.
   if (error || !student) {
     return (
       <main className="student-detail-page d-flex">
@@ -68,7 +74,8 @@ function StudentDetailPage() {
             to="/student-list"
             className="btn btn-outline-primary"
           >
-            ← Kembali
+            <BsArrowLeft className="me-1" />
+            Kembali
           </Link>
         </div>
 

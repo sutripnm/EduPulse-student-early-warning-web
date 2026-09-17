@@ -427,3 +427,60 @@ html {
     grid-template-columns: 1fr;
   }
 }
+
+/* =========================================================
+   LANDING PAGE - DARK MODE
+   ========================================================= */
+
+[data-theme="dark"] .hero {
+  background-color: var(--edupulse-bg);
+}
+
+[data-theme="dark"] .hero-title {
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] .hero-description {
+  color: var(--edupulse-text-muted);
+}
+
+[data-theme="dark"] .hero-label {
+  color: var(--edupulse-primary);
+}
+
+[data-theme="dark"] .hero-label span {
+  background-color: var(--edupulse-success);
+}
+
+[data-theme="dark"] .dashboard-preview {
+  background-color: var(--edupulse-surface);
+  border-color: var(--edupulse-border);
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] .navbar {
+  background-color: var(--edupulse-bg);
+}
+
+[data-theme="dark"] .navbar .nav-link {
+  color: var(--edupulse-text-muted);
+}
+
+[data-theme="dark"] .navbar .nav-link:hover {
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] .navbar-brand {
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] .btn-outline-dark {
+  color: var(--edupulse-text);
+  border-color: var(--edupulse-border-strong);
+}
+
+[data-theme="dark"] .btn-outline-dark:hover {
+  color: var(--edupulse-text);
+  background-color: var(--edupulse-surface);
+  border-color: var(--edupulse-primary);
+}

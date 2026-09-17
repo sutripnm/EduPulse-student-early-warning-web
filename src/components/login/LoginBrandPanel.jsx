@@ -1,3 +1,8 @@
+import {
+  BsGraphUpArrow,
+  BsExclamationTriangleFill,
+  BsPeopleFill,
+} from "react-icons/bs";
 import logo from "../../assets/gemini-svg.svg";
 
 function LoginBrandPanel() {
@@ -14,40 +19,40 @@ function LoginBrandPanel() {
         </p>
 
         <h1 className="login-title mb-4">
-          Turn student
+          Ubah data siswa
           <br />
-          data into <span>early</span>
+          menjadi tindakan <span>early</span>
           <br />
-          <span>action.</span>
+          <span>pencegahan dini.</span>
         </h1>
 
         <p className="login-description">
-          Access your EduPulse workspace and get a clearer view of student
-          performance, risk levels, and early warning signals.
+          Akses workspace EduPulse Anda dan pantau performa siswa, 
+          tingkat risiko, serta sinyal peringatan dini dengan lebih jelas.
         </p>
 
         <div className="mt-5">
           <div className="d-flex align-items-center gap-3 mb-4">
-            <div className="login-feature-icon">↗</div>
+            <div className="login-feature-icon"><BsGraphUpArrow /></div>
             <div>
               <h6 className="text-white mb-1">Performance insights</h6>
-              <small>See the indicators behind student risk.</small>
+              <small>Ketahui indikator yang memengaruhi tingkat risiko siswa.</small>
             </div>
           </div>
 
           <div className="d-flex align-items-center gap-3 mb-4">
-            <div className="login-feature-icon">!</div>
+            <div className="login-feature-icon"><BsExclamationTriangleFill /></div>
             <div>
               <h6 className="text-white mb-1">Early warnings</h6>
-              <small>Prioritize students who need attention.</small>
+              <small>Beri prioritas pada siswa yang paling membutuhkan perhatian.</small>
             </div>
           </div>
 
           <div className="d-flex align-items-center gap-3">
-            <div className="login-feature-icon">◎</div>
+            <div className="login-feature-icon"><BsPeopleFill /></div>
             <div>
               <h6 className="text-white mb-1">Student overview</h6>
-              <small>Monitor your student population in one place.</small>
+              <small>Pantau seluruh siswa Anda dalam satu platform terpusat.</small>
             </div>
           </div>
         </div>

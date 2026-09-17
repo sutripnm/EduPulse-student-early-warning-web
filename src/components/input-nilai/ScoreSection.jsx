@@ -1,5 +1,8 @@
+import { BsBarChartFill } from "react-icons/bs";
 import classOptions from "../../data/classOptions";
 
+// Daftar pilihan mata pelajaran untuk dropdown (belum diambil dari API,
+// masih hardcode sesuai desain awal form ini)
 const subjectOptions = [
   "Matematika",
   "Fisika",
@@ -7,6 +10,9 @@ const subjectOptions = [
   "Bahasa Inggris",
 ];
 
+// Definisi kolom nilai yang diinput per siswa: key dipakai untuk
+// membaca/menulis ke object `scores`, sisanya cuma buat tampilan (label,
+// hint, batas angka di <input>)
 const scoreFields = [
   { key: "studyTime", label: "Study Time", hint: "Jam", min: "0", step: "0.5", placeholder: "Jam" },
   { key: "quiz1", label: "Quiz 1", hint: "Pretest", min: "0", max: "100", placeholder: "0-100" },
@@ -14,6 +20,9 @@ const scoreFields = [
   { key: "quiz2", label: "Quiz 2", hint: "Posttest", min: "0", max: "100", placeholder: "0-100" },
 ];
 
+// Form input nilai mingguan: filter kelas/mapel/tanggal + tabel nilai
+// per siswa. Semua state & handler datang dari hook useScoreForm di
+// InputNilaiAbsensiPage, komponen ini murni menampilkan lewat props.
 function ScoreSection({
   scoreClass,
   setScoreClass,
@@ -36,11 +45,28 @@ function ScoreSection({
 
   loading,
 }) {
+  // Cari nama kelas yang lagi dipilih (dari id) buat ditampilkan di
+  // ringkasan "Kelas: ... | Mapel: ... | Tanggal: ...", biar JSX di
+  // bawah tinggal render nilainya tanpa nyari lagi
+  const selectedKelasName = scoreClass
+    ? kelasOptions.find((kelas) => String(kelas.id) === String(scoreClass))
+        ?.nama_kelas || "-"
+    : "Belum dipilih";
+
+  // Sama seperti di atas, tapi buat nama mata pelajaran
+  const selectedMapelName = subject
+    ? mapelOptions.find((mapel) => String(mapel.id) === String(subject))
+        ?.nama_mapel || "-"
+    : "Belum dipilih";
+
   return (
     <section className="input-data-card">
       <div className="input-section-header">
         <div>
-          <h5 className="fw-bold mb-1">📊 Input Nilai Mingguan</h5>
+          <h5 className="fw-bold mb-1">
+            <BsBarChartFill className="me-2" />
+            Input Nilai Mingguan
+          </h5>
           <p className="text-secondary mb-0">
             Satu input untuk satu minggu dan seluruh siswa dalam kelas.
           </p>
@@ -140,23 +166,11 @@ function ScoreSection({
 </div>
 
 <div className="selected-period-info mb-4">
-  <strong>Kelas:</strong>{" "}
-  {scoreClass
-    ? kelasOptions.find(
-        (kelas) =>
-          String(kelas.id) === String(scoreClass)
-      )?.nama_kelas || "-"
-    : "Belum dipilih"}
+  <strong>Kelas:</strong> {selectedKelasName}
 
   <span className="mx-2">|</span>
 
-  <strong>Mapel:</strong>{" "}
-  {subject
-    ? mapelOptions.find(
-        (mapel) =>
-          String(mapel.id) === String(subject)
-      )?.nama_mapel || "-"
-    : "Belum dipilih"}
+  <strong>Mapel:</strong> {selectedMapelName}
 
   <span className="mx-2">|</span>
 
@@ -248,7 +262,7 @@ function ScoreSection({
   {loading
     ? "Menyimpan..."
     : "Simpan Data Nilai"}
-</button>jad
+</button>
       </form>
     </section>
   );

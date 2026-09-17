@@ -1,11 +1,14 @@
 import Sidebar from "../components/Sidebar";
 import "../styles/settings-page.css";
 import useSettings from "../hooks/useSettings";
+import useTheme from "../hooks/useTheme";
 import ProfileCard from "../components/settings/ProfileCard";
 import SchoolSettingsCard from "../components/settings/SchoolSettingsCard";
 import ThemeCard from "../components/settings/ThemeCard";
 
 function SettingsPage() {
+  // Data user + tahun ajaran/semester aktif (read-only di halaman ini),
+  // plus status loading/error dari fetch-nya.
   const {
     user,
     activeTahunAjaran,
@@ -14,18 +17,12 @@ function SettingsPage() {
     error,
   } = useSettings();
 
-  const theme =
-    localStorage.getItem("theme") || "light";
+  // Preferensi tema (light/dark), disimpan terpisah dari useSettings
+  // karena sifatnya murni preferensi tampilan, bukan data dari server.
+  const { theme, setTheme } = useTheme();
 
-  const setTheme = (value) => {
-    localStorage.setItem("theme", value);
-
-    document.documentElement.setAttribute(
-      "data-theme",
-      value
-    );
-  };
-
+  // Selagi data pengaturan masih di-fetch, tampilkan loading dulu
+  // sebelum konten utama dirender.
   if (loading) {
     return (
       <main className="settings-page d-flex">
@@ -38,6 +35,8 @@ function SettingsPage() {
     );
   }
 
+  // Kalau fetch gagal, tampilkan pesan error dan hentikan render di sini
+  // (jangan lanjut ke JSX utama yang butuh data user/tahun ajaran).
   if (error) {
     return (
       <main className="settings-page d-flex">

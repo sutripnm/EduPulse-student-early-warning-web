@@ -8,6 +8,9 @@ import HighRiskSidebar from "../components/student-list/HighRiskSidebar";
 import Pagination from "../components/student-list/Pagination";
 
 function StudentListPage() {
+  // Data siswa (sudah terfilter+dipaginasi), state filter (search/kelas/
+  // risiko), dan state pagination — semuanya dikelola di useStudentList
+  // supaya halaman ini tinggal merakit komponen tabel & filter.
   const {
     students,
     totalStudents,

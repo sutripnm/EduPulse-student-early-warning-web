@@ -1,3 +1,8 @@
+import { BsBuildingFill, BsCheckCircleFill } from "react-icons/bs";
+
+// Render daftar kelas berperingkat (1. Kelas A - N siswa, dst).
+// Dipakai 2x di bawah: sekali buat kelas high-risk, sekali low-risk,
+// bedanya cuma warna teksnya (colorClass).
 function RankedClassList({ items, colorClass }) {
   return items.map((item, index) => (
     <div
@@ -20,14 +25,20 @@ function ClassInsightPanel({ highRiskClasses, lowRiskClasses }) {
       <h6 className="mb-4">Insight Kelas</h6>
 
       <div className="mb-4">
-        <p className="fw-semibold mb-3">🏫 High Risk Terbanyak</p>
+        <p className="fw-semibold mb-3">
+          <BsBuildingFill className="me-2" />
+          High Risk Terbanyak
+        </p>
         <RankedClassList items={highRiskClasses} colorClass="text-danger" />
       </div>
 
       <hr />
 
       <div className="mt-4">
-        <p className="fw-semibold mb-3">✅ Low Risk Terbanyak</p>
+        <p className="fw-semibold mb-3">
+          <BsCheckCircleFill className="me-2" />
+          Low Risk Terbanyak
+        </p>
         <RankedClassList items={lowRiskClasses} colorClass="text-success" />
       </div>
     </div>

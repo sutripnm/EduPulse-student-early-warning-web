@@ -1,11 +1,20 @@
 import { Link } from "react-router-dom";
 import RiskBadge from "../common/RiskBadge";
 
+// Tabel utama daftar siswa (kolom kiri StudentListPage). Data siswa,
+// nomor halaman, dan total siswa semua datang dari hook useStudentList
+// lewat props — komponen ini cuma menampilkan.
 function StudentTable({
   students,
   page,
   totalStudents,
 }) {
+  // Hitung "menampilkan X–Y dari Z siswa" berdasarkan halaman aktif.
+  // 10 = jumlah data per halaman (samakan dengan page size di
+  // useStudentList kalau nanti diubah).
+  const rangeStart = students.length > 0 ? (page - 1) * 10 + 1 : 0;
+  const rangeEnd = Math.min(page * 10, totalStudents);
+
   return (
     <section className="student-table-card">
       <div className="d-flex justify-content-between align-items-center mb-3">
@@ -16,14 +25,9 @@ function StudentTable({
 
           <small className="text-secondary">
             Menampilkan{" "}
-            {students.length > 0
-              ? (page - 1) * 10 + 1
-              : 0}
+            {rangeStart}
             –
-            {Math.min(
-              page * 10,
-              totalStudents
-            )}{" "}
+            {rangeEnd}{" "}
             dari {totalStudents} siswa
           </small>
         </div>

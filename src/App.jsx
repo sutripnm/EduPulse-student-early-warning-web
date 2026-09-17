@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import useTheme from "./hooks/useTheme";
+
 import StudentListPage from "./pages/StudentListPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
@@ -10,55 +12,26 @@ import SettingsPage from "./pages/SettingsPage";
 import AcademicSettingsPage from "./pages/AcademicSettingsPage";
 
 function App() {
+  useTheme();
+
   return (
     <BrowserRouter>
       <Routes>
-
-        <Route
-          path="/"
-          element={<LandingPage />}
-        />
-
-        <Route
-          path="/login"
-          element={<LoginPage />}
-        />
-
-        <Route
-          path="/dashboard"
-          element={<DashboardPage />}
-        />
-
-        <Route
-          path="/daftar-siswa"
-          element={<StudentListPage />}
-        />
-
-        <Route
-          path="/detail-siswa/:id"
-          element={<StudentDetailPage />}
-        />
-
-        <Route
-          path="/tambah-siswa"
-          element={<AddStudentPage />}
-        />
-
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/daftar-siswa" element={<StudentListPage />} />
+        <Route path="/detail-siswa/:id" element={<StudentDetailPage />} />
+        <Route path="/tambah-siswa" element={<AddStudentPage />} />
         <Route
           path="/input-nilai-dan-absensi"
           element={<InputNilaiAbsensiPage />}
         />
-
-        <Route
-          path="/pengaturan"
-          element={<SettingsPage />}
-        />
-
+        <Route path="/pengaturan" element={<SettingsPage />} />
         <Route
           path="/pengaturan-akademik"
           element={<AcademicSettingsPage />}
         />
-
       </Routes>
     </BrowserRouter>
   );

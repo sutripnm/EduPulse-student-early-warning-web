@@ -1,28 +1,39 @@
+import {
+  BsPeopleFill,
+  BsExclamationTriangleFill,
+  BsDashCircleFill,
+  BsCheckCircleFill,
+  BsBarChartFill,
+  BsBookFill,
+} from "react-icons/bs";
+
+// `icon` di sini adalah komponen icon-nya sendiri (bukan string/emoji),
+// jadi konsumennya (KpiCard.jsx / FeatureCard.jsx) tinggal render <Icon />.
 export const KPI_DATA = [
-  { id: "total", label: "Total Siswa", value: "100", icon: "👥" },
-  { id: "high", label: "Risiko Tinggi", value: "5", note: "5% dari total siswa", icon: "⚠️", textClass: "text-danger" },
-  { id: "medium", label: "Risiko Sedang", value: "16", note: "16% dari total siswa", icon: "➖", textClass: "text-warning" },
-  { id: "low", label: "Risiko Rendah", value: "79", note: "79% dari total siswa", icon: "✓", textClass: "text-success" },
+  { id: "total", label: "Total Siswa", value: "100", icon: BsPeopleFill },
+  { id: "high", label: "Risiko Tinggi", value: "5", note: "5% dari total siswa", icon: BsExclamationTriangleFill, textClass: "text-danger" },
+  { id: "medium", label: "Risiko Sedang", value: "16", note: "16% dari total siswa", icon: BsDashCircleFill, textClass: "text-warning" },
+  { id: "low", label: "Risiko Rendah", value: "79", note: "79% dari total siswa", icon: BsCheckCircleFill, textClass: "text-success" },
 ];
 
 export const FEATURES_DATA = [
   {
-    icon: "📊",
+    icon: BsBarChartFill,
     title: "Dashboard Analytics",
     description: "Lihat performa akademik, presensi, dan distribusi risiko siswa secara cepat.",
   },
   {
-    icon: "👨‍🎓",
+    icon: BsPeopleFill,
     title: "Student Monitoring",
     description: "Cari dan pantau kondisi siswa berdasarkan kelas dan tingkat risiko.",
   },
   {
-    icon: "⚠️",
+    icon: BsExclamationTriangleFill,
     title: "Early Warning",
     description: "Identifikasi siswa yang membutuhkan perhatian lebih awal.",
   },
   {
-    icon: "📚",
+    icon: BsBookFill,
     title: "Academic Data",
     description: "Kelola data nilai, presensi, kelas, dan informasi akademik siswa.",
   },

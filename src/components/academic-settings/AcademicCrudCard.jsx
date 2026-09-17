@@ -1,4 +1,10 @@
-import { useState } from "react";
+import useAcademicCrudForm from "../../hooks/useAcademicCrudForm";
+import { getFullName } from "../../utils/formatName";
+
+// Kartu CRUD generik, dipakai 2x di AcademicSettingsPage: sekali untuk
+// Mata Pelajaran (type="mapel"), sekali untuk Kelas (type="kelas").
+// Semua teks yang beda antar keduanya dikirim lewat props, biar JSX-nya
+// gak perlu duplikat.
 function AcademicCrudCard({
   type,
   icon,
@@ -14,129 +20,25 @@ function AcademicCrudCard({
   onUpdate,
   onDelete,
 }) {
-  const isMapel = type === "mapel";
-
-  const [showForm, setShowForm] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-
-  const [kodeMapel, setKodeMapel] = useState("");
-  const [nama, setNama] = useState("");
-
-  const [saving, setSaving] = useState(false);
-
-  const inputId = `${type}-name`;
-
-  // =========================
-  // FORM
-  // =========================
-
-  const openAddForm = () => {
-    setEditingId(null);
-    setKodeMapel("");
-    setNama("");
-    setShowForm(true);
-  };
-
-  const openEditForm = (item) => {
-    setEditingId(item.id);
-
-    if (isMapel) {
-      setKodeMapel(item.kode_mapel || "");
-      setNama(item.nama_mapel || "");
-    } else {
-      setNama(item.nama_kelas || "");
-    }
-
-    setShowForm(true);
-  };
-
-  const cancelForm = () => {
-    setShowForm(false);
-    setEditingId(null);
-    setKodeMapel("");
-    setNama("");
-  };
-
-  // =========================
-  // SUBMIT
-  // =========================
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    if (!nama.trim()) {
-      return;
-    }
-
-    try {
-      setSaving(true);
-
-      if (isMapel) {
-        const payload = {
-          kode_mapel: kodeMapel.trim(),
-          nama_mapel: nama.trim(),
-        };
-
-        if (editingId) {
-          await onUpdate(editingId, payload);
-        } else {
-          await onCreate(payload);
-        }
-      } else {
-        const payload = {
-          nama_kelas: nama.trim(),
-        };
-
-        if (editingId) {
-          await onUpdate(editingId, payload);
-        } else {
-          await onCreate(payload);
-        }
-      }
-
-      cancelForm();
-    } catch (error) {
-      console.error(
-        `Gagal menyimpan ${type}:`,
-        error.response?.data || error.message
-      );
-
-      alert(
-        error.response?.data?.message ||
-          `Gagal menyimpan ${title}.`
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  // =========================
-  // DELETE
-  // =========================
-
-  const handleDelete = async (id) => {
-    const confirmed = window.confirm(
-      `Yakin ingin menghapus ${title.toLowerCase()} ini?`
-    );
-
-    if (!confirmed) {
-      return;
-    }
-
-    try {
-      await onDelete(id);
-    } catch (error) {
-      console.error(
-        `Gagal menghapus ${type}:`,
-        error.response?.data || error.message
-      );
-
-      alert(
-        error.response?.data?.message ||
-          `Gagal menghapus ${title}.`
-      );
-    }
-  };
+  // State form (buka/tutup, sedang edit item mana) + handler submit/
+  // delete, semuanya dari hook useAcademicCrudForm supaya komponen ini
+  // tinggal menampilkan.
+  const {
+    isMapel,
+    inputId,
+    showForm,
+    editingId,
+    kodeMapel,
+    setKodeMapel,
+    nama,
+    setNama,
+    saving,
+    openAddForm,
+    openEditForm,
+    cancelForm,
+    handleSubmit,
+    handleDelete,
+  } = useAcademicCrudForm({ type, title, onCreate, onUpdate, onDelete });
 
   return (
     <section className="academic-settings-card h-100">
@@ -150,9 +52,7 @@ function AcademicCrudCard({
             {icon} {title}
           </h5>
 
-          <p className="text-secondary mb-0">
-            {description}
-          </p>
+          <p className="text-secondary mb-0">{description}</p>
         </div>
 
         <button
@@ -172,19 +72,14 @@ function AcademicCrudCard({
       {showForm && (
         <div className="academic-form-box mb-4">
           <h6 className="fw-bold mb-3">
-            {editingId
-              ? editFormTitle
-              : addFormTitle}
+            {editingId ? editFormTitle : addFormTitle}
           </h6>
 
           <form onSubmit={handleSubmit}>
             {/* MAPEL */}
             {isMapel && (
               <div className="mb-3">
-                <label
-                  htmlFor={`${type}-code`}
-                  className="form-label fw-semibold"
-                >
+                <label htmlFor={`${type}-code`} className="form-label fw-semibold">
                   Kode Mata Pelajaran
                 </label>
 
@@ -194,9 +89,7 @@ function AcademicCrudCard({
                   className="form-control"
                   placeholder="Contoh: MATH10"
                   value={kodeMapel}
-                  onChange={(event) =>
-                    setKodeMapel(event.target.value)
-                  }
+                  onChange={(event) => setKodeMapel(event.target.value)}
                   required
                 />
               </div>
@@ -204,28 +97,17 @@ function AcademicCrudCard({
 
             {/* NAMA */}
             <div className="mb-3">
-              <label
-                htmlFor={inputId}
-                className="form-label fw-semibold"
-              >
-                {isMapel
-                  ? "Nama Mata Pelajaran"
-                  : "Nama Kelas"}
+              <label htmlFor={inputId} className="form-label fw-semibold">
+                {isMapel ? "Nama Mata Pelajaran" : "Nama Kelas"}
               </label>
 
               <input
                 type="text"
                 id={inputId}
                 className="form-control"
-                placeholder={
-                  isMapel
-                    ? "Contoh: Matematika"
-                    : "Contoh: XI IPA 3"
-                }
+                placeholder={isMapel ? "Contoh: Matematika" : "Contoh: XI IPA 3"}
                 value={nama}
-                onChange={(event) =>
-                  setNama(event.target.value)
-                }
+                onChange={(event) => setNama(event.target.value)}
                 required
               />
             </div>
@@ -240,16 +122,8 @@ function AcademicCrudCard({
                 Batal
               </button>
 
-              <button
-                type="submit"
-                className="btn btn-primary"
-                disabled={saving}
-              >
-                {saving
-                  ? "Menyimpan..."
-                  : editingId
-                    ? "Simpan Perubahan"
-                    : submitLabel}
+              <button type="submit" className="btn btn-primary" disabled={saving}>
+                {saving ? "Menyimpan..." : editingId ? "Simpan Perubahan" : submitLabel}
               </button>
             </div>
           </form>
@@ -261,42 +135,25 @@ function AcademicCrudCard({
           ========================= */}
 
       {loading ? (
-        <div className="text-center py-4 text-secondary">
-          Memuat data...
-        </div>
+        <div className="text-center py-4 text-secondary">Memuat data...</div>
       ) : (
         <div className="table-responsive">
           <table className="table align-middle mb-0">
             <thead>
               {isMapel ? (
                 <tr>
-                  <th style={{ width: "60px" }}>
-                    No
-                  </th>
-
+                  <th style={{ width: "60px" }}>No</th>
                   <th>Kode</th>
-
                   <th>Mata Pelajaran</th>
-
                   <th>Pengajar</th>
-
-                  <th style={{ width: "180px" }}>
-                    Aksi
-                  </th>
+                  <th style={{ width: "180px" }}>Aksi</th>
                 </tr>
               ) : (
                 <tr>
-                  <th style={{ width: "60px" }}>
-                    No
-                  </th>
-
+                  <th style={{ width: "60px" }}>No</th>
                   <th>Kelas</th>
-
                   <th>Wali Kelas</th>
-
-                  <th style={{ width: "180px" }}>
-                    Aksi
-                  </th>
+                  <th style={{ width: "180px" }}>Aksi</th>
                 </tr>
               )}
             </thead>
@@ -304,10 +161,7 @@ function AcademicCrudCard({
             <tbody>
               {items.length === 0 ? (
                 <tr>
-                  <td
-                    colSpan={isMapel ? 5 : 4}
-                    className="text-center py-4 text-secondary"
-                  >
+                  <td colSpan={isMapel ? 5 : 4} className="text-center py-4 text-secondary">
                     Belum ada data.
                   </td>
                 </tr>
@@ -318,47 +172,18 @@ function AcademicCrudCard({
 
                     {isMapel ? (
                       <>
+                        <td>{item.kode_mapel || "-"}</td>
                         <td>
-                          {item.kode_mapel || "-"}
+                          <span className="fw-semibold">{item.nama_mapel || "-"}</span>
                         </td>
-
-                        <td>
-                          <span className="fw-semibold">
-                            {item.nama_mapel || "-"}
-                          </span>
-                        </td>
-
-                        <td>
-                          {item.pengajar
-                            ? [
-                                item.pengajar.first_name,
-                                item.pengajar.last_name,
-                              ]
-                                .filter(Boolean)
-                                .join(" ") ||
-                              item.pengajar.email
-                            : "-"}
-                        </td>
+                        <td>{getFullName(item.pengajar)}</td>
                       </>
                     ) : (
                       <>
                         <td>
-                          <span className="fw-semibold">
-                            {item.nama_kelas || "-"}
-                          </span>
+                          <span className="fw-semibold">{item.nama_kelas || "-"}</span>
                         </td>
-
-                        <td>
-                          {item.wali_kelas
-                            ? [
-                                item.wali_kelas.first_name,
-                                item.wali_kelas.last_name,
-                              ]
-                                .filter(Boolean)
-                                .join(" ") ||
-                              item.wali_kelas.email
-                            : "-"}
-                        </td>
+                        <td>{getFullName(item.wali_kelas)}</td>
                       </>
                     )}
 
@@ -367,9 +192,7 @@ function AcademicCrudCard({
                         <button
                           type="button"
                           className="btn btn-sm btn-outline-dark"
-                          onClick={() =>
-                            openEditForm(item)
-                          }
+                          onClick={() => openEditForm(item)}
                         >
                           Edit
                         </button>
@@ -377,9 +200,7 @@ function AcademicCrudCard({
                         <button
                           type="button"
                           className="btn btn-sm btn-outline-danger"
-                          onClick={() =>
-                            handleDelete(item.id)
-                          }
+                          onClick={() => handleDelete(item.id)}
                         >
                           Hapus
                         </button>

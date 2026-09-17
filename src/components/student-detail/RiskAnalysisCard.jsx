@@ -1,8 +1,17 @@
+import {
+  BsBarChartFill,
+  BsExclamationTriangleFill,
+  BsPinAngleFill,
+  BsLightbulbFill,
+} from "react-icons/bs";
 import { getRiskLabel } from "../../utils/risk";
 
 function RiskAnalysisCard({ student }) {
   const risk = student?.analisis_ews;
 
+  // Pakai label dari API kalau ada (tingkat_risiko_display), fallback ke
+  // hasil terjemahan status_risiko lewat getRiskLabel kalau API gak
+  // ngirim label siap-pakai.
   const riskDisplay =
     risk?.tingkat_risiko_display ||
     getRiskLabel(risk?.status_risiko);
@@ -10,18 +19,21 @@ function RiskAnalysisCard({ student }) {
   return (
     <>
       <p className="fw-semibold mb-2">
-        📊 Indikator Metrik Utama Siswa
+        <BsBarChartFill className="me-2" />
+        Indikator Metrik Utama Siswa
       </p>
 
       <section className="risk-analysis-card">
         {/* KIRI */}
         <div className="risk-analysis-section">
           <h6 className="fw-semibold">
-            🚨 Tingkat Risiko: {riskDisplay}
+            <BsExclamationTriangleFill className="me-2" />
+            Tingkat Risiko: {riskDisplay}
           </h6>
 
           <p className="fw-semibold mb-2">
-            📌 Status Early Warning System
+            <BsPinAngleFill className="me-2" />
+            Status Early Warning System
           </p>
 
           <p className="mb-0">
@@ -33,7 +45,8 @@ function RiskAnalysisCard({ student }) {
         {/* KANAN */}
         <div className="risk-analysis-section">
           <h6 className="fw-semibold text-center">
-            💡 Rekomendasi Tindakan
+            <BsLightbulbFill className="me-2" />
+            Rekomendasi Tindakan
           </h6>
 
           <p className="text-center mt-4 mb-0">

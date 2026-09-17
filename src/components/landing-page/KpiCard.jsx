@@ -1,4 +1,4 @@
-export default function KpiCard({ label, value, note, icon, textClass = "" }) {
+export default function KpiCard({ label, value, note, icon: Icon, textClass = "" }) {
   return (
     <div className="landing-kpi-card">
       <div>
@@ -6,7 +6,9 @@ export default function KpiCard({ label, value, note, icon, textClass = "" }) {
         <strong className={textClass}>{value}</strong>
         {note && <small className={textClass}>{note}</small>}
       </div>
-      <div className="landing-kpi-icon">{icon}</div>
+      <div className="landing-kpi-icon">
+        <Icon />
+      </div>
     </div>
   );
 }

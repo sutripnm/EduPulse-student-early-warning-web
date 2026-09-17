@@ -22,23 +22,23 @@ function LandingPage() {
               </p>
 
               <h1 className="hero-title">
-                Know who <br />
-                needs help <br />
-                <span>before it’s too late.</span>
+                Ketahui siapa <br />
+                yang membutuhkan bantuan <br />
+                <span>sebelum terlambat.</span>
               </h1>
 
               <p className="hero-description">
-                EduPulse turns everyday student data into actionable early
-                warnings, helping educators identify academic risk before it
-                becomes a bigger problem.
+               EduPulse mengubah data siswa sehari-hari menjadi peringatan dini yang dapat ditindaklanjuti, 
+               membantu pendidik mengidentifikasi risiko akademik 
+               sebelum masalah tersebut berkembang menjadi lebih besar.
               </p>
 
               <div className="d-flex gap-3 mt-4">
                 <Link to="/dashboard" className="btn btn-dark rounded-pill px-4">
-                  Explore Dashboard
+                  Buka   Dashboard
                 </Link>
                 <a href="#cara-kerja" className="btn btn-outline-dark rounded-pill px-4">
-                  See how it works
+                  Cara Kerja
                 </a>
               </div>
             </div>
@@ -66,7 +66,7 @@ function LandingPage() {
       <section id="fitur" className="landing-section">
         <div className="container">
           <div className="section-heading">
-            <p className="section-label">FEATURES</p>
+            <p className="section-label">FITUR</p>
             <h2>
               Semua yang dibutuhkan untuk <span>memahami siswa.</span>
             </h2>
@@ -88,7 +88,7 @@ function LandingPage() {
       <section id="cara-kerja" className="landing-section landing-section-muted">
         <div className="container">
           <div className="section-heading text-center">
-            <p className="section-label">HOW IT WORKS</p>
+            <p className="section-label">CARA KERJA</p>
             <h2>
               Dari data menjadi <span>tindakan.</span>
             </h2>
@@ -111,7 +111,7 @@ function LandingPage() {
         <div className="container">
           <div className="row align-items-center g-5">
             <div className="col-lg-6">
-              <p className="section-label">ABOUT EDUPULSE</p>
+              <p className="section-label">TENTANG EDUPULSE</p>
               <h2>
                 Membantu sekolah <span>bertindak lebih awal.</span>
               </h2>
@@ -129,11 +129,11 @@ function LandingPage() {
             <div className="col-lg-6">
               <div className="about-card">
                 <div>
-                  <small>Our Goal</small>
+                  <small>Tujuan Kami</small>
                   <h4>
-                    See the risk. <br />
-                    Understand the student. <br />
-                    Take action.
+                    Kenali risikonya <br />
+                    Pahami siswanya <br />
+                    Ambil tindakan.
                   </h4>
                 </div>
               </div>
@@ -147,14 +147,14 @@ function LandingPage() {
         <div className="container">
           <div className="cta-card">
             <div>
-              <p className="section-label">READY TO EXPLORE?</p>
+              <p className="section-label">SIAP UNTUK MENJELAJAHI?</p>
               <h2>
-                See your students <br />
-                more clearly.
+                Kenali siswa Anda <br />
+                dengan lebih jelas.
               </h2>
             </div>
             <Link to="/dashboard" className="btn btn-dark rounded-pill px-4">
-              Open Dashboard
+              Buka Dashboard
             </Link>
           </div>
         </div>

@@ -6,6 +6,8 @@ import AttendanceSection from "../components/input-nilai/AttendanceSection";
 import ScoreSection from "../components/input-nilai/ScoreSection";
 
 function InputNilaiAbsensiPage() {
+  // 2 form yang independen: satu buat absensi, satu buat nilai mingguan.
+  // Masing-masing punya state & handler sendiri dari hook terpisah.
   const attendanceForm = useAttendanceForm();
   const scoreForm = useScoreForm();
 

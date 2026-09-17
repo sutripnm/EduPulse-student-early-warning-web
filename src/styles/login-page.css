@@ -1,92 +1,3 @@
-/* .login-page {
-  background-color: var(--edupulse-surface);
-}
-
-.login-brand {
-  background-color: var(--edupulse-dark-surface);
-  color: var(--edupulse-dark-muted);
-}
-
-.login-logo {
-  width: 150px;
-}
-
-.login-label {
-  color: var(--edupulse-dark-muted);
-  font-size: 13px;
-  letter-spacing: 1.5px;
-}
-
-.login-label span {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  margin-right: 8px;
-  border-radius: 50%;
-  background-color: var(--edupulse-success);
-}
-
-.login-title {
-  color: var(--edupulse-surface);
-  font-size: clamp(48px, 5vw, 72px);
-  line-height: 1;
-  font-weight: 500;
-}
-
-.login-title span {
-  color: var(--edupulse-primary);
-}
-
-.login-description {
-  max-width: 550px;
-  line-height: 1.6;
-}
-
-.login-feature-icon {
-  width: 42px;
-  height: 42px;
-  border: 1px solid #4a4b58;
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--edupulse-primary);
-  font-size: 20px;
-  flex-shrink: 0;
-}
-
-.login-welcome {
-  color: var(--edupulse-primary);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
-
-.login-heading {
-  font-size: 42px;
-}
-
-.login-form-wrapper {
-  max-width: 520px;
-  margin: 0 auto;
-}
-
-.forgot-password {
-  color: var(--edupulse-primary);
-  text-decoration: none;
-  font-size: 14px;
-}
-
-.demo-card {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px;
-  border: 1px solid var(--edupulse-border);
-  border-radius: 16px;
-  background-color: var(--edupulse-surface);
-} */
-
 /* ==========================================
    BASE STYLES & LAYOUT
    ========================================== */
@@ -124,7 +35,7 @@
 }
 
 .login-title {
-  color: var(--edupulse-surface);
+  color: #ffffff;
   font-size: clamp(48px, 5vw, 72px);
   line-height: 1;
   font-weight: 500;
@@ -307,4 +218,59 @@
 
 .btn-dark:active {
   transform: translateY(0);
+}
+
+/* =========================================================
+   LOGIN - DARK MODE
+   ========================================================= */
+
+[data-theme="dark"] .login-form,
+[data-theme="dark"] .login-form-panel {
+  background-color: var(--edupulse-surface);
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] .login-form-wrapper {
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] .login-heading {
+  color: var(--edupulse-text);
+}
+
+[data-theme="dark"] .login-welcome {
+  color: var(--edupulse-primary);
+}
+
+[data-theme="dark"] .login-brand .login-description,
+[data-theme="dark"] .login-brand small {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+[data-theme="dark"] .login-page .form-control {
+  background-color: var(--edupulse-surface-muted);
+  color: var(--edupulse-text);
+  border-color: var(--edupulse-border);
+}
+
+[data-theme="dark"] .login-page .form-control::placeholder {
+  color: var(--edupulse-text-soft);
+}
+
+[data-theme="dark"] .login-page .form-control:focus {
+  background-color: var(--edupulse-surface);
+  color: var(--edupulse-text);
+  border-color: var(--edupulse-primary);
+  box-shadow: 0 0 0 0.2rem rgba(139, 128, 206, 0.15);
+}
+
+[data-theme="dark"] .login-page .alert-info {
+  background-color: var(--edupulse-info-soft);
+  color: var(--edupulse-info);
+  border-color: var(--edupulse-border);
+}
+
+.login-form {
+  background-color: var(--edupulse-surface);
+  color: var(--edupulse-text);
 }

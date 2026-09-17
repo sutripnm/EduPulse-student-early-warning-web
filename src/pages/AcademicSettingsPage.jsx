@@ -1,10 +1,14 @@
 import { Link } from "react-router-dom";
+import { BsArrowLeft, BsBookFill, BsBuildingFill } from "react-icons/bs";
 import Sidebar from "../components/Sidebar";
 import "../styles/academic-settings-page.css";
 import useAcademicSettings from "../hooks/useAcademicSettings";
 import AcademicCrudCard from "../components/academic-settings/AcademicCrudCard";
 
 function AcademicSettingsPage() {
+  // Semua data (daftar mapel & kelas) dan fungsi CRUD-nya (create/update/
+  // delete) datang dari sini, supaya AcademicCrudCard di bawah cuma perlu
+  // menerima props tanpa tahu soal pemanggilan API.
   const {
     subjects,
     classes,
@@ -49,7 +53,8 @@ function AcademicSettingsPage() {
             to="/pengaturan"
             className="btn btn-outline-dark"
           >
-            ← Kembali ke Pengaturan
+            <BsArrowLeft className="me-1" />
+            Kembali ke Pengaturan
           </Link>
         </div>
 
@@ -69,7 +74,7 @@ function AcademicSettingsPage() {
           <div className="col-lg-6">
             <AcademicCrudCard
               type="mapel"
-              icon="📚"
+              icon={<BsBookFill />}
               title="Mata Pelajaran"
               description="Daftar mata pelajaran saat ini."
               addButtonLabel="+ Tambah Mapel"
@@ -90,7 +95,7 @@ function AcademicSettingsPage() {
           <div className="col-lg-6">
             <AcademicCrudCard
               type="kelas"
-              icon="🏫"
+              icon={<BsBuildingFill />}
               title="Kelas"
               description="Daftar kelas yang tersedia."
               addButtonLabel="+ Tambah Kelas"

@@ -12,7 +12,8 @@
   padding: 12px;
   background-color: var(--edupulse-surface);
   border: 3px solid var(--edupulse-primary);
-  border-radius: 18px;
+  border-radius: 16px;
+  box-shadow: var(--edupulse-card-shadow);
   text-align: center;
 }
 
@@ -26,7 +27,15 @@
 }
 
 .kpi-icon {
-  font-size: 28px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: var(--edupulse-primary-soft);
+  color: var(--edupulse-primary);
+  font-size: 20px;
   margin-bottom: 3px;
 }
 
@@ -34,8 +43,8 @@
   width: 100%;
   padding: 24px;
   background-color: var(--edupulse-surface);
-  border-radius: 18px;
-  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
+  border-radius: var(--edupulse-card-radius);
+  box-shadow: var(--edupulse-card-shadow);
 }
 
 .dashboard-chart-box {
@@ -48,45 +57,17 @@
   border-radius: 18px;
 }
 
-.dashboard-table {
-  padding: 12px;
-  background-color: #ffffff;
-  border-radius: 18px;
-}
-
 .dashboard-table .table {
-  background-color: #ffffff;
-  --bs-table-bg: #ffffff;
+  background-color: var(--edupulse-surface);
+  --bs-table-bg: var(--edupulse-surface);
 }
 
 .dashboard-table .table > :not(caption) > * > * {
-  background-color: #ffffff;
+  background-color: var(--edupulse-surface);
 }
 
 .analytics-box {
   min-height: 200px;
-}
-
-.today-summary {
-  min-height: 100%;
-}
-
-.dashboard-kpi {
-  background-color: var(--edupulse-surface);
-  border-radius: 16px;
-  box-shadow: 0 2px 10px rgba(52, 52, 61, 0.05);
-}
-
-.kpi-icon {
-  width: 42px;
-  height: 42px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 12px;
-  background-color: var(--edupulse-primary-soft);
-  color: var(--edupulse-primary);
-  font-size: 20px;
 }
 
 .today-summary {
@@ -157,31 +138,8 @@
   color: var(--edupulse-text-muted);
 }
 
-.risk-badge {
-  display: inline-block;
-  padding: 6px 12px;
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 600;
-}
-
-.risk-high {
-  background-color: var(--edupulse-danger);
-  color: #ffffff;
-}
-
-.risk-medium {
-  background-color: var(--edupulse-warning);
-  color: #ffffff;
-}
-
 @media (max-width: 576px) {
   .risk-donut-detail {
     grid-template-columns: 1fr;
   }
-}
-
-.performance-trend-box,
-.risk-donut-box {
-  height: 100%;
 }

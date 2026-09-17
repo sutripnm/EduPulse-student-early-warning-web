@@ -36,20 +36,6 @@
   border-color: var(--edupulse-primary-hover);
 }
 
-.academic-form-box {
-  background-color: var(--edupulse-primary-soft);
-  border: 1px solid #d7d2e3;
-  border-radius: 14px;
-  padding: 20px;
-}
-
-.academic-settings-card {
-  background-color: var(--edupulse-surface);
-  border: 1px solid var(--edupulse-border-strong);
-  border-radius: 20px;
-  padding: 28px;
-}
-
 .academic-settings-card .table th {
   font-weight: 600;
 }
@@ -59,12 +45,9 @@
   padding: 14px 12px;
 }
 
-.academic-settings-card .btn-primary {
-  background-color: var(--edupulse-primary);
-  border-color: var(--edupulse-primary);
-}
-
-.academic-settings-card .btn-primary:hover {
-  background-color: var(--edupulse-primary-hover);
-  border-color: var(--edupulse-primary-hover);
+.academic-form-box {
+  background-color: var(--edupulse-primary-soft);
+  border: 1px solid #d7d2e3;
+  border-radius: 14px;
+  padding: 20px;
 }

@@ -1,4 +1,8 @@
+import { BsPersonFill } from "react-icons/bs";
+
 function ProfileCard({ user }) {
+  // Gabung first_name + last_name jadi satu nama utuh buat ditampilkan.
+  // filter(Boolean) biar gak ada spasi ganda kalau salah satunya kosong.
   const fullName = [
     user?.first_name,
     user?.last_name,
@@ -10,7 +14,8 @@ function ProfileCard({ user }) {
     <section className="settings-card mb-4">
       <div className="mb-4">
         <h5 className="fw-bold mb-1">
-          👤 Profil Pengguna
+          <BsPersonFill className="me-2" />
+          Profil Pengguna
         </h5>
 
         <p className="text-secondary mb-0">
