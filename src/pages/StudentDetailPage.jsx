@@ -1,4 +1,5 @@
 import { Link, useParams } from "react-router-dom";
+import { BsArrowLeft } from "react-icons/bs";
 import Sidebar from "../components/Sidebar";
 import "../styles/student-detail-page.css";
 import useStudentDetail from "../hooks/useStudentDetail";
@@ -73,7 +74,8 @@ function StudentDetailPage() {
             to="/daftar-siswa"
             className="btn btn-outline-dark"
           >
-            ← Kembali
+            <BsArrowLeft className="me-1" />
+            Kembali
           </Link>
         </div>
 
@@ -90,14 +92,9 @@ function StudentDetailPage() {
             id="mapel"
             className="form-select"
             value={selectedMapel}
-            onChange={(event) => {
-              console.log(
-                "MAPEL DIPILIH:",
-                event.target.value
-              );
-
-              setSelectedMapel(event.target.value);
-            }}
+            onChange={(event) =>
+              setSelectedMapel(event.target.value)
+            }
           >
             <option value="">
               Semua Mata Pelajaran
@@ -122,7 +119,6 @@ function StudentDetailPage() {
         />
 
         <RiskAnalysisCard
-          student={student}
           riskSummary={riskSummary}
           selectedMapel={selectedMapel}
           recommendation={recommendation}

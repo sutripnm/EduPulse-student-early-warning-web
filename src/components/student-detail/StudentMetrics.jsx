@@ -1,24 +1,17 @@
+import { getRiskLabel, getRiskBadgeClass } from "../../utils/risk";
+
 function StudentMetrics({
   student,
   riskSummary,
 }) {
   const metrics = student?.metrik_kinerja;
 
-  const riskStatus = String(
-    riskSummary?.status_risiko || ""
-  ).toUpperCase();
-
-  const riskClass =
-    riskStatus === "HIGH" ||
-    riskStatus === "TINGGI"
-      ? "risk-high"
-      : riskStatus === "MEDIUM" ||
-        riskStatus === "SEDANG"
-      ? "risk-medium"
-      : riskStatus === "LOW" ||
-        riskStatus === "RENDAH"
-      ? "risk-low"
-      : "";
+  // Pakai helper yang sama dengan StudentListPage/RiskBadge, biar
+  // translate label & warna badge-nya konsisten di semua halaman
+  // (dan status_risiko yang mentah dari API otomatis diterjemahkan,
+  // bukan ditampilkan apa adanya seperti "HIGH").
+  const riskStatus = riskSummary?.status_risiko;
+  const riskClass = getRiskBadgeClass(riskStatus).replace("risk-badge ", "");
 
   return (
     <section className="student-metrics mb-3">
@@ -64,7 +57,7 @@ function StudentMetrics({
         <span>Status Risk</span>
 
         <strong>
-          {riskSummary?.status_risiko || "-"}
+          {getRiskLabel(riskStatus)}
         </strong>
       </div>
 

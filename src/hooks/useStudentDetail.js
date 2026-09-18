@@ -11,52 +11,47 @@ function useStudentDetail(nisn) {
   const [student, setStudent] = useState(null);
 
   const [mapelOptions, setMapelOptions] = useState([]);
-  const [selectedMapel, setSelectedMapel] =
-    useState("");
+  const [selectedMapel, setSelectedMapel] = useState("");
 
-  const [latestWeek, setLatestWeek] =
-    useState(null);
+  const [latestWeek, setLatestWeek] = useState(null);
 
-  const [recommendation, setRecommendation] =
-    useState(null);
+  const [recommendation, setRecommendation] = useState(null);
+  const [recommendationLoading, setRecommendationLoading] = useState(false);
 
-  const [recommendationLoading, setRecommendationLoading] =
-    useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState(false);
-  
   const [riskSummary, setRiskSummary] = useState(null);
 
+  // =========================
+  // STATUS RISIKO (dari daftar siswa, difilter berdasarkan NISN)
+  // =========================
   useEffect(() => {
-  const fetchRiskSummary = async () => {
-    if (!nisn) return;
+    const fetchRiskSummary = async () => {
+      if (!nisn) return;
 
-    try {
-      const result = await getStudentRiskSummary({
-        page: 1,
-        page_size: 10,
-        search: nisn,
-      });
+      try {
+        const result = await getStudentRiskSummary({
+          page: 1,
+          page_size: 10,
+          search: nisn,
+        });
 
-      const studentRisk = result.results?.find(
-        (item) => item.nisn === nisn
-      );
+        const studentRisk = result.results?.find(
+          (item) => item.nisn === nisn
+        );
 
-      setRiskSummary(studentRisk || null);
-    } catch (error) {
-      console.error(
-        "Gagal mengambil status risiko siswa:",
-        error.response?.data || error.message
-      );
-    }
-  };
+        setRiskSummary(studentRisk || null);
+      } catch (error) {
+        console.error(
+          "Gagal mengambil status risiko siswa:",
+          error.response?.data || error.message
+        );
+      }
+    };
 
-  fetchRiskSummary();
-}, [nisn]);
+    fetchRiskSummary();
+  }, [nisn]);
 
   // =========================
   // MAPEL
@@ -67,14 +62,11 @@ function useStudentDetail(nisn) {
       try {
         const result = await getMapel();
 
-        setMapelOptions(
-          result.results || []
-        );
+        setMapelOptions(result.results || []);
       } catch (error) {
         console.error(
           "Gagal mengambil mata pelajaran:",
-          error.response?.data ||
-            error.message
+          error.response?.data || error.message
         );
       }
     };
@@ -96,11 +88,10 @@ function useStudentDetail(nisn) {
       setError(false);
 
       try {
-        const result =
-          await getStudentDetailRisk({
-            nisn,
-            mapel_id: selectedMapel,
-          });
+        const result = await getStudentDetailRisk({
+          nisn,
+          mapel_id: selectedMapel,
+        });
 
         if (result.success) {
           setStudent(result.data);
@@ -110,8 +101,7 @@ function useStudentDetail(nisn) {
       } catch (error) {
         console.error(
           "Gagal mengambil detail siswa:",
-          error.response?.data ||
-            error.message
+          error.response?.data || error.message
         );
 
         setError(true);
@@ -126,6 +116,9 @@ function useStudentDetail(nisn) {
   // =========================
   // CARI MINGGU TERBARU
   // =========================
+  // Rekomendasi AI dibuat berdasarkan data minggu paling baru yang
+  // sudah punya nilai, jadi perlu tahu dulu minggu ke berapa itu
+  // sebelum handleGenerateRecommendation bisa dipanggil.
 
   useEffect(() => {
     const fetchLatestWeek = async () => {
@@ -137,20 +130,12 @@ function useStudentDetail(nisn) {
       }
 
       try {
-        const result =
-          await getStudentScores({
-            nisn,
-            mapel_id: selectedMapel,
-          });
+        const result = await getStudentScores({
+          nisn,
+          mapel_id: selectedMapel,
+        });
 
         const scores = result.data || [];
-
-        console.log("HASIL GET NILAI:", result);
-        console.log("DATA SCORES:", scores);
-        console.log(
-          "WEEKS:",
-          scores.map((item) => item.minggu_ke)
-        );
 
         if (scores.length === 0) {
           setLatestWeek(null);
@@ -158,29 +143,16 @@ function useStudentDetail(nisn) {
         }
 
         const weeks = scores
-          .map((item) =>
-            Number(item.minggu_ke)
-          )
-          .filter(
-            (week) => !Number.isNaN(week)
-          );
+          .map((item) => Number(item.minggu_ke))
+          .filter((week) => !Number.isNaN(week));
 
-        const latest =
-          weeks.length > 0
-            ? Math.max(...weeks)
-            : null;
+        const latest = weeks.length > 0 ? Math.max(...weeks) : null;
 
         setLatestWeek(latest);
-
-        console.log(
-          "MINGGU TERBARU:",
-          latest
-        );
       } catch (error) {
         console.error(
           "Gagal mengambil nilai siswa:",
-          error.response?.data ||
-            error.message
+          error.response?.data || error.message
         );
 
         setLatestWeek(null);
@@ -194,65 +166,43 @@ function useStudentDetail(nisn) {
   // GENERATE REKOMENDASI
   // =========================
 
-// =========================
-// GENERATE REKOMENDASI
-// =========================
-
-const handleGenerateRecommendation = async () => {
-  console.log("=== GENERATE REKOMENDASI ===");
-  console.log("NISN:", nisn);
-  console.log("MAPEL:", selectedMapel);
-  console.log("LATEST WEEK:", latestWeek);
-
-  if (!selectedMapel) {
-    console.log("STOP: belum memilih mapel");
-    return;
-  }
-
-  if (!latestWeek) {
-    setRecommendation({
-      guru:
-        "Belum tersedia data penilaian untuk mata pelajaran ini.",
-    });
-
-    console.log("STOP: latestWeek tidak tersedia");
-    return;
-  }
-
-  setRecommendationLoading(true);
-
-  try {
-    const result = await getStudentPrediction({
-      nisn,
-      mapel_id: selectedMapel,
-      minggu_ke: latestWeek,
-    });
-
-    console.log("HASIL DETAIL PREDIKSI:", result);
-
-    if (result.success) {
-      console.log(
-        "REKOMENDASI GURU:",
-        result.data?.recommendation?.guru
-      );
-
-      setRecommendation(
-        result.data?.recommendation || null
-      );
+  const handleGenerateRecommendation = async () => {
+    if (!selectedMapel) {
+      return;
     }
-  } catch (error) {
-    console.error(
-      "Gagal mengambil rekomendasi AI:",
-      error.response?.data || error.message
-    );
 
-    setRecommendation({
-      guru: "Rekomendasi AI gagal diambil.",
-    });
-  } finally {
-    setRecommendationLoading(false);
-  }
-};
+    if (!latestWeek) {
+      setRecommendation({
+        guru: "Belum tersedia data penilaian untuk mata pelajaran ini.",
+      });
+      return;
+    }
+
+    setRecommendationLoading(true);
+
+    try {
+      const result = await getStudentPrediction({
+        nisn,
+        mapel_id: selectedMapel,
+        minggu_ke: latestWeek,
+      });
+
+      if (result.success) {
+        setRecommendation(result.data?.recommendation || null);
+      }
+    } catch (error) {
+      console.error(
+        "Gagal mengambil rekomendasi AI:",
+        error.response?.data || error.message
+      );
+
+      setRecommendation({
+        guru: "Rekomendasi AI gagal diambil.",
+      });
+    } finally {
+      setRecommendationLoading(false);
+    }
+  };
 
   return {
     student,

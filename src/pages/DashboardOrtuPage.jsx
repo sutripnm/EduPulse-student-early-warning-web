@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import Sidebar from "../components/Sidebar";
-import { getParentDashboard } from "../services/api";
-import "../styles/dashboard-ortu-page.css";
+import {
+  BsBarChartFill,
+  BsSignpostSplit,
+  BsCalendar2Week,
+} from "react-icons/bs";
 import {
   BarChart,
   Bar,
@@ -14,260 +14,37 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const DEFAULT_MAPEL_OPTIONS = [
-  { id: "", nama: "Semua Mapel" },
-  { id: "matematika", nama: "Matematika" },
-  { id: "b-indonesia", nama: "Bahasa Indonesia" },
-  { id: "b-inggris", nama: "Bahasa Inggris" },
-];
-
-const riskLabel = {
-  HIGH: "Tinggi",
-  MEDIUM: "Sedang",
-  LOW: "Rendah",
-};
-
-// Data contoh, dipakai sementara kalau API belum bisa diakses,
-// biar tampilan tetap kelihatan lengkap
-const DUMMY_DASHBOARD = {
-  profil: { nisn: "0051234567", nama: "Nadya Putri Ramadhani", kelas: "XI IPA 1" },
-  absensi: [
-    { label: "Minggu 1", persen: 100 },
-    { label: "Minggu 2", persen: 90 },
-    { label: "Minggu 3", persen: 80 },
-    { label: "Minggu 4", persen: 88 },
-  ],
-  study_time: [
-    { label: "Minggu 1", jam: 8 },
-    { label: "Minggu 2", jam: 6.5 },
-    { label: "Minggu 3", jam: 9 },
-    { label: "Minggu 4", jam: 7 },
-  ],
-  tugas_pretest: [
-    { label: "Minggu 1", nilai: 70 },
-    { label: "Minggu 2", nilai: 74 },
-    { label: "Minggu 3", nilai: 76 },
-    { label: "Minggu 4", nilai: 78 },
-  ],
-  assessment: [
-    { label: "Minggu 1", nilai: 75 },
-    { label: "Minggu 2", nilai: 78 },
-    { label: "Minggu 3", nilai: 80 },
-    { label: "Minggu 4", nilai: 82 },
-  ],
-  tugas_posttest: [
-    { label: "Minggu 1", nilai: 80 },
-    { label: "Minggu 2", nilai: 82 },
-    { label: "Minggu 3", nilai: 84 },
-    { label: "Minggu 4", nilai: 85 },
-  ],
-  komparasi: {
-    kehadiran: { sekarang: 88, bulan_lalu: 82 },
-    study_time: { sekarang: 7.6, bulan_lalu: 6 },
-    pretest: { sekarang: 74.5, bulan_lalu: 72 },
-    assessment: { sekarang: 78.8, bulan_lalu: 76 },
-    posttest: { sekarang: 82.8, bulan_lalu: 79 },
-  },
-  status_risk: "MEDIUM",
-  rekomendasi: [
-    "Tingkatkan waktu belajar mandiri anak, terutama sebelum assessment.",
-    "Dampingi anak agar kehadiran tetap konsisten di akhir minggu.",
-  ],
-  filter_opsi_mapel: [],
-};
-
-/**
- * Backend saat ini (bug sementara) mengirim rekomendasi_orangtua
- * sebagai STRING yang bentuknya mirip dict Python, contoh:
- * "{'guru': '...', 'siswa': '...', 'orangtua': 'Apresiasi pencapaian belajar anak.'}"
- * bukan object JSON asli. Fungsi ini coba "menarik" nilai key 'orangtua'
- * dari string itu pakai regex. Kalau formatnya berubah / sudah diperbaiki
- * backend jadi object asli, fungsi ini otomatis fallback aman.
- */
-function extractOrangtuaText(item) {
-  if (item && typeof item === "object" && item.orangtua) {
-    return item.orangtua;
-  }
-
-  if (typeof item !== "string") return String(item ?? "");
-
-  const match = item.match(/'orangtua':\s*'([^']*)'/);
-  if (match) return match[1];
-
-  return item; // fallback: tampilkan string aslinya kalau gagal di-parse
-}
-
-/**
- * API asli mengembalikan struktur:
- * {
- *   data: {
- *     profil: { nisn, nama_siswa, kelas },
- *     mapel_aktif, filter_opsi_mapel,
- *     grafik_mingguan: [
- *       { minggu_ke, label, presensi_persen, study_time_jam,
- *         nilai: { pretest, assessment, posttest } }
- *     ],
- *     komparasi_bulanan: {
- *       kehadiran: { sekarang, bulan_lalu, selisih, tren },
- *       study_time: {...}, pretest: {...}, assessment: {...}, posttest: {...}
- *     },
- *     analisis_ews: { status_risiko, label_risiko_display, rekomendasi_orangtua }
- *   }
- * }
- *
- * Fungsi ini menerjemahkan ke struktur yang dipakai komponen di bawah.
- */
-function normalizeParentDashboard(rawResult) {
-  const d = rawResult?.data || rawResult;
-  const grafik = d?.grafik_mingguan || [];
-  const komparasi = d?.komparasi_bulanan || {};
-  const ews = d?.analisis_ews || {};
-
-  return {
-    profil: {
-      nisn: d?.profil?.nisn,
-      nama: d?.profil?.nama_siswa,
-      kelas: d?.profil?.kelas,
-    },
-    mapel_aktif: d?.mapel_aktif || null,
-    filter_opsi_mapel: d?.filter_opsi_mapel || [],
-    absensi: grafik.map((m) => ({ label: m.label, persen: m.presensi_persen })),
-    study_time: grafik.map((m) => ({ label: m.label, jam: m.study_time_jam })),
-    tugas_pretest: grafik.map((m) => ({ label: m.label, nilai: m.nilai?.pretest })),
-    assessment: grafik.map((m) => ({ label: m.label, nilai: m.nilai?.assessment })),
-    tugas_posttest: grafik.map((m) => ({ label: m.label, nilai: m.nilai?.posttest })),
-    komparasi: {
-      kehadiran: komparasi?.kehadiran || {},
-      study_time: komparasi?.study_time || {},
-      pretest: komparasi?.pretest || {},
-      assessment: komparasi?.assessment || {},
-      posttest: komparasi?.posttest || {},
-    },
-    status_risk: ews?.status_risiko,
-    rekomendasi: (ews?.rekomendasi_orangtua || []).map(extractOrangtuaText),
-  };
-}
-
-function ComparisonCard({ title, unit, sekarang, bulanLalu, selisih }) {
-  const hasData = sekarang !== null && sekarang !== undefined &&
-    bulanLalu !== null && bulanLalu !== undefined;
-
-  const diff = hasData
-    ? (selisih ?? Math.round((sekarang - bulanLalu) * 10) / 10)
-    : null;
-
-  let trendClass = "text-secondary";
-  let trendSign = "";
-
-  if (diff > 0) {
-    trendClass = "text-success";
-    trendSign = "▲ +";
-  } else if (diff < 0) {
-    trendClass = "text-danger";
-    trendSign = "▼ ";
-  } else if (diff === 0) {
-    trendSign = "▬ ";
-  }
-
-  return (
-    <div className="col-md-4 col-6">
-      <div className="dashboard-ortu-box h-100 text-center">
-        <p className="small text-secondary mb-1">{title}</p>
-
-        <h4 className="fw-bold mb-1">
-          {sekarang ?? "-"}
-          {unit && <span className="fs-6 fw-normal"> {unit}</span>}
-        </h4>
-
-        <p className="small text-secondary mb-0">
-          Bulan lalu: {hasData ? `${bulanLalu}${unit ? ` ${unit}` : ""}` : "-"}
-        </p>
-
-        {hasData && (
-          <p className={`small fw-semibold mb-0 ${trendClass}`}>
-            {trendSign}
-            {Math.abs(diff)}
-            {unit ? ` ${unit}` : ""}
-          </p>
-        )}
-      </div>
-    </div>
-  );
-}
-
+import Sidebar from "../components/Sidebar";
+import "../styles/dashboard-ortu-page.css";
+import useParentDashboard from "../hooks/useParentDashboard";
+import { getRiskLabel } from "../utils/risk";
+import ComparisonCard from "../components/dashboard-ortu/ComparisonCard";
 
 function DashboardOrtuPage() {
-  const { nisn } = useParams();
-  const studentNisn = nisn || localStorage.getItem("nisn");
-
-  const [selectedMapel, setSelectedMapel] = useState("");
-  const [dashboard, setDashboard] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isDummy, setIsDummy] = useState(false);
-
-
-  useEffect(() => {
-    const fetchDashboard = async () => {
-      setLoading(true);
-
-      try {
-        const result = await getParentDashboard(
-          studentNisn,
-          selectedMapel
-        );
-
-        console.log("Dashboard Ortu API (raw):", result);
-
-        const normalized = normalizeParentDashboard(result);
-        setDashboard(normalized);
-        setIsDummy(false);
-
-        if (!selectedMapel && normalized.mapel_aktif?.id) {
-          setSelectedMapel(String(normalized.mapel_aktif.id));
-        }
-      } catch (error) {
-        console.error("Gagal mengambil dashboard ortu, pakai data contoh:", error);
-
-        setDashboard(DUMMY_DASHBOARD);
-        setIsDummy(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (studentNisn) {
-      fetchDashboard();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentNisn, selectedMapel]);
-
+  // Semua data dashboard (profil, grafik mingguan, komparasi bulanan,
+  // rekomendasi) + status loading/dummy ada di sini.
+  const {
+    studentNisn,
+    selectedMapel,
+    setSelectedMapel,
+    dashboard,
+    loading,
+    isDummy,
+    mapelOptions,
+  } = useParentDashboard();
 
   const statusRisk = dashboard?.status_risk;
   const rekomendasi = dashboard?.rekomendasi || [];
   const komparasi = dashboard?.komparasi || {};
 
-  const mapelOptions =
-    dashboard?.filter_opsi_mapel?.length > 0
-      ? dashboard.filter_opsi_mapel.map((mapel) => ({
-          id: mapel.id,
-          nama: mapel.nama_mapel,
-        }))
-      : DEFAULT_MAPEL_OPTIONS;
-
-
   return (
     <main className="dashboard-ortu-page d-flex">
-
       <Sidebar />
 
       <section className="dashboard-ortu-main flex-grow-1 p-4">
-
         <header className="d-flex justify-content-between align-items-center mb-3">
           <div>
-            <h1 className="h4 fw-bold mb-1">
-              Dashboard Orang Tua
-            </h1>
+            <h1 className="h4 fw-bold mb-1">Dashboard Orang Tua</h1>
 
             <p className="text-secondary mb-0">
               Pantau perkembangan belajar anak Anda setiap minggu
@@ -280,7 +57,6 @@ function DashboardOrtuPage() {
             </span>
           )}
         </header>
-
 
         <div className="d-flex justify-content-end align-items-center gap-2 mb-3">
           <label htmlFor="filterMapelOrtu" className="mb-0 small fw-semibold">
@@ -301,9 +77,7 @@ function DashboardOrtuPage() {
           </select>
         </div>
 
-
         <section className="dashboard-ortu-box d-flex gap-2 flex-wrap mb-4">
-
           <div className="ortu-profile-chip">
             <small>NISN</small>
             <strong>{dashboard?.profil?.nisn || studentNisn || "-"}</strong>
@@ -324,23 +98,21 @@ function DashboardOrtuPage() {
             <strong
               className={`risk-badge-inline risk-${(statusRisk || "").toLowerCase()}`}
             >
-              {riskLabel[statusRisk] || "-"}
+              {getRiskLabel(statusRisk)}
             </strong>
           </div>
-
         </section>
-
 
         {loading && <p>Memuat grafik...</p>}
 
         {!loading && (
           <>
             <h6 className="fw-semibold mb-3">
-              📊 Grafik Mingguan
+              <BsBarChartFill className="me-2" />
+              Grafik Mingguan
             </h6>
 
             <section className="row g-3 mb-4">
-
               <div className="col-md-6">
                 <div className="dashboard-ortu-box chart-box">
                   <h6 className="mb-1">Grafik Absensi</h6>
@@ -424,19 +196,18 @@ function DashboardOrtuPage() {
                   </ResponsiveContainer>
                 </div>
               </div>
-
             </section>
 
-
             <h6 className="fw-semibold mb-2">
-              🚦 Label Risiko & Rekomendasi untuk Orang Tua
+              <BsSignpostSplit className="me-2" />
+              Label Risiko & Rekomendasi untuk Orang Tua
             </h6>
 
             <section className="dashboard-ortu-box risk-recommendation-box mb-4">
               <span
                 className={`badge risk-badge risk-${(statusRisk || "").toLowerCase()}`}
               >
-                Risiko {riskLabel[statusRisk] || "-"}
+                Risiko {getRiskLabel(statusRisk)}
               </span>
 
               {rekomendasi.length > 0 ? (
@@ -446,15 +217,13 @@ function DashboardOrtuPage() {
                   ))}
                 </ul>
               ) : (
-                <p className="mt-3 mb-0">
-                  Belum ada rekomendasi untuk minggu ini.
-                </p>
+                <p className="mt-3 mb-0">Belum ada rekomendasi untuk minggu ini.</p>
               )}
             </section>
 
-
             <h6 className="fw-semibold mb-3">
-              📆 Perbandingan dengan Bulan Lalu
+              <BsCalendar2Week className="me-2" />
+              Perbandingan dengan Bulan Lalu
             </h6>
 
             <section className="row g-3 mb-4">
@@ -494,12 +263,9 @@ function DashboardOrtuPage() {
                 selisih={komparasi.posttest?.selisih}
               />
             </section>
-
           </>
         )}
-
       </section>
-
     </main>
   );
 }

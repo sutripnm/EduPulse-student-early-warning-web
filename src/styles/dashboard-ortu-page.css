@@ -61,3 +61,29 @@
   background-color: #fdecee;
   color: #dc3545;
 }
+
+/* Dipakai di chip "Label Risiko" pada baris profil (di dalam
+   .ortu-profile-chip yang berlatar ungu), jadi warnanya dibuat solid
+   biar tetap kebaca di atas latar ungu itu. */
+.risk-badge-inline {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.risk-badge-inline.risk-low {
+  background-color: #22a06b;
+  color: #ffffff;
+}
+
+.risk-badge-inline.risk-medium {
+  background-color: #f5b82e;
+  color: #3a2c00;
+}
+
+.risk-badge-inline.risk-high {
+  background-color: #dc3545;
+  color: #ffffff;
+}

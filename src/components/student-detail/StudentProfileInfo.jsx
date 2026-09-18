@@ -1,10 +1,12 @@
+import { BsPersonFill } from "react-icons/bs";
+
 function StudentProfileInfo({ student }) {
   const profile = student?.profil_siswa;
 
   return (
     <section className="student-profile-card mb-4">
       <div className="student-section-title">
-        <span>👤</span>
+        <span><BsPersonFill /></span>
         <h6>Informasi Siswa</h6>
       </div>
 
