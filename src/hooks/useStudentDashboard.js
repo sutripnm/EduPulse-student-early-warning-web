@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getStudentDashboard } from "../services/api";
+import { getStudentDashboard, getDashboardSummary } from "../services/api";
 import { normalizeStudentDashboard } from "../utils/dashboardNormalize";
-import defaultMapelOptions from "../data/defaultMapelOptions";
 
 // Data contoh, dipakai sementara kalau API belum bisa diakses,
 // biar tampilan tetap kelihatan lengkap
@@ -47,14 +46,34 @@ function useStudentDashboard() {
         const result = await getStudentDashboard(studentNisn, selectedMapel);
         const normalized = normalizeStudentDashboard(result);
 
+        let finalDashboard = normalized;
+
+        if (!selectedMapel) {
+          const riskResult =
+            await getStudentRiskSummary({
+              page: 1,
+              page_size: 10,
+              search: studentNisn,
+            });
+
+          const studentRisk =
+            riskResult.results?.find(
+              (item) => item.nisn === studentNisn
+            );
+
+          finalDashboard = {
+            ...normalized,
+            status_risk:
+              studentRisk?.status_risiko ||
+              normalized.status_risk,
+          };
+        }
+
+        setDashboard(finalDashboard);
+
         setDashboard(normalized);
         setIsDummy(false);
 
-        // Set filter mapel default ke mapel_aktif dari API,
-        // hanya kalau user belum pilih apa-apa sendiri
-        if (!selectedMapel && normalized.mapel_aktif?.id) {
-          setSelectedMapel(String(normalized.mapel_aktif.id));
-        }
       } catch (error) {
         console.error("Gagal mengambil dashboard siswa, pakai data contoh:", error);
 
@@ -72,12 +91,10 @@ function useStudentDashboard() {
   }, [studentNisn, selectedMapel]);
 
   const mapelOptions =
-    dashboard?.filter_opsi_mapel?.length > 0
-      ? dashboard.filter_opsi_mapel.map((mapel) => ({
-          id: mapel.id,
-          nama: mapel.nama_mapel,
-        }))
-      : defaultMapelOptions;
+    dashboard?.filter_opsi_mapel?.map((mapel) => ({
+      id: mapel.id,
+      nama: mapel.nama_mapel,
+    })) || [];
 
   return {
     studentNisn,

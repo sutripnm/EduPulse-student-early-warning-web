@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getParentDashboard } from "../services/api";
+import {
+  getParentDashboard,
+  getStudentRiskSummary,
+} from "../services/api";
 import { normalizeParentDashboard } from "../utils/dashboardNormalize";
-import defaultMapelOptions from "../data/defaultMapelOptions";
 
 // Data contoh, dipakai sementara kalau API belum bisa diakses,
 // biar tampilan tetap kelihatan lengkap
@@ -73,6 +75,33 @@ function useParentDashboard() {
         const result = await getParentDashboard(studentNisn, selectedMapel);
         const normalized = normalizeParentDashboard(result);
 
+        let finalDashboard = normalized;
+
+        if (!selectedMapel) {
+          const riskResult =
+            await getStudentRiskSummary({
+              page: 1,
+              page_size: 10,
+              search: studentNisn,
+            });
+
+          const studentRisk =
+            riskResult.results?.find(
+              (item) => item.nisn === studentNisn
+            );
+
+          finalDashboard = {
+            ...normalized,
+
+            status_risk:
+              studentRisk?.status_risiko ||
+              normalized.status_risk,
+          };
+        }
+
+        setDashboard(finalDashboard);
+        setIsDummy(false);
+
         setDashboard(normalized);
         setIsDummy(false);
 
@@ -96,12 +125,12 @@ function useParentDashboard() {
   }, [studentNisn, selectedMapel]);
 
   const mapelOptions =
-    dashboard?.filter_opsi_mapel?.length > 0
-      ? dashboard.filter_opsi_mapel.map((mapel) => ({
-          id: mapel.id,
-          nama: mapel.nama_mapel,
-        }))
-      : defaultMapelOptions;
+    dashboard?.filter_opsi_mapel?.map(
+      (mapel) => ({
+        id: mapel.id,
+        nama: mapel.nama_mapel,
+      })
+    ) || [];
 
   return {
     studentNisn,

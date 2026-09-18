@@ -13,7 +13,7 @@ function StudentDetailPage() {
 
   const {
     student,
-    mapelOptions,
+    riskMapelOptions,
     selectedMapel,
     setSelectedMapel,
     recommendation,
@@ -58,7 +58,9 @@ function StudentDetailPage() {
 
       <section className="student-detail-main flex-grow-1 p-4">
 
-        {/* Header */}
+        {/* =========================
+            HEADER
+            ========================= */}
         <div className="d-flex justify-content-between align-items-center mb-4">
           <div>
             <h1 className="h4 fw-bold mb-1">
@@ -91,44 +93,87 @@ function StudentDetailPage() {
           </div>
         </div>
 
-        {/* Filter Mapel */}
+        {/* =========================
+            MAPEL BERISIKO
+            ========================= */}
         <div className="student-filter mb-4">
-          <label
-            htmlFor="mapel"
-            className="form-label fw-semibold"
-          >
+          <label className="form-label fw-semibold d-block mb-2">
             Mata Pelajaran
           </label>
 
-          <select
-            id="mapel"
-            className="form-select"
-            value={selectedMapel}
-            onChange={(event) =>
-              setSelectedMapel(event.target.value)
-            }
-          >
-            <option value="">
-              Semua Mata Pelajaran
-            </option>
+          <div className="d-flex flex-wrap gap-2">
+            {riskMapelOptions.length > 0 ? (
+              riskMapelOptions.map((mapel) => {
+                const riskStatus = String(
+                  mapel.status_risiko || ""
+                ).toUpperCase();
 
-            {mapelOptions.map((mapel) => (
-              <option
-                key={mapel.id}
-                value={mapel.id}
-              >
-                {mapel.nama_mapel}
-              </option>
-            ))}
-          </select>
+                const isSelected =
+                  selectedMapel ===
+                  String(mapel.id);
+
+                let riskClass = "";
+
+                if (
+                  riskStatus === "HIGH" ||
+                  riskStatus === "TINGGI"
+                ) {
+                  riskClass = isSelected
+                    ? "mapel-risk-high active"
+                    : "mapel-risk-high";
+                } else if (
+                  riskStatus === "MEDIUM" ||
+                  riskStatus === "SEDANG"
+                ) {
+                  riskClass = isSelected
+                    ? "mapel-risk-medium active"
+                    : "mapel-risk-medium";
+                } else {
+                  riskClass = isSelected
+                    ? "mapel-risk-low active"
+                    : "mapel-risk-low";
+                }
+
+                return (
+                  <button
+                    key={mapel.id}
+                    type="button"
+                    className={`btn mapel-risk-button ${riskClass}`}
+                    onClick={() =>
+                      setSelectedMapel(
+                        String(mapel.id)
+                      )
+                    }
+                  >
+                    {mapel.nama_mapel}
+                  </button>
+                );
+              })
+            ) : (
+              <span className="text-secondary small">
+                Data mata pelajaran belum tersedia.
+              </span>
+            )}
+          </div>
         </div>
 
-        <StudentProfileInfo student={student} />
+        {/* =========================
+            PROFILE
+            ========================= */}
+        <StudentProfileInfo
+          student={student}
+        />
 
+        {/* =========================
+            METRICS
+            ========================= */}
         <StudentMetrics
           student={student}
         />
 
+        {/* =========================
+            EWS + REKOMENDASI
+            ========================= */}
         <RiskAnalysisCard
           student={student}
           selectedMapel={selectedMapel}
