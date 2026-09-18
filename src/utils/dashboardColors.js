@@ -5,7 +5,9 @@ export const riskColors = {
 };
 
 export const riskFactorColors = [
-  "var(--edupulse-primary)", 
-  "var(--edupulse-warning)", 
-  "var(--edupulse-success)"
+  "var(--edupulse-info)",
+  "var(--edupulse-danger)",
+  "var(--edupulse-success)",
+  "var(--edupulse-primary)",
+  "var(--edupulse-warning)",
 ];

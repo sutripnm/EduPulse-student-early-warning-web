@@ -148,6 +148,17 @@ export const getParentDashboard = async (nisn, mapel_id) => {
   return response.data;
 };
 
+// ========
+// Hapus siswa
+// ========
+export const deleteStudent = async (nisn) => {
+  const response = await api.delete(
+    `/v1/academic/siswa/${nisn}/`
+  );
+
+  return response.data;
+};
+
 
 /* =========================================================
    AUTH

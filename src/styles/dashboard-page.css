@@ -142,3 +142,43 @@
     grid-template-columns: 1fr;
   }
 }
+
+.risk-factor-chart-container
+  .recharts-legend-wrapper {
+  width: 100% !important;
+}
+
+.risk-factor-chart-container
+  .recharts-default-legend {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 20px;
+}
+
+.risk-factor-chart-container
+  .recharts-legend-item {
+  margin: 0 !important;
+}
+
+.risk-factor-tooltip {
+  padding: 10px 12px;
+
+  background-color: var(--edupulse-surface);
+  border: 1px solid var(--edupulse-border);
+  border-radius: 10px;
+
+  box-shadow: var(--edupulse-card-shadow);
+
+  color: var(--edupulse-text);
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.risk-factor-tooltip strong {
+  display: block;
+  margin-bottom: 4px;
+
+  color: var(--edupulse-text);
+}

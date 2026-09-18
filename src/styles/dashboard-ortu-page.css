@@ -1,6 +1,12 @@
 .dashboard-ortu-page {
   min-height: 100vh;
-  background-color: #eeecfa;
+
+  background-color: var(--edupulse-bg);
+  color: var(--edupulse-text);
+
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }
 
 .dashboard-ortu-main {
@@ -9,9 +15,20 @@
 
 .dashboard-ortu-box {
   padding: 20px;
-  background-color: #ffffff;
+
+  background-color: var(--edupulse-surface);
+  color: var(--edupulse-text);
+
+  border: 1px solid var(--edupulse-border);
   border-radius: 18px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  box-shadow: var(--edupulse-card-shadow);
+
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    color 0.3s ease;
 }
 
 .chart-box {
@@ -19,12 +36,15 @@
 }
 
 .ortu-profile-chip {
-  background-color: #7056d8;
-  color: white;
+  background-color: var(--edupulse-primary);
+  color: #ffffff;
+
   border-radius: 20px;
   padding: 6px 16px;
+
   display: flex;
   flex-direction: column;
+
   min-width: 110px;
 }
 
@@ -37,53 +57,26 @@
   font-size: 14px;
 }
 
+/* =========================
+   STATUS RISK
+   ========================= */
+
+.ortu-profile-chip.risk-high {
+  background-color: var(--edupulse-danger);
+}
+
+.ortu-profile-chip.risk-medium {
+  background-color: var(--edupulse-warning);
+  color: #ffffff;
+}
+
+.ortu-profile-chip.risk-low {
+  background-color: var(--edupulse-success);
+}
+
 .risk-recommendation-box {
   min-height: 120px;
-}
 
-.risk-badge {
-  font-size: 13px;
-  padding: 6px 14px;
-  border-radius: 20px;
-}
-
-.risk-badge.risk-low {
-  background-color: #e5f7ee;
-  color: #22a06b;
-}
-
-.risk-badge.risk-medium {
-  background-color: #fff6e0;
-  color: #b3860f;
-}
-
-.risk-badge.risk-high {
-  background-color: #fdecee;
-  color: #dc3545;
-}
-
-/* Dipakai di chip "Label Risiko" pada baris profil (di dalam
-   .ortu-profile-chip yang berlatar ungu), jadi warnanya dibuat solid
-   biar tetap kebaca di atas latar ungu itu. */
-.risk-badge-inline {
-  display: inline-block;
-  padding: 2px 10px;
-  border-radius: 12px;
-  font-size: 13px;
-  font-weight: 600;
-}
-
-.risk-badge-inline.risk-low {
-  background-color: #22a06b;
-  color: #ffffff;
-}
-
-.risk-badge-inline.risk-medium {
-  background-color: #f5b82e;
-  color: #3a2c00;
-}
-
-.risk-badge-inline.risk-high {
-  background-color: #dc3545;
-  color: #ffffff;
+  background-color: var(--edupulse-surface);
+  color: var(--edupulse-text);
 }

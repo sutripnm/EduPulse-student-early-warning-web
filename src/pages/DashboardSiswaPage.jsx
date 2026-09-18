@@ -86,10 +86,26 @@ function DashboardSiswaPage() {
             </div>
 
             {!loading && (
-              <div className="siswa-profile-chip">
-                <small>Label Risiko</small>
-                <strong>{getRiskLabel(statusRisk)}</strong>
-              </div>
+            <div
+              className={`siswa-profile-chip ${
+                String(statusRisk || "").toLowerCase() === "high" ||
+                String(statusRisk || "").toLowerCase() === "tinggi"
+                  ? "risk-high"
+                  : String(statusRisk || "").toLowerCase() === "medium" ||
+                    String(statusRisk || "").toLowerCase() === "sedang"
+                  ? "risk-medium"
+                  : String(statusRisk || "").toLowerCase() === "low" ||
+                    String(statusRisk || "").toLowerCase() === "rendah"
+                  ? "risk-low"
+                  : ""
+              }`}
+            >
+              <small>Label Risiko</small>
+
+              <strong>
+                {getRiskLabel(statusRisk)}
+              </strong>
+            </div>
             )}
           </div>
         </section>

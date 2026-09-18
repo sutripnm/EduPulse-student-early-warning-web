@@ -1,13 +1,23 @@
-import { BsBarChartFill, BsLightbulbFill, BsStars } from "react-icons/bs";
+import {
+  BsBarChartFill,
+  BsLightbulbFill,
+  BsStars,
+} from "react-icons/bs";
+
 import { getRiskLabel } from "../../utils/risk";
 
 function RiskAnalysisCard({
-  riskSummary,
+  student,
   selectedMapel,
   recommendation,
   onGenerateRecommendation,
   recommendationLoading,
 }) {
+  const analysis = student?.analisis_ews;
+
+  // Status risiko berasal dari endpoint detail-siswa
+  const riskStatus = analysis?.status_risiko;
+
   const recommendationText =
     recommendation?.guru ||
     (!selectedMapel
@@ -22,7 +32,10 @@ function RiskAnalysisCard({
       </p>
 
       <section className="risk-analysis-card">
-        {/* ANALISIS EWS */}
+
+        {/* =========================
+            ANALISIS EWS
+            ========================= */}
         <div className="risk-analysis-section risk-ews-section">
           <h6 className="fw-semibold mb-3">
             <BsBarChartFill className="me-2" />
@@ -30,15 +43,19 @@ function RiskAnalysisCard({
           </h6>
 
           <div className="risk-ews-content">
-            <span className="risk-ews-label">Status Risiko</span>
+            <span className="risk-ews-label">
+              Status Risiko
+            </span>
 
             <strong className="risk-ews-status">
-              {getRiskLabel(riskSummary?.status_risiko)}
+              {getRiskLabel(riskStatus)}
             </strong>
           </div>
         </div>
 
-        {/* REKOMENDASI */}
+        {/* =========================
+            REKOMENDASI
+            ========================= */}
         <div className="risk-analysis-section risk-recommendation-section">
           <div>
             <h6 className="fw-semibold mb-3">
@@ -56,7 +73,10 @@ function RiskAnalysisCard({
               type="button"
               className="btn risk-ai-button"
               onClick={onGenerateRecommendation}
-              disabled={recommendationLoading || !selectedMapel}
+              disabled={
+                recommendationLoading ||
+                !selectedMapel
+              }
             >
               {recommendationLoading ? (
                 "Generating..."
@@ -69,6 +89,7 @@ function RiskAnalysisCard({
             </button>
           </div>
         </div>
+
       </section>
     </>
   );

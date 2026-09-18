@@ -1,5 +1,4 @@
 import { Link, useParams } from "react-router-dom";
-import { BsArrowLeft } from "react-icons/bs";
 import Sidebar from "../components/Sidebar";
 import "../styles/student-detail-page.css";
 import useStudentDetail from "../hooks/useStudentDetail";
@@ -14,13 +13,14 @@ function StudentDetailPage() {
 
   const {
     student,
-    riskSummary,
     mapelOptions,
     selectedMapel,
     setSelectedMapel,
     recommendation,
     handleGenerateRecommendation,
     recommendationLoading,
+    handleDeleteStudent,
+    deleteLoading,
     loading,
     error,
   } = useStudentDetail(id);
@@ -70,13 +70,25 @@ function StudentDetailPage() {
             </p>
           </div>
 
-          <Link
-            to="/daftar-siswa"
-            className="btn btn-outline-dark"
-          >
-            <BsArrowLeft className="me-1" />
-            Kembali
-          </Link>
+          <div className="d-flex gap-2">
+            <button
+              type="button"
+              className="btn btn-outline-danger"
+              onClick={handleDeleteStudent}
+              disabled={deleteLoading}
+            >
+              {deleteLoading
+                ? "Menghapus..."
+                : "Hapus Siswa"}
+            </button>
+
+            <Link
+              to="/daftar-siswa"
+              className="btn btn-outline-dark"
+            >
+              ← Kembali
+            </Link>
+          </div>
         </div>
 
         {/* Filter Mapel */}
@@ -115,15 +127,18 @@ function StudentDetailPage() {
 
         <StudentMetrics
           student={student}
-          riskSummary={riskSummary}
         />
 
         <RiskAnalysisCard
-          riskSummary={riskSummary}
+          student={student}
           selectedMapel={selectedMapel}
           recommendation={recommendation}
-          onGenerateRecommendation={handleGenerateRecommendation}
-          recommendationLoading={recommendationLoading}
+          onGenerateRecommendation={
+            handleGenerateRecommendation
+          }
+          recommendationLoading={
+            recommendationLoading
+          }
         />
 
       </section>

@@ -93,11 +93,23 @@ function DashboardOrtuPage() {
             <strong>{dashboard?.profil?.kelas || "-"}</strong>
           </div>
 
-          <div className="ortu-profile-chip">
+          <div
+            className={`ortu-profile-chip ${
+              String(statusRisk || "").toLowerCase() === "high" ||
+              String(statusRisk || "").toLowerCase() === "tinggi"
+                ? "risk-high"
+                : String(statusRisk || "").toLowerCase() === "medium" ||
+                  String(statusRisk || "").toLowerCase() === "sedang"
+                ? "risk-medium"
+                : String(statusRisk || "").toLowerCase() === "low" ||
+                  String(statusRisk || "").toLowerCase() === "rendah"
+                ? "risk-low"
+                : ""
+            }`}
+          >
             <small>Label Risiko</small>
-            <strong
-              className={`risk-badge-inline risk-${(statusRisk || "").toLowerCase()}`}
-            >
+
+            <strong>
               {getRiskLabel(statusRisk)}
             </strong>
           </div>
@@ -126,7 +138,7 @@ function DashboardOrtuPage() {
                       <XAxis dataKey="label" />
                       <YAxis />
                       <Tooltip />
-                      <Bar dataKey="persen" name="Kehadiran (%)" fill="#6840d9" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="persen" name="Kehadiran (%)" fill="var(--edupulse-primary)" radius={[6, 6, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -143,7 +155,7 @@ function DashboardOrtuPage() {
                       <XAxis dataKey="label" />
                       <YAxis />
                       <Tooltip />
-                      <Bar dataKey="jam" name="Jam" fill="#22a06b" radius={[6, 6, 0, 0]} />
+                      <Bar dataKey="jam" name="Jam" fill="var(--edupulse-success)" radius={[6, 6, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -159,7 +171,7 @@ function DashboardOrtuPage() {
                       <XAxis dataKey="label" />
                       <YAxis />
                       <Tooltip />
-                      <Line dataKey="nilai" name="Tugas 1" stroke="#6840d9" />
+                      <Line dataKey="nilai" name="Tugas 1" stroke="var(--edupulse-primary)" />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -175,7 +187,7 @@ function DashboardOrtuPage() {
                       <XAxis dataKey="label" />
                       <YAxis />
                       <Tooltip />
-                      <Line dataKey="nilai" name="Assessment" stroke="#f5b82e" />
+                      <Line dataKey="nilai" name="Assessment" stroke="var(--edupulse-warning)" />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
@@ -191,7 +203,7 @@ function DashboardOrtuPage() {
                       <XAxis dataKey="label" />
                       <YAxis />
                       <Tooltip />
-                      <Line dataKey="nilai" name="Tugas 2" stroke="#dc3545" />
+                      <Line dataKey="nilai" name="Tugas 2" stroke="var(--edupulse-danger)" />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>

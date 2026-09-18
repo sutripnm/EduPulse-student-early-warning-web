@@ -5,6 +5,7 @@ import {
   getStudentScores,
   getStudentPrediction,
   getStudentRiskSummary,
+  deleteStudent,
 } from "../services/api";
 
 function useStudentDetail(nisn) {
@@ -17,6 +18,7 @@ function useStudentDetail(nisn) {
 
   const [recommendation, setRecommendation] = useState(null);
   const [recommendationLoading, setRecommendationLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -204,10 +206,60 @@ function useStudentDetail(nisn) {
     }
   };
 
+  // =================================================
+  // Delete Siswa
+  // =================================================
+  const handleDeleteStudent = async () => {
+  const confirmed = window.confirm(
+    `Yakin ingin menghapus siswa ${student?.profil_siswa?.nama_siswa || ""}?`
+  );
+
+  if (!confirmed) {
+    return;
+  }
+
+  setDeleteLoading(true);
+
+  try {
+    const result = await deleteStudent(nisn);
+
+    console.log(
+      "HASIL DELETE SISWA:",
+      result
+    );
+
+    if (result.success) {
+      alert(
+        result.message ||
+          "Siswa berhasil dihapus."
+      );
+
+      window.location.href =
+        "/daftar-siswa";
+    } else {
+      alert(
+        result.message ||
+          "Gagal menghapus siswa."
+      );
+    }
+  } catch (error) {
+    console.error(
+      "Gagal menghapus siswa:",
+      error.response?.data ||
+        error.message
+    );
+
+    alert(
+      error.response?.data?.message ||
+        "Gagal menghapus siswa."
+    );
+  } finally {
+    setDeleteLoading(false);
+  }
+};
+
   return {
     student,
-
-    riskSummary,
 
     mapelOptions,
     selectedMapel,
@@ -218,6 +270,9 @@ function useStudentDetail(nisn) {
     recommendation,
     handleGenerateRecommendation,
     recommendationLoading,
+
+    handleDeleteStudent,
+    deleteLoading,
 
     loading,
     error,

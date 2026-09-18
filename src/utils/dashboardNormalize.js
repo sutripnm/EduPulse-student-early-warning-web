@@ -5,6 +5,24 @@ export function lastValue(list, key) {
   return list[list.length - 1][key] ?? "-";
 }
 
+// =========================
+// HELPER
+// =========================
+function normalizeMapelOptions(list) {
+  return (list || []).filter(
+    (mapel) =>
+      mapel &&
+      mapel.id &&
+      mapel.nama_mapel &&
+      mapel.nama_mapel.trim().toLowerCase() !== "string" &&
+      (
+        !mapel.kode_mapel ||
+        mapel.kode_mapel.trim().toLowerCase() !== "string"
+      )
+  );
+}
+
+
 /**
  * API dashboard siswa mengembalikan struktur:
  * {
@@ -27,6 +45,10 @@ export function lastValue(list, key) {
  * assessment, tugas_posttest, status_risk, rekomendasi), supaya JSX
  * halamannya tidak perlu diubah walau nama field API berbeda.
  */
+
+// =========================
+// DASHBOARD SISWA
+// =========================
 export function normalizeStudentDashboard(rawResult) {
   const d = rawResult?.data || rawResult;
   const mingguan = d?.ringkasan_mingguan || {};
@@ -34,22 +56,53 @@ export function normalizeStudentDashboard(rawResult) {
   const ews = d?.analisis_ews || {};
   const mingguLabel = `Minggu ${mingguan?.minggu_ke ?? "Ini"}`;
 
-  return {
-    profil: {
-      nisn: d?.profil?.nisn,
-      nama: d?.profil?.nama_siswa,
-      kelas: d?.profil?.kelas,
+ return {
+  profil: {
+    nisn: d?.profil?.nisn,
+    nama: d?.profil?.nama_siswa,
+    kelas: d?.profil?.kelas,
+  },
+
+  filter_opsi_mapel: normalizeMapelOptions(
+    d?.filter_opsi_mapel
+  ),
+
+  mapel_aktif: d?.mapel_aktif || null,
+
+  absensi_harian: mingguan?.presensi_harian || [],
+
+  study_time: [
+    {
+      label: mingguLabel,
+      jam: mingguan?.study_time_jam ?? "-",
     },
-    mapel_aktif: d?.mapel_aktif || null,
-    filter_opsi_mapel: d?.filter_opsi_mapel || [],
-    absensi_harian: mingguan?.presensi_harian || [],
-    study_time: [{ label: mingguLabel, jam: mingguan?.study_time_jam ?? "-" }],
-    tugas_pretest: [{ label: mingguLabel, nilai: nilai?.tugas_1_pretest ?? "-" }],
-    assessment: [{ label: mingguLabel, nilai: nilai?.assessment ?? "-" }],
-    tugas_posttest: [{ label: mingguLabel, nilai: nilai?.tugas_2_posttest ?? "-" }],
-    status_risk: ews?.status_risiko,
-    rekomendasi: ews?.rekomendasi || [],
-  };
+  ],
+
+  tugas_pretest: [
+    {
+      label: mingguLabel,
+      nilai: nilai?.tugas_1_pretest ?? "-",
+    },
+  ],
+
+  assessment: [
+    {
+      label: mingguLabel,
+      nilai: nilai?.assessment ?? "-",
+    },
+  ],
+
+  tugas_posttest: [
+    {
+      label: mingguLabel,
+      nilai: nilai?.tugas_2_posttest ?? "-",
+    },
+  ],
+
+  status_risk: ews?.status_risiko,
+
+  rekomendasi: ews?.rekomendasi || [],
+};
 }
 
 /**
@@ -99,27 +152,56 @@ export function normalizeParentDashboard(rawResult) {
   const komparasi = d?.komparasi_bulanan || {};
   const ews = d?.analisis_ews || {};
 
-  return {
-    profil: {
-      nisn: d?.profil?.nisn,
-      nama: d?.profil?.nama_siswa,
-      kelas: d?.profil?.kelas,
-    },
-    mapel_aktif: d?.mapel_aktif || null,
-    filter_opsi_mapel: d?.filter_opsi_mapel || [],
-    absensi: grafik.map((m) => ({ label: m.label, persen: m.presensi_persen })),
-    study_time: grafik.map((m) => ({ label: m.label, jam: m.study_time_jam })),
-    tugas_pretest: grafik.map((m) => ({ label: m.label, nilai: m.nilai?.pretest })),
-    assessment: grafik.map((m) => ({ label: m.label, nilai: m.nilai?.assessment })),
-    tugas_posttest: grafik.map((m) => ({ label: m.label, nilai: m.nilai?.posttest })),
-    komparasi: {
-      kehadiran: komparasi?.kehadiran || {},
-      study_time: komparasi?.study_time || {},
-      pretest: komparasi?.pretest || {},
-      assessment: komparasi?.assessment || {},
-      posttest: komparasi?.posttest || {},
-    },
-    status_risk: ews?.status_risiko,
-    rekomendasi: (ews?.rekomendasi_orangtua || []).map(extractOrangtuaText),
-  };
+return {
+  profil: {
+    nisn: d?.profil?.nisn,
+    nama: d?.profil?.nama_siswa,
+    kelas: d?.profil?.kelas,
+  },
+
+  filter_opsi_mapel: normalizeMapelOptions(
+    d?.filter_opsi_mapel
+  ),
+
+  mapel_aktif: d?.mapel_aktif || null,
+
+  absensi: grafik.map((m) => ({
+    label: m.label,
+    persen: m.presensi_persen,
+  })),
+
+  study_time: grafik.map((m) => ({
+    label: m.label,
+    jam: m.study_time_jam,
+  })),
+
+  tugas_pretest: grafik.map((m) => ({
+    label: m.label,
+    nilai: m.nilai?.pretest,
+  })),
+
+  assessment: grafik.map((m) => ({
+    label: m.label,
+    nilai: m.nilai?.assessment,
+  })),
+
+  tugas_posttest: grafik.map((m) => ({
+    label: m.label,
+    nilai: m.nilai?.posttest,
+  })),
+
+  komparasi: {
+    kehadiran: komparasi?.kehadiran || {},
+    study_time: komparasi?.study_time || {},
+    pretest: komparasi?.pretest || {},
+    assessment: komparasi?.assessment || {},
+    posttest: komparasi?.posttest || {},
+  },
+
+  status_risk: ews?.status_risiko,
+
+  rekomendasi: (
+    ews?.rekomendasi_orangtua || []
+  ).map(extractOrangtuaText),
+};
 }
