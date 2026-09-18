@@ -113,3 +113,113 @@
 .risk-recommendation-box {
   min-height: 120px;
 }
+
+/* =========================================================
+   MAPEL RISK BUTTON
+   ========================================================= */
+
+.mapel-risk-button {
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 600;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+/* LOW */
+
+.mapel-risk-low {
+  color: var(--edupulse-success);
+  border-color: var(--edupulse-success);
+  background-color: transparent;
+}
+
+.mapel-risk-low:hover,
+.mapel-risk-low.active {
+  background-color: var(--edupulse-success);
+  border-color: var(--edupulse-success);
+  color: #ffffff;
+}
+
+/* MEDIUM */
+
+.mapel-risk-medium {
+  color: var(--edupulse-warning);
+  border-color: var(--edupulse-warning);
+  background-color: transparent;
+}
+
+.mapel-risk-medium:hover,
+.mapel-risk-medium.active {
+  background-color: var(--edupulse-warning);
+  border-color: var(--edupulse-warning);
+  color: #ffffff;
+}
+
+/* HIGH */
+
+.mapel-risk-high {
+  color: var(--edupulse-danger);
+  border-color: var(--edupulse-danger);
+  background-color: transparent;
+}
+
+.mapel-risk-high:hover,
+.mapel-risk-high.active {
+  background-color: var(--edupulse-danger);
+  border-color: var(--edupulse-danger);
+  color: #ffffff;
+}
+
+.mapel-risk-button {
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-weight: 600;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.mapel-risk-high {
+  color: var(--edupulse-danger);
+  border-color: var(--edupulse-danger);
+  background-color: transparent;
+}
+
+.mapel-risk-high:hover,
+.mapel-risk-high.active {
+  background-color: var(--edupulse-danger);
+  border-color: var(--edupulse-danger);
+  color: #ffffff;
+}
+
+.mapel-risk-medium {
+  color: var(--edupulse-warning);
+  border-color: var(--edupulse-warning);
+  background-color: transparent;
+}
+
+.mapel-risk-medium:hover,
+.mapel-risk-medium.active {
+  background-color: var(--edupulse-warning);
+  border-color: var(--edupulse-warning);
+  color: #ffffff;
+}
+
+.mapel-risk-low {
+  color: var(--edupulse-success);
+  border-color: var(--edupulse-success);
+  background-color: transparent;
+}
+
+.mapel-risk-low:hover,
+.mapel-risk-low.active {
+  background-color: var(--edupulse-success);
+  border-color: var(--edupulse-success);
+  color: #ffffff;
+} 

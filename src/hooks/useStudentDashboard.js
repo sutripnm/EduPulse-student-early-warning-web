@@ -1,109 +1,283 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { getStudentDashboard, getDashboardSummary } from "../services/api";
-import { normalizeStudentDashboard } from "../utils/dashboardNormalize";
 
-// Data contoh, dipakai sementara kalau API belum bisa diakses,
-// biar tampilan tetap kelihatan lengkap
+import {
+  getStudentDashboard,
+} from "../services/api";
+
+import {
+  normalizeStudentDashboard,
+} from "../utils/dashboardNormalize";
+
+import {
+  getRiskPriority,
+} from "../utils/risk";
+
+// =========================
+// DATA CONTOH
+// =========================
+
 const DUMMY_DASHBOARD = {
-  profil: { nisn: "0051234567", nama: "Nadya Putri Ramadhani", kelas: "XI IPA 1" },
-  absensi_harian: [
-    { hari: "Senin", status: "Hadir" },
-    { hari: "Selasa", status: "Hadir" },
-    { hari: "Rabu", status: "Izin" },
-    { hari: "Kamis", status: "Hadir" },
-    { hari: "Jumat", status: "Alpha" },
+  profil: {
+    nisn: "0051234567",
+    nama: "Nadya Putri Ramadhani",
+    kelas: "XI IPA 1",
+  },
+
+  absensi_harian: [],
+
+  study_time: [
+    {
+      label: "Minggu Ini",
+      jam: 7,
+    },
   ],
-  study_time: [{ label: "Minggu Ini", jam: 7 }],
-  tugas_pretest: [{ label: "Minggu Ini", nilai: 78 }],
-  assessment: [{ label: "Minggu Ini", nilai: 82 }],
-  tugas_posttest: [{ label: "Minggu Ini", nilai: 85 }],
+
+  tugas_pretest: [
+    {
+      label: "Minggu Ini",
+      nilai: 78,
+    },
+  ],
+
+  assessment: [
+    {
+      label: "Minggu Ini",
+      nilai: 82,
+    },
+  ],
+
+  tugas_posttest: [
+    {
+      label: "Minggu Ini",
+      nilai: 85,
+    },
+  ],
+
   status_risk: "MEDIUM",
+
   rekomendasi: [
     "Tingkatkan waktu belajar mandiri terutama sebelum assessment.",
     "Perhatikan kehadiran, terutama di akhir minggu.",
   ],
+
   filter_opsi_mapel: [],
 };
 
 function useStudentDashboard() {
-  // NISN diambil dari URL (/dashboard-siswa/:nisn); kalau halaman ini
-  // diakses tanpa parameter (siswa login sendiri), fallback ke NISN
-  // yang tersimpan di localStorage saat login.
   const { nisn } = useParams();
-  const studentNisn = nisn || localStorage.getItem("nisn");
 
-  const [selectedMapel, setSelectedMapel] = useState("");
-  const [dashboard, setDashboard] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [isDummy, setIsDummy] = useState(false);
+  const studentNisn =
+    nisn ||
+    localStorage.getItem("nisn");
+
+  const [selectedMapel, setSelectedMapel] =
+    useState("");
+
+  const [dashboard, setDashboard] =
+    useState(null);
+
+  const [riskMapelOptions, setRiskMapelOptions] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [isDummy, setIsDummy] =
+    useState(false);
+
+  // =========================
+  // AMBIL MAPEL + RISIKO
+  // =========================
+
+  useEffect(() => {
+    const fetchMapelRisk = async () => {
+      if (!studentNisn) {
+        return;
+      }
+
+      try {
+        // Ambil daftar mapel dari dashboard
+        // tanpa filter mapel.
+        const result =
+          await getStudentDashboard(
+            studentNisn,
+            ""
+          );
+
+        const normalized =
+          normalizeStudentDashboard(
+            result
+          );
+
+        const mapelList =
+          normalized.filter_opsi_mapel ||
+          [];
+
+        // =========================
+        // CEK STATUS SETIAP MAPEL
+        // =========================
+
+        const riskResults =
+          await Promise.all(
+            mapelList.map(
+              async (mapel) => {
+                try {
+                  const mapelResult =
+                    await getStudentDashboard(
+                      studentNisn,
+                      mapel.id
+                    );
+
+                  const normalizedMapel =
+                    normalizeStudentDashboard(
+                      mapelResult
+                    );
+
+                  return {
+                    id: mapel.id,
+
+                    nama_mapel:
+                      mapel.nama_mapel,
+
+                    status_risiko:
+                      normalizedMapel.status_risk ||
+                      "LOW",
+                  };
+                } catch (error) {
+                  console.error(
+                    `Gagal mengambil risiko mapel ${mapel.nama_mapel}:`,
+                    error.response?.data ||
+                      error.message
+                  );
+
+                  return null;
+                }
+              }
+            )
+          );
+
+        const validResults =
+          riskResults.filter(Boolean);
+
+        // =========================
+        // URUTKAN
+        // HIGH → MEDIUM → LOW
+        // =========================
+
+        validResults.sort(
+          (a, b) =>
+            getRiskPriority(
+              a.status_risiko
+            ) -
+            getRiskPriority(
+              b.status_risiko
+            )
+        );
+
+        console.log(
+          "RISIKO MAPEL SISWA:",
+          validResults
+        );
+
+        setRiskMapelOptions(
+          validResults
+        );
+
+        // =========================
+        // OTOMATIS PILIH
+        // RISIKO TERTINGGI
+        // =========================
+
+        if (
+          validResults.length > 0
+        ) {
+          setSelectedMapel(
+            String(
+              validResults[0].id
+            )
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Gagal mengambil mapel siswa:",
+          error.response?.data ||
+            error.message
+        );
+
+        setRiskMapelOptions([]);
+      }
+    };
+
+    fetchMapelRisk();
+  }, [studentNisn]);
+
+  // =========================
+  // AMBIL DASHBOARD AKTIF
+  // =========================
 
   useEffect(() => {
     const fetchDashboard = async () => {
+      if (!studentNisn) {
+        return;
+      }
+
       setLoading(true);
 
       try {
-        const result = await getStudentDashboard(studentNisn, selectedMapel);
-        const normalized = normalizeStudentDashboard(result);
+        const result =
+          await getStudentDashboard(
+            studentNisn,
+            selectedMapel
+          );
 
-        let finalDashboard = normalized;
+        const normalized =
+          normalizeStudentDashboard(
+            result
+          );
 
-        if (!selectedMapel) {
-          const riskResult =
-            await getStudentRiskSummary({
-              page: 1,
-              page_size: 10,
-              search: studentNisn,
-            });
+        setDashboard(
+          normalized
+        );
 
-          const studentRisk =
-            riskResult.results?.find(
-              (item) => item.nisn === studentNisn
-            );
-
-          finalDashboard = {
-            ...normalized,
-            status_risk:
-              studentRisk?.status_risiko ||
-              normalized.status_risk,
-          };
-        }
-
-        setDashboard(finalDashboard);
-
-        setDashboard(normalized);
         setIsDummy(false);
 
       } catch (error) {
-        console.error("Gagal mengambil dashboard siswa, pakai data contoh:", error);
+        console.error(
+          "Gagal mengambil dashboard siswa:",
+          error.response?.data ||
+            error.message
+        );
 
-        setDashboard(DUMMY_DASHBOARD);
+        setDashboard(
+          DUMMY_DASHBOARD
+        );
+
         setIsDummy(true);
+
       } finally {
         setLoading(false);
       }
     };
 
-    if (studentNisn) {
-      fetchDashboard();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentNisn, selectedMapel]);
-
-  const mapelOptions =
-    dashboard?.filter_opsi_mapel?.map((mapel) => ({
-      id: mapel.id,
-      nama: mapel.nama_mapel,
-    })) || [];
+    fetchDashboard();
+  }, [
+    studentNisn,
+    selectedMapel,
+  ]);
 
   return {
     studentNisn,
+
     selectedMapel,
     setSelectedMapel,
+
     dashboard,
+
+    riskMapelOptions,
+
     loading,
     isDummy,
-    mapelOptions,
   };
 }
 

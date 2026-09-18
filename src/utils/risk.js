@@ -25,3 +25,30 @@ export function getRiskBadgeClass(status) {
 
   return classes[status] || "risk-badge";
 }
+
+export function getRiskPriority(status) {
+  const value = String(status || "").toUpperCase();
+
+  if (
+    value === "HIGH" ||
+    value === "TINGGI"
+  ) {
+    return 1;
+  }
+
+  if (
+    value === "MEDIUM" ||
+    value === "SEDANG"
+  ) {
+    return 2;
+  }
+
+  if (
+    value === "LOW" ||
+    value === "RENDAH"
+  ) {
+    return 3;
+  }
+
+  return 99;
+}

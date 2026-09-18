@@ -28,9 +28,9 @@ function DashboardOrtuPage() {
     selectedMapel,
     setSelectedMapel,
     dashboard,
+    riskMapelOptions,
     loading,
     isDummy,
-    mapelOptions,
   } = useParentDashboard();
 
   const statusRisk = dashboard?.status_risk;
@@ -58,23 +58,57 @@ function DashboardOrtuPage() {
           )}
         </header>
 
-        <div className="d-flex justify-content-end align-items-center gap-2 mb-3">
-          <label htmlFor="filterMapelOrtu" className="mb-0 small fw-semibold">
-            Filter Mapel
+        <div className="d-flex align-items-center gap-3 mb-3 flex-wrap">
+          <label className="mb-0 small fw-semibold">
+            Mata Pelajaran
           </label>
 
-          <select
-            id="filterMapelOrtu"
-            className="form-select"
-            value={selectedMapel}
-            onChange={(event) => setSelectedMapel(event.target.value)}
-          >
-            {mapelOptions.map((mapel) => (
-              <option key={mapel.id} value={mapel.id}>
-                {mapel.nama}
-              </option>
-            ))}
-          </select>
+          <div className="d-flex flex-wrap gap-2">
+            {riskMapelOptions.map((mapel) => {
+              const status =
+                String(
+                  mapel.status_risiko || ""
+                ).toUpperCase();
+
+              const isSelected =
+                selectedMapel ===
+                String(mapel.id);
+
+              let riskClass =
+                "mapel-risk-low";
+
+              if (
+                status === "HIGH" ||
+                status === "TINGGI"
+              ) {
+                riskClass =
+                  "mapel-risk-high";
+              } else if (
+                status === "MEDIUM" ||
+                status === "SEDANG"
+              ) {
+                riskClass =
+                  "mapel-risk-medium";
+              }
+
+              return (
+                <button
+                  key={mapel.id}
+                  type="button"
+                  className={`btn mapel-risk-button ${
+                    riskClass
+                  } ${isSelected ? "active" : ""}`}
+                  onClick={() =>
+                    setSelectedMapel(
+                      String(mapel.id)
+                    )
+                  }
+                >
+                  {mapel.nama_mapel}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         <section className="dashboard-ortu-box d-flex gap-2 flex-wrap mb-4">
