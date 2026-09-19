@@ -71,25 +71,39 @@ function StudentDetailPage() {
             </p>
           </div>
 
-          <div className="d-flex gap-2">
-            <button
-              type="button"
-              className="btn btn-outline-danger"
-              onClick={handleDeleteStudent}
-              disabled={deleteLoading}
-            >
-              {deleteLoading
-                ? "Menghapus..."
-                : "Hapus Siswa"}
-            </button>
+        <div className="d-flex gap-2 flex-wrap">
+          <Link
+            to={`/dashboard-siswa/${id}`}
+            className="btn btn-outline-dark"
+          >
+            Dashboard Siswa
+          </Link>
 
-            <Link
-              to="/daftar-siswa"
-              className="btn btn-outline-dark"
-            >
-              ← Kembali
-            </Link>
-          </div>
+          <Link
+            to={`/dashboard-ortu/${id}`}
+            className="btn btn-outline-dark"
+          >
+            Dashboard Orang Tua
+          </Link>
+
+          <button
+            type="button"
+            className="btn btn-outline-danger"
+            onClick={handleDeleteStudent}
+            disabled={deleteLoading}
+          >
+            {deleteLoading
+              ? "Menghapus..."
+              : "Hapus Siswa"}
+          </button>
+
+          <Link
+            to="/daftar-siswa"
+            className="btn btn-outline-dark"
+          >
+            ← Kembali
+          </Link>
+        </div>
         </div>
 
         {/* =========================
