@@ -31,8 +31,13 @@ function useLogin() {
     localStorage.setItem("refreshToken", response.data.data.refresh_token);
 
     localStorage.setItem(
-      "user",
-      JSON.stringify(response.data.data.user)
+      "accessToken",
+      result.data.access_token
+    );
+
+    localStorage.setItem(
+      "refreshToken",
+      result.data.refresh_token
     );
 
     navigate("/dashboard");

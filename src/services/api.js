@@ -6,24 +6,230 @@ const api = axios.create({
 });
 
 /* =========================================================
-   AXIOS INTERCEPTOR
+   AXIOS REQUEST INTERCEPTOR
    ========================================================= */
 
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("accessToken");
+  const token =
+    localStorage.getItem("accessToken");
 
-  if (
-    token &&
-    !config.url.includes("/auth/login/")
-  ) {
-    config.headers.Authorization = `Bearer ${token}`;
+  // Jangan kirim access token ke login / refresh
+  const isAuthRequest =
+    config.url?.includes("/auth/login/") ||
+    config.url?.includes("/auth/refresh/");
+
+  if (token && !isAuthRequest) {
+    config.headers.Authorization =
+      `Bearer ${token}`;
   }
 
-  // Biar ngrok gak nampilin halaman warning ke request non-browser-navigasi
-  config.headers["ngrok-skip-browser-warning"] = "true";
+  // Biar ngrok gak nampilin halaman warning
+  config.headers[
+    "ngrok-skip-browser-warning"
+  ] = "true";
 
   return config;
 });
+
+
+/* =========================================================
+   REFRESH TOKEN
+   ========================================================= */
+
+// Menyimpan proses refresh yang sedang berjalan.
+// Ini mencegah beberapa request sekaligus melakukan
+// refresh token secara bersamaan.
+let refreshPromise = null;
+
+const refreshAccessToken = async () => {
+  const refreshToken =
+    localStorage.getItem("refreshToken");
+
+  if (!refreshToken) {
+    throw new Error(
+      "Refresh token tidak tersedia."
+    );
+  }
+
+  // Kalau sedang ada refresh berjalan,
+  // request lain tinggal menunggu hasilnya.
+  if (!refreshPromise) {
+    refreshPromise =
+      axios
+        .post(
+          `${api.defaults.baseURL}/v1/auth/refresh/`,
+          {
+            refresh: refreshToken,
+          },
+          {
+            headers: {
+              "ngrok-skip-browser-warning":
+                "true",
+            },
+          }
+        )
+        .then((response) => {
+          const result =
+            response.data;
+
+          console.log(
+            "HASIL REFRESH TOKEN:",
+            result
+          );
+
+          if (
+            !result.success ||
+            !result.data?.access_token
+          ) {
+            throw new Error(
+              result.message ||
+                "Gagal memperbarui token."
+            );
+          }
+
+          // Backend memberikan access token
+          // DAN refresh token baru.
+          localStorage.setItem(
+            "accessToken",
+            result.data.access_token
+          );
+
+          if (
+            result.data.refresh_token
+          ) {
+            localStorage.setItem(
+              "refreshToken",
+              result.data.refresh_token
+            );
+          }
+
+          return result.data.access_token;
+        })
+        .finally(() => {
+          refreshPromise = null;
+        });
+  }
+
+  return refreshPromise;
+};
+
+
+/* =========================================================
+   AXIOS RESPONSE INTERCEPTOR
+   ========================================================= */
+
+api.interceptors.response.use(
+  (response) => {
+    // Response normal
+    return response;
+  },
+
+  async (error) => {
+    const originalRequest =
+      error.config;
+
+    // Bukan 401 → langsung teruskan error
+    if (
+      error.response?.status !== 401
+    ) {
+      return Promise.reject(
+        error
+      );
+    }
+
+    // Kalau request sudah pernah di-retry,
+    // jangan refresh lagi supaya tidak infinite loop.
+    if (
+      originalRequest?._retry
+    ) {
+      return Promise.reject(
+        error
+      );
+    }
+
+    // Login dan refresh sendiri tidak perlu
+    // di-refresh ulang.
+    if (
+      originalRequest?.url?.includes(
+        "/auth/login/"
+      ) ||
+      originalRequest?.url?.includes(
+        "/auth/refresh/"
+      )
+    ) {
+      return Promise.reject(
+        error
+      );
+    }
+
+    const refreshToken =
+      localStorage.getItem(
+        "refreshToken"
+      );
+
+    // Tidak ada refresh token
+    → hapus session dan login ulang
+    if (!refreshToken) {
+      localStorage.removeItem(
+        "accessToken"
+      );
+
+      localStorage.removeItem(
+        "refreshToken"
+      );
+
+      window.location.href =
+        "/login";
+
+      return Promise.reject(
+        error
+      );
+    }
+
+    originalRequest._retry =
+      true;
+
+    try {
+      // Ambil access token baru
+      const newAccessToken =
+        await refreshAccessToken();
+
+      // Pasang token baru ke request
+      originalRequest.headers =
+        originalRequest.headers || {};
+
+      originalRequest.headers.Authorization =
+        `Bearer ${newAccessToken}`;
+
+      // Ulangi request yang sebelumnya 401
+      return api(
+        originalRequest
+      );
+
+    } catch (refreshError) {
+      console.error(
+        "Refresh token gagal:",
+        refreshError
+      );
+
+      // Refresh token juga sudah tidak valid
+      localStorage.removeItem(
+        "accessToken"
+      );
+
+      localStorage.removeItem(
+        "refreshToken"
+      );
+
+      window.location.href =
+        "/login";
+
+      return Promise.reject(
+        refreshError
+      );
+    }
+  }
+);
 
 
 /* =========================================================

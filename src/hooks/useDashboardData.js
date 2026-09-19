@@ -1,102 +1,272 @@
 import { useEffect, useState } from "react";
+
 import {
   getDashboardSummary,
   getSchoolAnalytics,
+  getCurrentUser,
 } from "../services/api";
 
+import teacherMapel from "../data/teacherMapel";
+
 function useDashboardData() {
-  const [dashboardData, setDashboardData] = useState(null);
+  const [dashboardData, setDashboardData] =
+    useState(null);
+
   const [schoolAnalyticsData, setSchoolAnalyticsData] =
     useState(null);
 
-  const [kelasOptions, setKelasOptions] = useState([]);
-  const [mapelOptions, setMapelOptions] = useState([]);
+  const [kelasOptions, setKelasOptions] =
+    useState([]);
 
-  const [selectedKelas, setSelectedKelas] = useState("");
-  const [selectedMapel, setSelectedMapel] = useState("");
+  const [mapelOptions, setMapelOptions] =
+    useState([]);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [selectedKelas, setSelectedKelas] =
+    useState("");
+
+  const [selectedMapel, setSelectedMapel] =
+    useState("");
+
+  const [currentUser, setCurrentUser] =
+    useState(null);
+
+  const [userLoading, setUserLoading] =
+    useState(true);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState(false);
+
+  // =========================================================
+  // AMBIL USER YANG SEDANG LOGIN
+  // =========================================================
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const result =
+          await getCurrentUser();
+
+        const user =
+          result?.data || result;
+
+        console.log(
+          "USER LOGIN:",
+          user
+        );
+
+        console.log(
+          "ROLE USER:",
+          user?.role
+        );
+
+        console.log(
+          "EMAIL USER:",
+          user?.email
+        );
+
+        setCurrentUser(user);
+      } catch (error) {
+        console.error(
+          "Gagal mengambil user:",
+          error.response?.data ||
+            error.message
+        );
+
+        setCurrentUser(null);
+      } finally {
+        setUserLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // =========================================================
+  // ROLE
+  // =========================================================
+
+  const isGuru =
+    currentUser?.role === "GURU";
+
+  const isAdmin =
+    currentUser?.role === "ADMIN";
+
+  // Kode mapel yang dimiliki guru
+  const teacherMapelCode =
+    isGuru
+      ? teacherMapel[
+          currentUser?.email
+        ]
+      : null;
+
+  // =========================================================
+  // DASHBOARD + ANALYTICS
+  // =========================================================
 
   useEffect(() => {
     const fetchDashboard = async () => {
+      // Jangan request sebelum user diketahui
+      if (
+        userLoading ||
+        !currentUser
+      ) {
+        return;
+      }
+
       setLoading(true);
       setError(false);
 
       try {
-        // =========================
+        // =====================================================
         // ANALYTICS
-        // =========================
+        // =====================================================
 
         const analyticsResult =
           await getSchoolAnalytics({
-            kelas_id: selectedKelas,
-            mapel_id: selectedMapel,
+            kelas_id:
+              selectedKelas,
+            mapel_id:
+              selectedMapel,
           });
 
-        if (analyticsResult.success) {
+        let visibleMapelOptions = [];
+
+        if (
+          analyticsResult.success
+        ) {
           setSchoolAnalyticsData(
             analyticsResult.data
           );
 
           // =========================
-          // FILTER KELAS
+          // KELAS
           // =========================
 
-          const kelasOptions =
-            analyticsResult.data?.filter_options
-              ?.kelas || [];
-
           setKelasOptions(
-            kelasOptions.filter(
-              (kelas) =>
-                kelas &&
-                kelas.id &&
-                kelas.nama_kelas &&
-                kelas.nama_kelas
-                  .trim()
-                  .toLowerCase() !== "string"
-            )
+            analyticsResult.data
+              ?.filter_options
+              ?.kelas || []
           );
 
           // =========================
-          // FILTER MAPEL
+          // MAPEL
           // =========================
 
-          const mapelOptions =
-            analyticsResult.data?.filter_options
-              ?.mapel || [];
-
-          setMapelOptions(
-            mapelOptions.filter(
+          const allMapelOptions =
+            (
+              analyticsResult.data
+                ?.filter_options
+                ?.mapel || []
+            ).filter(
               (mapel) =>
                 mapel &&
                 mapel.id &&
                 mapel.nama_mapel &&
                 mapel.nama_mapel
                   .trim()
-                  .toLowerCase() !== "string" &&
+                  .toLowerCase() !==
+                  "string" &&
                 (
                   !mapel.kode_mapel ||
                   mapel.kode_mapel
                     .trim()
-                    .toLowerCase() !== "string"
+                    .toLowerCase() !==
+                    "string"
                 )
-            )
+            );
+
+          // ===================================================
+          // ADMIN
+          // → SEMUA MAPEL
+          // ===================================================
+
+          if (isAdmin) {
+            visibleMapelOptions =
+              allMapelOptions;
+          }
+
+          // ===================================================
+          // GURU
+          // → HANYA MAPEL YANG DIA AJAR
+          // ===================================================
+
+          if (isGuru) {
+            visibleMapelOptions =
+              allMapelOptions.filter(
+                (mapel) =>
+                  String(
+                    mapel.kode_mapel ||
+                      ""
+                  ).toUpperCase() ===
+                  String(
+                    teacherMapelCode ||
+                      ""
+                  ).toUpperCase()
+              );
+          }
+
+          console.log(
+            "SEMUA MAPEL:",
+            allMapelOptions
+          );
+
+          console.log(
+            "KODE MAPEL GURU:",
+            teacherMapelCode
+          );
+
+          console.log(
+            "MAPEL YANG DITAMPILKAN:",
+            visibleMapelOptions
+          );
+
+          setMapelOptions(
+            visibleMapelOptions
           );
         }
 
-        // =========================
+        // =====================================================
+        // TENTUKAN MAPEL YANG AKTIF
+        // =====================================================
+
+        let activeMapelId =
+          selectedMapel;
+
+        // Guru belum punya selectedMapel
+        // → otomatis gunakan mapel miliknya
+        if (
+          isGuru &&
+          !selectedMapel &&
+          visibleMapelOptions.length > 0
+        ) {
+          activeMapelId =
+            String(
+              visibleMapelOptions[0].id
+            );
+
+          setSelectedMapel(
+            activeMapelId
+          );
+        }
+
+        // =====================================================
         // SUMMARY
-        // =========================
+        // =====================================================
 
         const summaryResult =
           await getDashboardSummary({
-            kelas_id: selectedKelas,
-            mapel_id: selectedMapel,
+            kelas_id:
+              selectedKelas,
+            mapel_id:
+              activeMapelId,
           });
 
-        if (summaryResult.success) {
+        if (
+          summaryResult.success
+        ) {
           setDashboardData(
             summaryResult.data
           );
@@ -115,15 +285,24 @@ function useDashboardData() {
     };
 
     fetchDashboard();
-  }, [selectedKelas, selectedMapel]);
+  }, [
+    userLoading,
+    currentUser,
+    selectedKelas,
+    selectedMapel,
+    isGuru,
+    isAdmin,
+    teacherMapelCode,
+  ]);
 
-  // =========================
+  // =========================================================
   // ANALYTICS
-  // =========================
+  // =========================================================
 
   const riskByClassData =
     schoolAnalyticsData
-      ?.perbandingan_risiko_kelas || [];
+      ?.perbandingan_risiko_kelas ||
+    [];
 
   const riskFactorData =
     schoolAnalyticsData
@@ -133,9 +312,9 @@ function useDashboardData() {
         value: item.percentage,
       })) || [];
 
-  // =========================
+  // =========================================================
   // RISK DONUT
-  // =========================
+  // =========================================================
 
   const riskData = [
     {
@@ -146,6 +325,7 @@ function useDashboardData() {
           ?.rendah
           ?.percentage || 0,
     },
+
     {
       name: "Sedang",
       value:
@@ -154,6 +334,7 @@ function useDashboardData() {
           ?.sedang
           ?.percentage || 0,
     },
+
     {
       name: "Tinggi",
       value:
@@ -164,74 +345,68 @@ function useDashboardData() {
     },
   ];
 
-  // =========================
+  // =========================================================
   // TOP INTERVENTION
-  // =========================
+  // =========================================================
 
   const topRiskStudents =
-    dashboardData?.top_intervensi || [];
+    dashboardData
+      ?.top_intervensi || [];
 
-  // =========================
-  // INSIGHT KELAS
-  // =========================
+  // =========================================================
+  // INSIGHT KELAS - HIGH
+  // =========================================================
 
   const topHighRiskClasses =
     dashboardData
       ?.insight_kelas
       ?.high_risk_terbanyak
-      ?.map((item) => ({
-        className: item.nama_kelas,
-        count: item.jumlah_siswa,
-      })) || [];
+      ?.map(
+        (item) => ({
+          className:
+            item.nama_kelas,
+
+          count:
+            item.jumlah_siswa,
+        })
+      ) || [];
+
+  // =========================================================
+  // INSIGHT KELAS - LOW
+  // =========================================================
 
   const topLowRiskClasses =
     dashboardData
       ?.insight_kelas
       ?.low_risk_terbanyak
-      ?.map((item) => ({
-        className: item.nama_kelas,
-        count: item.jumlah_siswa,
-      })) || [];
+      ?.map(
+        (item) => ({
+          className:
+            item.nama_kelas,
+
+          count:
+            item.jumlah_siswa,
+        })
+      ) || [];
+
+  // =========================================================
+  // RETURN
+  // =========================================================
 
   return {
-    // =========================
-    // RAW DATA
-    // =========================
-
     dashboardData,
     schoolAnalyticsData,
-
-    // =========================
-    // ANALYTICS DATA
-    // =========================
 
     riskByClassData,
     riskFactorData,
     riskData,
 
-    // =========================
-    // INTERVENTION
-    // =========================
-
     topRiskStudents,
-
-    // =========================
-    // INSIGHT KELAS
-    // =========================
-
     topHighRiskClasses,
     topLowRiskClasses,
 
-    // =========================
-    // FILTER OPTIONS
-    // =========================
-
     kelasOptions,
     mapelOptions,
-
-    // =========================
-    // SELECTED FILTER
-    // =========================
 
     selectedKelas,
     setSelectedKelas,
@@ -239,9 +414,9 @@ function useDashboardData() {
     selectedMapel,
     setSelectedMapel,
 
-    // =========================
-    // STATE
-    // =========================
+    currentUser,
+    isGuru,
+    isAdmin,
 
     loading,
     error,
