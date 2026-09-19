@@ -591,7 +591,7 @@ useEffect(() => {
         HADIR: "Hadir",
         IZIN: "Izin",
         SAKIT: "Sakit",
-        ALPHA: "Alpha",
+        ALPHA: "Alpa",
       };
 
       // =====================================================

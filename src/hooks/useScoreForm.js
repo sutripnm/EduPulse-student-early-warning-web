@@ -549,7 +549,7 @@ useEffect(() => {
 
                 {
                   jenis_evaluasi:
-                    "QUIZ",
+                    "QUIZ2",
 
                   nama_evaluasi:
                     "Quiz 2",
