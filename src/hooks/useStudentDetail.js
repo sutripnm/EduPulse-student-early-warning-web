@@ -433,84 +433,84 @@ function useStudentDetail(nisn) {
   ]);
 
   // =========================
-  // GENERATE REKOMENDASI
-  // =========================
+// AMBIL REKOMENDASI OTOMATIS
+// =========================
 
-  const handleGenerateRecommendation =
-    async () => {
-      if (!selectedMapel) {
-        return;
-      }
+useEffect(() => {
+  const fetchRecommendation = async () => {
+    // Belum ada mapel atau minggu terbaru
+    if (!nisn || !selectedMapel || !latestWeek) {
+      setRecommendation(null);
+      return;
+    }
 
-      if (!latestWeek) {
-        setRecommendation({
-          guru:
-            "Belum tersedia data penilaian untuk mata pelajaran ini.",
-        });
+    setRecommendationLoading(true);
 
-        return;
-      }
-
-      setRecommendationLoading(
-        true
+    try {
+      console.log(
+        "REKOMENDASI OTOMATIS"
       );
 
-      try {
-        console.log(
-          "NISN:",
-          nisn
-        );
+      console.log(
+        "NISN:",
+        nisn
+      );
 
-        console.log(
-          "MAPEL:",
-          selectedMapel
-        );
+      console.log(
+        "MAPEL:",
+        selectedMapel
+      );
 
-        console.log(
-          "LATEST WEEK:",
-          latestWeek
-        );
+      console.log(
+        "MINGGU:",
+        latestWeek
+      );
 
-        const result =
-          await getStudentPrediction({
-            nisn,
-            mapel_id:
-              selectedMapel,
-            minggu_ke:
-              latestWeek,
-          });
-
-        console.log(
-          "HASIL DETAIL PREDIKSI:",
-          result
-        );
-
-        if (
-          result.success
-        ) {
-          setRecommendation(
-            result.data
-              ?.recommendation ||
-              null
-          );
-        }
-      } catch (error) {
-        console.error(
-          "Gagal mengambil rekomendasi AI:",
-          error.response?.data ||
-            error.message
-        );
-
-        setRecommendation({
-          guru:
-            "Rekomendasi AI gagal diambil.",
+      const result =
+        await getStudentPrediction({
+          nisn,
+          mapel_id:
+            selectedMapel,
+          minggu_ke:
+            latestWeek,
         });
-      } finally {
-        setRecommendationLoading(
-          false
+
+      console.log(
+        "HASIL REKOMENDASI:",
+        result
+      );
+
+      if (result.success) {
+        setRecommendation(
+          result.data?.recommendation ||
+            null
         );
+      } else {
+        setRecommendation(null);
       }
-    };
+
+    } catch (error) {
+      console.error(
+        "Gagal mengambil rekomendasi AI:",
+        error.response?.data ||
+          error.message
+      );
+
+      setRecommendation(null);
+
+    } finally {
+      setRecommendationLoading(
+        false
+      );
+    }
+  };
+
+  fetchRecommendation();
+}, [
+  nisn,
+  selectedMapel,
+  latestWeek,
+]);
 
   // =========================
   // DELETE SISWA
@@ -598,7 +598,6 @@ function useStudentDetail(nisn) {
     latestWeek,
 
     recommendation,
-    handleGenerateRecommendation,
     recommendationLoading,
 
     handleDeleteStudent,

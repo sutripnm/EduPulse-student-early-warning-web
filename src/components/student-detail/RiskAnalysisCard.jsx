@@ -1,7 +1,6 @@
 import {
   BsBarChartFill,
   BsLightbulbFill,
-  BsStars,
 } from "react-icons/bs";
 
 import { getRiskLabel } from "../../utils/risk";
@@ -10,19 +9,13 @@ function RiskAnalysisCard({
   student,
   selectedMapel,
   recommendation,
-  onGenerateRecommendation,
   recommendationLoading,
 }) {
-  const analysis = student?.analisis_ews;
+  const analysis =
+    student?.analisis_ews;
 
-  // Status risiko berasal dari endpoint detail-siswa
-  const riskStatus = analysis?.status_risiko;
-
-  const recommendationText =
-    recommendation?.guru ||
-    (!selectedMapel
-      ? "Pilih mata pelajaran untuk melihat rekomendasi tindakan yang lebih spesifik."
-      : "Rekomendasi AI belum dibuat untuk mata pelajaran yang dipilih.");
+  const riskStatus =
+    analysis?.status_risiko;
 
   return (
     <>
@@ -48,7 +41,9 @@ function RiskAnalysisCard({
             </span>
 
             <strong className="risk-ews-status">
-              {getRiskLabel(riskStatus)}
+              {getRiskLabel(
+                riskStatus
+              )}
             </strong>
           </div>
         </div>
@@ -57,37 +52,33 @@ function RiskAnalysisCard({
             REKOMENDASI
             ========================= */}
         <div className="risk-analysis-section risk-recommendation-section">
+
           <div>
             <h6 className="fw-semibold mb-3">
               <BsLightbulbFill className="me-2" />
               Rekomendasi Tindakan
             </h6>
 
-            <p className="risk-recommendation-text mb-0">
-              {recommendationText}
-            </p>
+            {recommendationLoading ? (
+              <p className="risk-recommendation-text mb-0">
+                Sedang menyiapkan rekomendasi...
+              </p>
+            ) : recommendation?.guru ? (
+              <p className="risk-recommendation-text mb-0">
+                {recommendation.guru}
+              </p>
+            ) : !selectedMapel ? (
+              <p className="risk-recommendation-text mb-0">
+                Belum ada mata pelajaran yang dipilih.
+              </p>
+            ) : (
+              <p className="risk-recommendation-text mb-0">
+                Rekomendasi belum tersedia untuk
+                mata pelajaran ini.
+              </p>
+            )}
           </div>
 
-          <div className="risk-ai-action">
-            <button
-              type="button"
-              className="btn risk-ai-button"
-              onClick={onGenerateRecommendation}
-              disabled={
-                recommendationLoading ||
-                !selectedMapel
-              }
-            >
-              {recommendationLoading ? (
-                "Generating..."
-              ) : (
-                <>
-                  <BsStars className="me-1" />
-                  Generate Rekomendasi AI
-                </>
-              )}
-            </button>
-          </div>
         </div>
 
       </section>

@@ -17,7 +17,6 @@ function StudentDetailPage() {
     selectedMapel,
     setSelectedMapel,
     recommendation,
-    handleGenerateRecommendation,
     recommendationLoading,
     handleDeleteStudent,
     deleteLoading,
@@ -178,9 +177,6 @@ function StudentDetailPage() {
           student={student}
           selectedMapel={selectedMapel}
           recommendation={recommendation}
-          onGenerateRecommendation={
-            handleGenerateRecommendation
-          }
           recommendationLoading={
             recommendationLoading
           }

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL:
-    "https://731c-2402-8780-1018-c90c-c930-4ebd-7d3-37f6.ngrok-free.app/api",
+    "https://92d0-2402-8780-1018-c90c-9800-a1d9-4813-cf12.ngrok-free.app/api",
 });
 
 /* =========================================================
