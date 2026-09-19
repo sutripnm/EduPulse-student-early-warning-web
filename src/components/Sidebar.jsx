@@ -1,75 +1,118 @@
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../services/api";
 import { NavLink, useNavigate } from "react-router-dom";
+
 import {
   BsChevronLeft,
   BsChevronRight,
   BsBoxArrowRight,
 } from "react-icons/bs";
+
 import logo from "../assets/gemini-svg.svg";
+
 import "../styles/sidebar.css";
+
 import useSidebar from "../hooks/useSidebar";
-import sidebarMenuItems from "../data/sidebarMenuItems";
+
+import {
+  getSidebarMenuItems,
+} from "../data/sidebarMenuItems";
 
 function Sidebar() {
-  const { collapsed, toggleCollapsed } = useSidebar();
+  const {
+    collapsed,
+    toggleCollapsed,
+  } = useSidebar();
+
   const navigate = useNavigate();
-  const [currentUser, setCurrentUser] = useState(null);
 
-useEffect(() => {
-  const fetchUser = async () => {
-    try {
-      const result = await getCurrentUser();
+  const [currentUser, setCurrentUser] =
+    useState(null);
 
-      console.log("HASIL AUTH ME:", result);
-      console.log(
-        "ROLE USER:",
-        result?.data?.role || result?.role
-      );
+  // =========================
+  // USER LOGIN
+  // =========================
 
-      setCurrentUser(
-        result.data || result
-      );
-    } catch (error) {
-      console.error(
-        "Gagal mengambil data user:",
-        error.response?.data ||
-          error.message
-      );
-    }
-  };
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const result =
+          await getCurrentUser();
 
-  fetchUser();
-}, []);
+        const user =
+          result?.data || result;
+
+        console.log(
+          "USER SIDEBAR:",
+          user
+        );
+
+        console.log(
+          "ROLE SIDEBAR:",
+          user?.role
+        );
+
+        setCurrentUser(user);
+      } catch (error) {
+        console.error(
+          "Gagal mengambil data user:",
+          error.response?.data ||
+            error.message
+        );
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // =========================
+  // ROLE & NISN
+  // =========================
+
+  const role =
+    currentUser?.role;
+
+  const studentNisn =
+    localStorage.getItem("nisn");
+
+  // =========================
+  // MENU SESUAI ROLE
+  // =========================
+
+  const visibleMenuItems =
+    getSidebarMenuItems(
+      role,
+      studentNisn
+    );
+
+  // =========================
+  // LOGOUT
+  // =========================
 
   const handleLogout = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
+    localStorage.removeItem(
+      "accessToken"
+    );
+
+    localStorage.removeItem(
+      "refreshToken"
+    );
+
+    localStorage.removeItem(
+      "nisn"
+    );
 
     navigate("/login", {
       replace: true,
     });
   };
 
-
-  const role = currentUser?.role;
-  const visibleMenuItems =
-    sidebarMenuItems.filter((item) => {
-      if (
-        item.adminOnly &&
-        role !== "ADMIN"
-      ) {
-        return false;
-      }
-
-      return true;
-    });
-
-
   return (
     <aside
       className={`sidebar d-flex flex-column ${
-        collapsed ? "sidebar-collapsed" : ""
+        collapsed
+          ? "sidebar-collapsed"
+          : ""
       }`}
     >
       {/* Floating Toggle Button */}
@@ -110,6 +153,7 @@ useEffect(() => {
               <span className="text-edu">
                 Edu
               </span>
+
               <span className="text-pulse">
                 Pulse
               </span>
@@ -124,26 +168,34 @@ useEffect(() => {
 
       {/* Navigation */}
       <nav className="sidebar-menu">
-        {visibleMenuItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            data-tooltip={item.label}
-            className={({ isActive }) =>
-              `sidebar-link ${
-                isActive ? "active" : ""
-              }`
-            }
-          >
-            <span className="sidebar-link-icon">
-              <item.icon />
-            </span>
+        {visibleMenuItems.map(
+          (item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              data-tooltip={
+                item.label
+              }
+              className={({
+                isActive,
+              }) =>
+                `sidebar-link ${
+                  isActive
+                    ? "active"
+                    : ""
+                }`
+              }
+            >
+              <span className="sidebar-link-icon">
+                <item.icon />
+              </span>
 
-            <span className="sidebar-link-text">
-              {item.label}
-            </span>
-          </NavLink>
-        ))}
+              <span className="sidebar-link-text">
+                {item.label}
+              </span>
+            </NavLink>
+          )
+        )}
       </nav>
 
       {/* Logout */}

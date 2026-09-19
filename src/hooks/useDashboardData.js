@@ -40,7 +40,7 @@ function useDashboardData() {
     useState(false);
 
   // =========================================================
-  // AMBIL USER YANG SEDANG LOGIN
+  // USER LOGIN
   // =========================================================
 
   useEffect(() => {
@@ -88,19 +88,32 @@ function useDashboardData() {
   // ROLE
   // =========================================================
 
+  const role = String(
+    currentUser?.role || ""
+  ).toUpperCase();
+
   const isGuru =
-    currentUser?.role === "GURU";
+    role === "GURU";
 
   const isAdmin =
-    currentUser?.role === "ADMIN";
+    role === "ADMIN";
 
-  // Kode mapel yang dimiliki guru
-  const teacherMapelCode =
+  // =========================================================
+  // MAPEL GURU
+  // =========================================================
+
+  const guruMapel =
     isGuru
       ? teacherMapel[
           currentUser?.email
         ]
       : null;
+
+  const guruMapelCode =
+    guruMapel?.kode || "";
+
+  const guruMapelName =
+    guruMapel?.nama || "";
 
   // =========================================================
   // DASHBOARD + ANALYTICS
@@ -108,7 +121,6 @@ function useDashboardData() {
 
   useEffect(() => {
     const fetchDashboard = async () => {
-      // Jangan request sebelum user diketahui
       if (
         userLoading ||
         !currentUser
@@ -137,85 +149,128 @@ function useDashboardData() {
         if (
           analyticsResult.success
         ) {
+          const analyticsData =
+            analyticsResult.data;
+
           setSchoolAnalyticsData(
-            analyticsResult.data
+            analyticsData
           );
 
-          // =========================
-          // KELAS
-          // =========================
+          // ===================================================
+          // FILTER KELAS
+          // ===================================================
+
+          const rawKelasOptions =
+            analyticsData
+              ?.filter_options
+              ?.kelas || [];
+
+          const cleanedKelasOptions =
+            rawKelasOptions.filter(
+              (kelas) =>
+                kelas &&
+                kelas.id &&
+                kelas.nama_kelas &&
+                String(
+                  kelas.nama_kelas
+                )
+                  .trim()
+                  .toLowerCase() !==
+                  "string"
+            );
 
           setKelasOptions(
-            analyticsResult.data
-              ?.filter_options
-              ?.kelas || []
+            cleanedKelasOptions
           );
 
-          // =========================
-          // MAPEL
-          // =========================
+          // ===================================================
+          // FILTER MAPEL
+          // ===================================================
 
-          const allMapelOptions =
-            (
-              analyticsResult.data
-                ?.filter_options
-                ?.mapel || []
-            ).filter(
+          const rawMapelOptions =
+            analyticsData
+              ?.filter_options
+              ?.mapel || [];
+
+          const cleanedMapelOptions =
+            rawMapelOptions.filter(
               (mapel) =>
                 mapel &&
                 mapel.id &&
                 mapel.nama_mapel &&
-                mapel.nama_mapel
+                String(
+                  mapel.nama_mapel
+                )
                   .trim()
                   .toLowerCase() !==
-                  "string" &&
-                (
-                  !mapel.kode_mapel ||
-                  mapel.kode_mapel
-                    .trim()
-                    .toLowerCase() !==
-                    "string"
-                )
+                  "string"
             );
+
+          console.log(
+            "SEMUA MAPEL DARI API:",
+            cleanedMapelOptions
+          );
 
           // ===================================================
           // ADMIN
-          // → SEMUA MAPEL
           // ===================================================
 
           if (isAdmin) {
             visibleMapelOptions =
-              allMapelOptions;
+              cleanedMapelOptions;
           }
 
           // ===================================================
           // GURU
-          // → HANYA MAPEL YANG DIA AJAR
           // ===================================================
 
           if (isGuru) {
             visibleMapelOptions =
-              allMapelOptions.filter(
-                (mapel) =>
-                  String(
-                    mapel.kode_mapel ||
-                      ""
-                  ).toUpperCase() ===
-                  String(
-                    teacherMapelCode ||
-                      ""
-                  ).toUpperCase()
+              cleanedMapelOptions.filter(
+                (mapel) => {
+                  const kodeMapel =
+                    String(
+                      mapel.kode_mapel ||
+                        mapel.kode ||
+                        mapel.code ||
+                        ""
+                    )
+                      .trim()
+                      .toUpperCase();
+
+                  const namaMapel =
+                    String(
+                      mapel.nama_mapel ||
+                        ""
+                    )
+                      .trim()
+                      .toLowerCase();
+
+                  const cocokKode =
+                    guruMapelCode &&
+                    kodeMapel ===
+                      guruMapelCode
+                        .trim()
+                        .toUpperCase();
+
+                  const cocokNama =
+                    guruMapelName &&
+                    namaMapel ===
+                      guruMapelName
+                        .trim()
+                        .toLowerCase();
+
+                  return (
+                    cocokKode ||
+                    cocokNama
+                  );
+                }
               );
           }
 
           console.log(
-            "SEMUA MAPEL:",
-            allMapelOptions
-          );
-
-          console.log(
-            "KODE MAPEL GURU:",
-            teacherMapelCode
+            "MAPEL GURU:",
+            guruMapel
           );
 
           console.log(
@@ -229,18 +284,20 @@ function useDashboardData() {
         }
 
         // =====================================================
-        // TENTUKAN MAPEL YANG AKTIF
+        // TENTUKAN MAPEL AKTIF
         // =====================================================
 
         let activeMapelId =
           selectedMapel;
 
-        // Guru belum punya selectedMapel
-        // → otomatis gunakan mapel miliknya
+        // Guru:
+        // kalau belum memilih mapel,
+        // otomatis pilih mapel miliknya.
         if (
           isGuru &&
           !selectedMapel &&
-          visibleMapelOptions.length > 0
+          visibleMapelOptions.length >
+            0
         ) {
           activeMapelId =
             String(
@@ -292,7 +349,8 @@ function useDashboardData() {
     selectedMapel,
     isGuru,
     isAdmin,
-    teacherMapelCode,
+    guruMapelCode,
+    guruMapelName,
   ]);
 
   // =========================================================
@@ -415,6 +473,7 @@ function useDashboardData() {
     setSelectedMapel,
 
     currentUser,
+
     isGuru,
     isAdmin,
 

@@ -1,67 +1,120 @@
 import { useEffect, useState } from "react";
+
 import {
   getStudentRiskSummary,
-  getKelas,
+  getSchoolAnalytics,
   getHighRiskStudents,
 } from "../services/api";
 
 function useStudentList() {
-  const [students, setStudents] = useState([]);
-  const [totalStudents, setTotalStudents] = useState(0);
+  const [students, setStudents] =
+    useState([]);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [totalStudents, setTotalStudents] =
+    useState(0);
 
-  const [search, setSearch] = useState("");
-  const [classFilter, setClassFilter] = useState("");
-  const [riskFilter, setRiskFilter] = useState("");
+  const [loading, setLoading] =
+    useState(true);
 
-  const [kelasOptions, setKelasOptions] = useState([]);
+  const [error, setError] =
+    useState(false);
 
-  const [page, setPage] = useState(1);
+  const [search, setSearch] =
+    useState("");
+
+  const [classFilter, setClassFilter] =
+    useState("");
+
+  const [riskFilter, setRiskFilter] =
+    useState("");
+
+  const [kelasOptions, setKelasOptions] =
+    useState([]);
+
+  const [page, setPage] =
+    useState(1);
 
   const [highRiskStudents, setHighRiskStudents] =
     useState([]);
 
   const pageSize = 10;
 
-  // =========================
-  // Ambil daftar siswa
-  // =========================
+  // =========================================================
+  // DAFTAR SISWA
+  // =========================================================
 
   useEffect(() => {
-    const fetchStudents = async () => {
-      setLoading(true);
-      setError(false);
+    const fetchStudents =
+      async () => {
+        setLoading(true);
+        setError(false);
 
-      try {
-        const result =
-          await getStudentRiskSummary({
-            page,
-            page_size: pageSize,
-            search,
-            kelas_id: classFilter,
-            risk_status: riskFilter,
-          });
+        try {
+          console.log(
+            "=== FILTER DAFTAR SISWA ==="
+          );
 
-        setStudents(result.results || []);
-        setTotalStudents(result.count || 0);
-      } catch (error) {
-        console.error(
-          "Gagal mengambil daftar siswa:",
-          error.response?.data ||
-            error.message
-        );
+          console.log(
+            "Search:",
+            search
+          );
 
-        setError(true);
-        setStudents([]);
-        setTotalStudents(0);
-      } finally {
-        setLoading(false);
-      }
-    };
+          console.log(
+            "Kelas ID:",
+            classFilter
+          );
+
+          console.log(
+            "Risk:",
+            riskFilter
+          );
+
+          const result =
+            await getStudentRiskSummary({
+              page,
+              page_size:
+                pageSize,
+              search:
+                search.trim(),
+              kelas_id:
+                classFilter,
+              risk_status:
+                riskFilter,
+            });
+
+          console.log(
+            "HASIL SISWA:",
+            result.results
+          );
+
+          setStudents(
+            result.results || []
+          );
+
+          setTotalStudents(
+            result.count || 0
+          );
+
+        } catch (error) {
+          console.error(
+            "Gagal mengambil daftar siswa:",
+            error.response
+              ?.data ||
+              error.message
+          );
+
+          setError(true);
+
+          setStudents([]);
+          setTotalStudents(0);
+
+        } finally {
+          setLoading(false);
+        }
+      };
 
     fetchStudents();
+
   }, [
     page,
     search,
@@ -69,63 +122,105 @@ function useStudentList() {
     riskFilter,
   ]);
 
-  // =========================
-  // Ambil kelas
-  // =========================
+  // =========================================================
+  // KELAS
+  // =========================================================
 
   useEffect(() => {
-    const fetchClasses = async () => {
-      try {
-        const result = await getKelas();
+    const fetchClasses =
+      async () => {
+        try {
+          const result =
+            await getSchoolAnalytics({});
 
-        setKelasOptions(
-          result.results || []
-        );
-      } catch (error) {
-        console.error(
-          "Gagal mengambil kelas:",
-          error.response?.data ||
-            error.message
-        );
-      }
-    };
+          const classes =
+            result?.data
+              ?.filter_options
+              ?.kelas || [];
+
+          const cleanedClasses =
+            classes.filter(
+              (kelas) =>
+                kelas &&
+                kelas.id &&
+                kelas.nama_kelas &&
+                String(
+                  kelas.nama_kelas
+                )
+                  .trim()
+                  .toLowerCase() !==
+                  "string"
+            );
+
+          console.log(
+            "KELAS FILTER DAFTAR SISWA:",
+            cleanedClasses
+          );
+
+          setKelasOptions(
+            cleanedClasses
+          );
+
+        } catch (error) {
+          console.error(
+            "Gagal mengambil kelas untuk filter:",
+            error.response
+              ?.data ||
+              error.message
+          );
+
+          setKelasOptions([]);
+        }
+      };
 
     fetchClasses();
+
   }, []);
 
-  // =========================
-  // Ambil high risk
-  // =========================
+  // =========================================================
+  // HIGH RISK
+  // =========================================================
 
   useEffect(() => {
-    const fetchHighRisk = async () => {
-      try {
-        const result =
-          await getHighRiskStudents({
-            page: 1,
-            page_size: 10,
-          });
+    const fetchHighRisk =
+      async () => {
+        try {
+          const result =
+            await getHighRiskStudents({
+              page: 1,
+              page_size: 10,
+              kelas_id:
+                classFilter,
+              search:
+                search.trim(),
+            });
 
-        setHighRiskStudents(
-          result.results || []
-        );
-      } catch (error) {
-        console.error(
-          "Gagal mengambil siswa risiko tinggi:",
-          error.response?.data ||
-            error.message
-        );
+          setHighRiskStudents(
+            result.results || []
+          );
 
-        setHighRiskStudents([]);
-      }
-    };
+        } catch (error) {
+          console.error(
+            "Gagal mengambil siswa risiko tinggi:",
+            error.response
+              ?.data ||
+              error.message
+          );
+
+          setHighRiskStudents([]);
+        }
+      };
 
     fetchHighRisk();
-  }, []);
 
-  // =========================
-  // Reset page saat filter berubah
-  // =========================
+  }, [
+    classFilter,
+    search,
+  ]);
+
+  // =========================================================
+  // RESET PAGE
+  // =========================================================
 
   useEffect(() => {
     setPage(1);
@@ -135,15 +230,19 @@ function useStudentList() {
     riskFilter,
   ]);
 
-  // =========================
-  // Pagination
-  // =========================
+  // =========================================================
+  // PAGINATION
+  // =========================================================
 
-  const totalPages = Math.ceil(
-    totalStudents / pageSize
-  );
+  const totalPages =
+    Math.ceil(
+      totalStudents /
+        pageSize
+    );
 
-  const goToPage = (newPage) => {
+  const goToPage = (
+    newPage
+  ) => {
     if (
       newPage < 1 ||
       newPage > totalPages
@@ -153,6 +252,10 @@ function useStudentList() {
 
     setPage(newPage);
   };
+
+  // =========================================================
+  // RETURN
+  // =========================================================
 
   return {
     students,

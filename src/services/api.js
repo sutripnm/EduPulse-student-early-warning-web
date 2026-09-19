@@ -167,8 +167,8 @@ api.interceptors.response.use(
         "refreshToken"
       );
 
-    // Tidak ada refresh token
-    → hapus session dan login ulang
+ // Tidak ada refresh token
+    // → hapus session dan login ulang
     if (!refreshToken) {
       localStorage.removeItem(
         "accessToken"
@@ -653,6 +653,11 @@ export const getStudentRiskSummary = async ({
   if (risk_status) {
     params.risk_status = risk_status;
   }
+
+    console.log(
+    "PARAMS RISK SUMMARY:",
+    params
+  );
 
   const response = await api.get(
     "/v1/assessment/siswa-risk-summary/",

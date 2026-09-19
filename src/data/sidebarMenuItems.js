@@ -3,35 +3,99 @@ import {
   BsPeopleFill,
   BsPencilSquare,
   BsGearFill,
-  BsBookFill,
-  BsPersonPlusFill,
 } from "react-icons/bs";
 
-const sidebarMenuItems = [
-  {
-    label: "Dashboard",
-    to: "/",
-    icon: BsSpeedometer2,
-  },
+export function getSidebarMenuItems(role, nisn) {
+  const normalizedRole = String(
+    role || ""
+  ).toUpperCase();
 
-  {
-    label: "Daftar Siswa",
-    to: "/daftar-siswa",
-    icon: BsPeopleFill,
-  },
+  // =========================
+  // SISWA
+  // =========================
 
-  {
-    label: "Input Nilai & Absensi",
-    to: "/input-nilai",
-    icon: BsPencilSquare,
-  },
+  if (normalizedRole === "SISWA") {
+    return [
+      {
+        label: "Dashboard Siswa",
+        to: `/dashboard-siswa/${nisn}`,
+        icon: BsSpeedometer2,
+      },
+    ];
+  }
 
-  {
-    label: "Pengaturan",
-    to: "/pengaturan",
-    icon: BsGearFill,
-  },
+  // =========================
+  // ORANG TUA
+  // =========================
 
-];
+  if (
+    normalizedRole === "ORANGTUA" ||
+    normalizedRole === "ORANG_TUA"
+  ) {
+    return [
+      {
+        label: "Dashboard Orang Tua",
+        to: `/dashboard-ortu/${nisn}`,
+        icon: BsSpeedometer2,
+      },
+    ];
+  }
 
-export default sidebarMenuItems;
+  // =========================
+  // GURU
+  // =========================
+
+  if (normalizedRole === "GURU") {
+    return [
+      {
+        label: "Dashboard",
+        to: "/dashboard",
+        icon: BsSpeedometer2,
+      },
+
+      {
+        label: "Daftar Siswa",
+        to: "/daftar-siswa",
+        icon: BsPeopleFill,
+      },
+
+      {
+        label: "Input Nilai & Absensi",
+        to: "/input-nilai-dan-absensi",
+        icon: BsPencilSquare,
+      },
+    ];
+  }
+
+  // =========================
+  // ADMIN
+  // =========================
+
+  return [
+    {
+      label: "Dashboard",
+      to: "/dashboard",
+      icon: BsSpeedometer2,
+    },
+
+    {
+      label: "Daftar Siswa",
+      to: "/daftar-siswa",
+      icon: BsPeopleFill,
+    },
+
+    {
+      label: "Input Nilai & Absensi",
+      to: "/input-nilai-dan-absensi",
+      icon: BsPencilSquare,
+    },
+
+    {
+      label: "Pengaturan",
+      to: "/pengaturan",
+      icon: BsGearFill,
+    },
+  ];
+}
+
+export default getSidebarMenuItems;

@@ -1,15 +1,27 @@
 import { useEffect, useState } from "react";
 
 import {
+  getCurrentUser,
   getStudentDetailRisk,
   getMapel,
+  getSchoolAnalytics,
+  getStudentDashboard,
+  getParentDashboard,
   getStudentScores,
   getStudentPrediction,
   deleteStudent,
 } from "../services/api";
 
+import {
+  normalizeStudentDashboard,
+  normalizeParentDashboard,
+} from "../utils/dashboardNormalize";
+
+import teacherMapel from "../data/teacherMapel";
+
 function useStudentDetail(nisn) {
-  const [student, setStudent] = useState(null);
+  const [student, setStudent] =
+    useState(null);
 
   const [mapelOptions, setMapelOptions] =
     useState([]);
@@ -41,488 +53,925 @@ function useStudentDetail(nisn) {
   const [error, setError] =
     useState(false);
 
-  // =========================
+  const [currentUser, setCurrentUser] =
+    useState(null);
+
+  // =========================================================
+  // USER LOGIN
+  // =========================================================
+
+  useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const result =
+          await getCurrentUser();
+
+        const user =
+          result?.data || result;
+
+        console.log(
+          "USER DETAIL:",
+          user
+        );
+
+        console.log(
+          "ROLE DETAIL:",
+          user?.role
+        );
+
+        setCurrentUser(user);
+      } catch (error) {
+        console.error(
+          "Gagal mengambil user:",
+          error.response?.data ||
+            error.message
+        );
+
+        setCurrentUser(null);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // =========================================================
+  // ROLE
+  // =========================================================
+
+  const role = String(
+    currentUser?.role || ""
+  ).toUpperCase();
+
+  const isAdmin =
+    role === "ADMIN";
+
+  const isGuru =
+    role === "GURU";
+
+  // =========================================================
+  // MAPEL GURU
+  // =========================================================
+
+  const guruMapel =
+    isGuru
+      ? teacherMapel[
+          currentUser?.email
+        ]
+      : null;
+
+  const guruMapelCode =
+    guruMapel?.kode || "";
+
+  const guruMapelName =
+    guruMapel?.nama || "";
+
+  // =========================================================
   // MAPEL + RISIKO PER MAPEL
-  // =========================
+  // =========================================================
 
   useEffect(() => {
-    const fetchMapelAndRisk = async () => {
-      if (!nisn) {
-        return;
-      }
+    const fetchMapelAndRisk =
+      async () => {
+        if (
+          !nisn ||
+          !currentUser?.role
+        ) {
+          return;
+        }
 
-      try {
-        const result = await getMapel();
+        try {
+          let mapelList = [];
 
-        const mapelList = (
-          result.results || []
-        ).filter(
-          (mapel) =>
-            mapel &&
-            mapel.id &&
-            mapel.nama_mapel &&
-            mapel.nama_mapel
-              .trim()
-              .toLowerCase() !== "string" &&
-            (
-              !mapel.kode_mapel ||
-              mapel.kode_mapel
-                .trim()
-                .toLowerCase() !==
-                "string"
-            )
-        );
+          // =====================================================
+          // ADMIN
+          // =====================================================
 
-        setMapelOptions(mapelList);
+          if (isAdmin) {
+            const result =
+              await getMapel();
 
-        // =========================
-        // CEK RISIKO SETIAP MAPEL
-        // =========================
+            mapelList =
+              (
+                result?.results ||
+                []
+              ).filter(
+                (mapel) =>
+                  mapel &&
+                  mapel.id &&
+                  mapel.nama_mapel &&
+                  String(
+                    mapel.nama_mapel
+                  )
+                    .trim()
+                    .toLowerCase() !==
+                    "string"
+              );
+          }
 
-        const riskResults =
-          await Promise.all(
-            mapelList.map(
-              async (mapel) => {
-                try {
-                  const detail =
-                    await getStudentDetailRisk({
-                      nisn,
-                      mapel_id:
-                        mapel.id,
-                    });
+          // =====================================================
+          // GURU
+          // =====================================================
+          // Endpoint /academic/mapel sebelumnya 403 untuk Guru.
+          // Karena dashboard analytics bisa diakses Guru,
+          // ambil daftar mapel dari filter_options.mapel.
+          // =====================================================
 
-                  return {
-                    id: mapel.id,
-                    nama_mapel:
-                      mapel.nama_mapel,
-                    status_risiko:
-                      detail?.data
-                        ?.analisis_ews
-                        ?.status_risiko ||
-                      "LOW",
-                  };
-                } catch (error) {
-                  console.error(
-                    `Gagal mengambil risiko ${mapel.nama_mapel}:`,
-                    error.response
-                      ?.data ||
-                      error.message
+          else if (isGuru) {
+            const result =
+              await getSchoolAnalytics({});
+
+            const analyticsData =
+              result?.data || {};
+
+            const allMapel =
+              (
+                analyticsData
+                  ?.filter_options
+                  ?.mapel || []
+              ).filter(
+                (mapel) =>
+                  mapel &&
+                  mapel.id &&
+                  mapel.nama_mapel &&
+                  String(
+                    mapel.nama_mapel
+                  )
+                    .trim()
+                    .toLowerCase() !==
+                    "string"
+              );
+
+            mapelList =
+              allMapel.filter(
+                (mapel) => {
+                  const kode =
+                    String(
+                      mapel.kode_mapel ||
+                        mapel.kode ||
+                        mapel.code ||
+                        ""
+                    )
+                      .trim()
+                      .toUpperCase();
+
+                  const nama =
+                    String(
+                      mapel.nama_mapel ||
+                        ""
+                    )
+                      .trim()
+                      .toLowerCase();
+
+                  const cocokKode =
+                    guruMapelCode &&
+                    kode ===
+                      guruMapelCode
+                        .trim()
+                        .toUpperCase();
+
+                  const cocokNama =
+                    guruMapelName &&
+                    nama ===
+                      guruMapelName
+                        .trim()
+                        .toLowerCase();
+
+                  return (
+                    cocokKode ||
+                    cocokNama
                   );
-
-                  return null;
                 }
-              }
-            )
-          );
+              );
+          }
 
-        const validRiskResults =
-          riskResults.filter(
-            Boolean
-          );
+          // =====================================================
+          // SISWA
+          // =====================================================
 
-        console.log(
-          "RISIKO PER MAPEL:",
-          validRiskResults
-        );
+          else if (
+            role === "SISWA"
+          ) {
+            const result =
+              await getStudentDashboard(
+                nisn,
+                ""
+              );
 
-        // =========================
-        // TENTUKAN RISIKO TERTINGGI
-        // =========================
+            const normalized =
+              normalizeStudentDashboard(
+                result
+              );
 
-        const hasHigh =
-          validRiskResults.some(
-            (item) =>
-              String(
-                item.status_risiko
-              ).toUpperCase() ===
-                "HIGH" ||
-              String(
-                item.status_risiko
-              ).toUpperCase() ===
-                "TINGGI"
-          );
+            mapelList =
+              normalized
+                ?.filter_opsi_mapel ||
+              [];
+          }
 
-        const hasMedium =
-          validRiskResults.some(
-            (item) =>
-              String(
-                item.status_risiko
-              ).toUpperCase() ===
-                "MEDIUM" ||
-              String(
-                item.status_risiko
-              ).toUpperCase() ===
-                "SEDANG"
-          );
+          // =====================================================
+          // ORANG TUA
+          // =====================================================
 
-        let highestRisk = "LOW";
+          else if (
+            role === "ORANGTUA" ||
+            role === "ORANG_TUA"
+          ) {
+            const result =
+              await getParentDashboard(
+                nisn,
+                ""
+              );
 
-        if (hasHigh) {
-          highestRisk = "HIGH";
-        } else if (hasMedium) {
-          highestRisk = "MEDIUM";
-        }
+            const normalized =
+              normalizeParentDashboard(
+                result
+              );
 
-        setOverallRisk(
-          highestRisk
-        );
+            mapelList =
+              normalized
+                ?.filter_opsi_mapel ||
+              [];
+          }
 
-        // =========================
-        // HANYA TAMPILKAN
-        // HIGH / MEDIUM
-        // =========================
+          else {
+            setMapelOptions([]);
+            setRiskMapelOptions([]);
+            return;
+          }
 
-        const filteredRiskMapel =
-          validRiskResults
-            .filter((item) => {
-              const status =
+          // =====================================================
+          // BERSIHKAN MAPEL
+          // =====================================================
+
+          mapelList =
+            mapelList.filter(
+              (mapel) =>
+                mapel &&
+                mapel.id &&
+                mapel.nama_mapel &&
                 String(
-                  item.status_risiko || ""
-                ).toUpperCase();
-
-              return (
-                status === "HIGH" ||
-                status === "TINGGI" ||
-                status === "MEDIUM" ||
-                status === "SEDANG" ||
-                status === "LOW" ||
-                status === "RENDAH"
-              );
-            })
-            .sort((a, b) => {
-              const priority = {
-                HIGH: 1,
-                TINGGI: 1,
-                MEDIUM: 2,
-                SEDANG: 2,
-              };
-
-              const aPriority =
-                priority[
-                  String(
-                    a.status_risiko
-                  ).toUpperCase()
-                ] || 99;
-
-              const bPriority =
-                priority[
-                  String(
-                    b.status_risiko
-                  ).toUpperCase()
-                ] || 99;
-
-              return (
-                aPriority -
-                bPriority
-              );
-            });
-
-        setRiskMapelOptions(
-          filteredRiskMapel
-        );
-
-        // =========================
-        // OTOMATIS PILIH MAPEL
-        // =========================
-
-        if (
-          filteredRiskMapel.length >
-          0
-        ) {
-          setSelectedMapel(
-            String(
-              filteredRiskMapel[0].id
-            )
-          );
-        } else {
-          // Semua LOW
-          setSelectedMapel("");
-        }
-      } catch (error) {
-        console.error(
-          "Gagal mengambil mapel dan risiko:",
-          error.response?.data ||
-            error.message
-        );
-
-        setMapelOptions([]);
-        setRiskMapelOptions([]);
-        setOverallRisk(null);
-      }
-    };
-
-    fetchMapelAndRisk();
-  }, [nisn]);
-
-  // =========================
-  // DETAIL SISWA
-  // =========================
-
-  useEffect(() => {
-    const fetchStudentDetail = async () => {
-      if (!nisn) {
-        return;
-      }
-
-      setLoading(true);
-      setError(false);
-
-      try {
-        const result =
-          await getStudentDetailRisk({
-            nisn,
-            mapel_id:
-              selectedMapel,
-          });
-
-        if (!result.success) {
-          setError(true);
-          return;
-        }
-
-        let finalStudent =
-          result.data;
-
-        // =========================
-        // BELUM ADA MAPEL TERPILIH
-        // =========================
-        // Semua mapel LOW
-        // → gunakan overallRisk
-        // =========================
-
-        if (!selectedMapel) {
-          finalStudent = {
-            ...result.data,
-
-            analisis_ews: {
-              ...result.data
-                ?.analisis_ews,
-
-              status_risiko:
-                overallRisk ||
-                result.data
-                  ?.analisis_ews
-                  ?.status_risiko,
-            },
-          };
-        }
-
-        setStudent(
-          finalStudent
-        );
-      } catch (error) {
-        console.error(
-          "Gagal mengambil detail siswa:",
-          error.response?.data ||
-            error.message
-        );
-
-        setError(true);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Jangan request sampai
-    // proses mapel selesai menentukan
-    // kondisi awal.
-    if (
-      nisn &&
-      mapelOptions.length > 0
-    ) {
-      fetchStudentDetail();
-    }
-  }, [
-    nisn,
-    selectedMapel,
-    mapelOptions.length,
-    overallRisk,
-  ]);
-
-  // =========================
-  // CARI MINGGU TERBARU
-  // =========================
-
-  useEffect(() => {
-    const fetchLatestWeek = async () => {
-      if (
-        !nisn ||
-        !selectedMapel
-      ) {
-        setLatestWeek(null);
-        setRecommendation(null);
-        return;
-      }
-
-      try {
-        const result =
-          await getStudentScores({
-            nisn,
-            mapel_id:
-              selectedMapel,
-          });
-
-        const scores =
-          result.data || [];
-
-        console.log(
-          "HASIL GET NILAI:",
-          result
-        );
-
-        console.log(
-          "DATA SCORES:",
-          scores
-        );
-
-        console.log(
-          "WEEKS:",
-          scores.map(
-            (item) =>
-              item.minggu_ke
-          )
-        );
-
-        if (
-          scores.length === 0
-        ) {
-          setLatestWeek(null);
-          return;
-        }
-
-        const weeks =
-          scores
-            .map((item) =>
-              Number(
-                item.minggu_ke
-              )
-            )
-            .filter(
-              (week) =>
-                !Number.isNaN(week)
+                  mapel.nama_mapel
+                )
+                  .trim()
+                  .toLowerCase() !==
+                  "string"
             );
 
-        const latest =
-          weeks.length > 0
-            ? Math.max(...weeks)
-            : null;
+          console.log(
+            "MAPEL DETAIL:",
+            mapelList
+          );
 
-        setLatestWeek(
-          latest
-        );
+          setMapelOptions(
+            mapelList
+          );
 
-        console.log(
-          "MINGGU TERBARU:",
-          latest
-        );
-      } catch (error) {
-        console.error(
-          "Gagal mengambil nilai siswa:",
-          error.response?.data ||
-            error.message
-        );
+          // =====================================================
+          // CEK RISIKO MASING-MASING MAPEL
+          // =====================================================
 
-        setLatestWeek(null);
-      }
-    };
+          const riskResults =
+            await Promise.all(
+              mapelList.map(
+                async (mapel) => {
+                  try {
+                    let statusRisk =
+                      "LOW";
+
+                    // -----------------------------------------
+                    // ADMIN / GURU
+                    // -----------------------------------------
+
+                    if (
+                      isAdmin ||
+                      isGuru
+                    ) {
+                      const detail =
+                        await getStudentDetailRisk({
+                          nisn,
+                          mapel_id:
+                            mapel.id,
+                        });
+
+                      statusRisk =
+                        detail?.data
+                          ?.analisis_ews
+                          ?.status_risiko ||
+                        "LOW";
+                    }
+
+                    // -----------------------------------------
+                    // SISWA
+                    // -----------------------------------------
+
+                    else if (
+                      role ===
+                      "SISWA"
+                    ) {
+                      const result =
+                        await getStudentDashboard(
+                          nisn,
+                          mapel.id
+                        );
+
+                      const normalized =
+                        normalizeStudentDashboard(
+                          result
+                        );
+
+                      statusRisk =
+                        normalized.status_risk ||
+                        "LOW";
+                    }
+
+                    // -----------------------------------------
+                    // ORANG TUA
+                    // -----------------------------------------
+
+                    else if (
+                      role ===
+                        "ORANGTUA" ||
+                      role ===
+                        "ORANG_TUA"
+                    ) {
+                      const result =
+                        await getParentDashboard(
+                          nisn,
+                          mapel.id
+                        );
+
+                      const normalized =
+                        normalizeParentDashboard(
+                          result
+                        );
+
+                      statusRisk =
+                        normalized.status_risk ||
+                        "LOW";
+                    }
+
+                    return {
+                      id:
+                        mapel.id,
+
+                      nama_mapel:
+                        mapel.nama_mapel,
+
+                      status_risiko:
+                        statusRisk,
+                    };
+                  } catch (error) {
+                    console.error(
+                      `Gagal mengambil risiko ${mapel.nama_mapel}:`,
+                      error.response
+                        ?.data ||
+                        error.message
+                    );
+
+                    return null;
+                  }
+                }
+              )
+            );
+
+          const validRiskResults =
+            riskResults.filter(
+              Boolean
+            );
+
+          console.log(
+            "RISIKO PER MAPEL:",
+            validRiskResults
+          );
+
+          // =====================================================
+          // RISIKO TERTINGGI
+          // HIGH > MEDIUM > LOW
+          // =====================================================
+
+          const hasHigh =
+            validRiskResults.some(
+              (item) => {
+                const status =
+                  String(
+                    item.status_risiko ||
+                      ""
+                  ).toUpperCase();
+
+                return (
+                  status ===
+                    "HIGH" ||
+                  status ===
+                    "TINGGI"
+                );
+              }
+            );
+
+          const hasMedium =
+            validRiskResults.some(
+              (item) => {
+                const status =
+                  String(
+                    item.status_risiko ||
+                      ""
+                  ).toUpperCase();
+
+                return (
+                  status ===
+                    "MEDIUM" ||
+                  status ===
+                    "SEDANG"
+                );
+              }
+            );
+
+          let highestRisk =
+            "LOW";
+
+          if (hasHigh) {
+            highestRisk =
+              "HIGH";
+          } else if (
+            hasMedium
+          ) {
+            highestRisk =
+              "MEDIUM";
+          }
+
+          setOverallRisk(
+            highestRisk
+          );
+
+          // =====================================================
+          // URUTKAN MAPEL
+          // HIGH → MEDIUM → LOW
+          // =====================================================
+
+          const priority = {
+            HIGH: 1,
+            TINGGI: 1,
+            MEDIUM: 2,
+            SEDANG: 2,
+            LOW: 3,
+            RENDAH: 3,
+          };
+
+          const filteredRiskMapel =
+            [...validRiskResults].sort(
+              (a, b) => {
+                const aPriority =
+                  priority[
+                    String(
+                      a.status_risiko ||
+                        ""
+                    ).toUpperCase()
+                  ] || 99;
+
+                const bPriority =
+                  priority[
+                    String(
+                      b.status_risiko ||
+                        ""
+                    ).toUpperCase()
+                  ] || 99;
+
+                return (
+                  aPriority -
+                  bPriority
+                );
+              }
+            );
+
+          setRiskMapelOptions(
+            filteredRiskMapel
+          );
+
+          // =====================================================
+          // OTOMATIS PILIH MAPEL
+          // =====================================================
+          // Guru hanya punya satu mapel,
+          // jadi otomatis memilih mapel tersebut.
+          //
+          // Admin juga otomatis memilih mapel
+          // dengan risiko tertinggi.
+          // =====================================================
+
+          if (
+            filteredRiskMapel.length >
+            0
+          ) {
+            setSelectedMapel(
+              String(
+                filteredRiskMapel[0].id
+              )
+            );
+          } else {
+            setSelectedMapel("");
+          }
+        } catch (error) {
+          console.error(
+            "Gagal mengambil mapel dan risiko:",
+            error.response?.data ||
+              error.message
+          );
+
+          setMapelOptions([]);
+          setRiskMapelOptions([]);
+          setOverallRisk(null);
+        }
+      };
+
+    fetchMapelAndRisk();
+  }, [
+    nisn,
+    currentUser?.role,
+    isAdmin,
+    isGuru,
+    guruMapelCode,
+    guruMapelName,
+  ]);
+
+  // =========================================================
+  // DETAIL SISWA
+  // =========================================================
+
+  useEffect(() => {
+    const fetchStudentDetail =
+      async () => {
+        if (
+          !nisn ||
+          !currentUser?.role
+        ) {
+          return;
+        }
+
+        setLoading(true);
+        setError(false);
+
+        try {
+          let finalStudent = null;
+
+          // ===================================================
+          // ADMIN / GURU
+          // ===================================================
+
+          if (
+            isAdmin ||
+            isGuru
+          ) {
+            const result =
+              await getStudentDetailRisk({
+                nisn,
+                mapel_id:
+                  selectedMapel,
+              });
+
+            if (
+              !result?.success
+            ) {
+              setError(true);
+              return;
+            }
+
+            finalStudent =
+              result.data;
+
+            // Kalau belum ada mapel,
+            // pakai overall risk.
+            if (
+              !selectedMapel
+            ) {
+              finalStudent = {
+                ...result.data,
+
+                analisis_ews: {
+                  ...result.data
+                    ?.analisis_ews,
+
+                  status_risiko:
+                    overallRisk ||
+                    result.data
+                      ?.analisis_ews
+                      ?.status_risiko,
+                },
+              };
+            }
+          }
+
+          // ===================================================
+          // SISWA
+          // ===================================================
+
+          else if (
+            role === "SISWA"
+          ) {
+            const result =
+              await getStudentDashboard(
+                nisn,
+                selectedMapel
+              );
+
+            finalStudent = {
+              profil_siswa:
+                {
+                  nisn:
+                    result?.data
+                      ?.profil?.nisn,
+                  nama_siswa:
+                    result?.data
+                      ?.profil
+                      ?.nama ||
+                    result?.data
+                      ?.profil
+                      ?.nama_siswa,
+                  kelas:
+                    result?.data
+                      ?.profil
+                      ?.kelas,
+                },
+
+              analisis_ews: {
+                status_risiko:
+                  result?.data
+                    ?.status_risk,
+              },
+
+              metrik_kinerja: {},
+            };
+          }
+
+          // ===================================================
+          // ORANG TUA
+          // ===================================================
+
+          else if (
+            role ===
+              "ORANGTUA" ||
+            role ===
+              "ORANG_TUA"
+          ) {
+            const result =
+              await getParentDashboard(
+                nisn,
+                selectedMapel
+              );
+
+            finalStudent = {
+              profil_siswa:
+                {
+                  nisn:
+                    result?.data
+                      ?.profil?.nisn,
+                  nama_siswa:
+                    result?.data
+                      ?.profil
+                      ?.nama ||
+                    result?.data
+                      ?.profil
+                      ?.nama_siswa,
+                  kelas:
+                    result?.data
+                      ?.profil
+                      ?.kelas,
+                },
+
+              analisis_ews: {
+                status_risiko:
+                  result?.data
+                    ?.status_risk,
+              },
+
+              metrik_kinerja: {},
+            };
+          }
+
+          if (!finalStudent) {
+            setError(true);
+            return;
+          }
+
+          setStudent(
+            finalStudent
+          );
+        } catch (error) {
+          console.error(
+            "Gagal mengambil detail siswa:",
+            error.response?.data ||
+              error.message
+          );
+
+          setError(true);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+    fetchStudentDetail();
+  }, [
+    nisn,
+    currentUser?.role,
+    selectedMapel,
+    overallRisk,
+    isAdmin,
+    isGuru,
+  ]);
+
+  // =========================================================
+  // CARI MINGGU TERBARU
+  // =========================================================
+
+  useEffect(() => {
+    const fetchLatestWeek =
+      async () => {
+        if (
+          !nisn ||
+          !selectedMapel
+        ) {
+          setLatestWeek(null);
+          setRecommendation(null);
+          return;
+        }
+
+        // Rekomendasi AI hanya untuk
+        // Admin dan Guru.
+        if (
+          !isAdmin &&
+          !isGuru
+        ) {
+          setLatestWeek(null);
+          setRecommendation(null);
+          return;
+        }
+
+        try {
+          const result =
+            await getStudentScores({
+              nisn,
+              mapel_id:
+                selectedMapel,
+            });
+
+          const scores =
+            result?.data || [];
+
+          if (
+            scores.length ===
+            0
+          ) {
+            setLatestWeek(null);
+            return;
+          }
+
+          const weeks =
+            scores
+              .map((item) =>
+                Number(
+                  item.minggu_ke
+                )
+              )
+              .filter(
+                (week) =>
+                  !Number.isNaN(
+                    week
+                  )
+              );
+
+          const latest =
+            weeks.length > 0
+              ? Math.max(
+                  ...weeks
+                )
+              : null;
+
+          setLatestWeek(
+            latest
+          );
+
+          console.log(
+            "MINGGU TERBARU:",
+            latest
+          );
+        } catch (error) {
+          console.error(
+            "Gagal mengambil nilai siswa:",
+            error.response?.data ||
+              error.message
+          );
+
+          setLatestWeek(null);
+        }
+      };
 
     fetchLatestWeek();
   }, [
     nisn,
     selectedMapel,
+    isAdmin,
+    isGuru,
   ]);
 
-  // =========================
-// AMBIL REKOMENDASI OTOMATIS
-// =========================
+  // =========================================================
+  // REKOMENDASI OTOMATIS
+  // =========================================================
 
-useEffect(() => {
-  const fetchRecommendation = async () => {
-    // Belum ada mapel atau minggu terbaru
-    if (!nisn || !selectedMapel || !latestWeek) {
-      setRecommendation(null);
-      return;
-    }
+  useEffect(() => {
+    const fetchRecommendation =
+      async () => {
+        if (
+          !nisn ||
+          !selectedMapel ||
+          !latestWeek
+        ) {
+          setRecommendation(null);
+          return;
+        }
 
-    setRecommendationLoading(true);
+        if (
+          !isAdmin &&
+          !isGuru
+        ) {
+          setRecommendation(null);
+          return;
+        }
 
-    try {
-      console.log(
-        "REKOMENDASI OTOMATIS"
-      );
-
-      console.log(
-        "NISN:",
-        nisn
-      );
-
-      console.log(
-        "MAPEL:",
-        selectedMapel
-      );
-
-      console.log(
-        "MINGGU:",
-        latestWeek
-      );
-
-      const result =
-        await getStudentPrediction({
-          nisn,
-          mapel_id:
-            selectedMapel,
-          minggu_ke:
-            latestWeek,
-        });
-
-      console.log(
-        "HASIL REKOMENDASI:",
-        result
-      );
-
-      if (result.success) {
-        setRecommendation(
-          result.data?.recommendation ||
-            null
+        setRecommendationLoading(
+          true
         );
-      } else {
-        setRecommendation(null);
-      }
 
-    } catch (error) {
-      console.error(
-        "Gagal mengambil rekomendasi AI:",
-        error.response?.data ||
-          error.message
-      );
+        try {
+          const result =
+            await getStudentPrediction({
+              nisn,
+              mapel_id:
+                selectedMapel,
+              minggu_ke:
+                latestWeek,
+            });
 
-      setRecommendation(null);
+          console.log(
+            "HASIL REKOMENDASI:",
+            result
+          );
 
-    } finally {
-      setRecommendationLoading(
-        false
-      );
-    }
-  };
+          if (
+            result?.success
+          ) {
+            setRecommendation(
+              result.data
+                ?.recommendation ||
+                null
+            );
+          } else {
+            setRecommendation(
+              null
+            );
+          }
+        } catch (error) {
+          console.error(
+            "Gagal mengambil rekomendasi AI:",
+            error.response?.data ||
+              error.message
+          );
 
-  fetchRecommendation();
-}, [
-  nisn,
-  selectedMapel,
-  latestWeek,
-]);
+          setRecommendation(
+            null
+          );
+        } finally {
+          setRecommendationLoading(
+            false
+          );
+        }
+      };
 
-  // =========================
+    fetchRecommendation();
+  }, [
+    nisn,
+    selectedMapel,
+    latestWeek,
+    isAdmin,
+    isGuru,
+  ]);
+
+  // =========================================================
   // DELETE SISWA
-  // =========================
+  // =========================================================
 
   const handleDeleteStudent =
     async () => {
+      // Guru tidak boleh menghapus siswa.
+      if (!isAdmin) {
+        console.warn(
+          "Role ini tidak memiliki izin menghapus siswa."
+        );
+        return;
+      }
+
       const confirmed =
         window.confirm(
           `Yakin ingin menghapus siswa ${
             student?.profil_siswa
-              ?.nama_siswa || ""
+              ?.nama_siswa ||
+            ""
           }?`
         );
 
@@ -546,7 +995,7 @@ useEffect(() => {
         );
 
         if (
-          result.success
+          result?.success
         ) {
           alert(
             result.message ||
@@ -580,15 +1029,14 @@ useEffect(() => {
       }
     };
 
-  // =========================
+  // =========================================================
   // RETURN
-  // =========================
+  // =========================================================
 
   return {
     student,
 
     mapelOptions,
-
     riskMapelOptions,
     overallRisk,
 
@@ -605,6 +1053,10 @@ useEffect(() => {
 
     loading,
     error,
+
+    currentUser,
+    isAdmin,
+    isGuru,
   };
 }
 

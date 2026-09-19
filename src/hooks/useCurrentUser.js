@@ -1,17 +1,63 @@
 import { useEffect, useState } from "react";
+import { getCurrentUser } from "../services/api";
 
-// Membaca data user yang tersimpan di localStorage setelah login
-// (lihat hooks/useLogin.js). Dipisah jadi hook sendiri supaya
-// komponen seperti DashboardHeader tidak perlu tahu soal localStorage.
 function useCurrentUser() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
+    const fetchCurrentUser = async () => {
+      const accessToken =
+        localStorage.getItem("accessToken");
 
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
+      // Belum login
+      if (!accessToken) {
+        setUser(null);
+        return;
+      }
+
+      try {
+        const result =
+          await getCurrentUser();
+
+        const currentUser =
+          result?.data || result;
+
+        console.log(
+          "CURRENT USER HEADER:",
+          currentUser
+        );
+
+        setUser(
+          currentUser || null
+        );
+
+        // Sinkronkan juga localStorage
+        // supaya data user lama tidak tertinggal
+        if (currentUser) {
+          localStorage.setItem(
+            "user",
+            JSON.stringify(
+              currentUser
+            )
+          );
+        }
+      } catch (error) {
+        console.error(
+          "Gagal mengambil current user:",
+          error.response?.data ||
+            error.message
+        );
+
+        setUser(null);
+
+        // Hapus data user lama
+        localStorage.removeItem(
+          "user"
+        );
+      }
+    };
+
+    fetchCurrentUser();
   }, []);
 
   return user;

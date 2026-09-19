@@ -1,34 +1,381 @@
 import { useEffect, useState } from "react";
+
 import {
   createPresensi,
-  getKelas,
-  getMapel,
-  getSemester,
+  getSchoolAnalytics,
   getStudents,
+  getCurrentUser,
 } from "../services/api";
 
+import teacherMapel from "../data/teacherMapel";
+
+// =========================================================
+// SEMESTER AKTIF
+// =========================================================
+// Untuk sementara Guru tidak bisa GET /academic/semester/
+// karena permission backend.
+// Semester aktif yang digunakan saat ini adalah ID 1.
+//
+// Kalau backend nanti memberikan ID semester aktif yang berbeda,
+// cukup ubah angka ini.
+// =========================================================
+const ACTIVE_SEMESTER_ID = 1;
+
 function useAttendanceForm() {
-  const [attendanceClass, setAttendanceClass] = useState("");
-  const [mapelId, setMapelId] = useState("");
+  // =========================================================
+  // STATE FILTER
+  // =========================================================
 
-  const [kelasOptions, setKelasOptions] = useState([]);
-  const [mapelOptions, setMapelOptions] = useState([]);
+  const [attendanceClass, setAttendanceClass] =
+    useState("");
 
-  const [semesterId, setSemesterId] = useState(null);
+  const [mapelId, setMapelId] =
+    useState("");
 
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [kelasOptions, setKelasOptions] =
+    useState([]);
 
-  const [attendance, setAttendance] = useState({});
+  const [mapelOptions, setMapelOptions] =
+    useState([]);
 
-  const [loading, setLoading] = useState(false);
+  // =========================================================
+  // USER
+  // =========================================================
 
-  const [students, setStudents] = useState([]);
+  const [currentUser, setCurrentUser] =
+    useState(null);
+
+  const [userLoading, setUserLoading] =
+    useState(true);
+
+  // =========================================================
+  // SEMESTER
+  // =========================================================
+
+  const [semesterId] =
+    useState(ACTIVE_SEMESTER_ID);
+
+  // =========================================================
+  // TANGGAL
+  // =========================================================
+
+  const [startDate, setStartDate] =
+    useState("");
+
+  const [endDate, setEndDate] =
+    useState("");
+
+  // =========================================================
+  // ABSENSI
+  // =========================================================
+
+  const [attendance, setAttendance] =
+    useState({});
+
+  const [loading, setLoading] =
+    useState(false);
+
+  const [students, setStudents] =
+    useState([]);
+
+  // =========================================================
+  // USER LOGIN
+  // =========================================================
 
   useEffect(() => {
+    const fetchCurrentUser = async () => {
+      try {
+        const result =
+          await getCurrentUser();
+
+        const user =
+          result?.data || result;
+
+        console.log(
+          "ATTENDANCE USER:",
+          user
+        );
+
+        setCurrentUser(user);
+      } catch (error) {
+        console.error(
+          "Gagal mengambil user absensi:",
+          error.response?.data ||
+            error.message
+        );
+
+        setCurrentUser(null);
+      } finally {
+        setUserLoading(false);
+      }
+    };
+
+    fetchCurrentUser();
+  }, []);
+
+  // =========================================================
+  // ROLE
+  // =========================================================
+
+  const role = String(
+    currentUser?.role || ""
+  ).toUpperCase();
+
+  const isGuru =
+    role === "GURU";
+
+  const isAdmin =
+    role === "ADMIN";
+
+  // =========================================================
+  // MAPEL GURU
+  // =========================================================
+
+  const guruMapel =
+    isGuru
+      ? teacherMapel[
+          currentUser?.email
+        ]
+      : null;
+
+  const guruMapelCode =
+    guruMapel?.kode || "";
+
+  const guruMapelName =
+    guruMapel?.nama || "";
+
+  // =========================================================
+  // KELAS + MAPEL
+  // =========================================================
+  // Untuk Guru:
+  // sumber filter dari dashboard analytics
+  //
+  // Untuk Admin:
+  // tetap dari sumber yang sama karena endpoint
+  // analytics sudah menyediakan kelas + mapel.
+  // =========================================================
+
+  useEffect(() => {
+    const fetchFilterOptions =
+      async () => {
+        if (
+          userLoading ||
+          !currentUser
+        ) {
+          return;
+        }
+
+        try {
+          const result =
+            await getSchoolAnalytics({});
+
+          const data =
+            result?.data || {};
+
+          // ===================================================
+          // KELAS
+          // ===================================================
+
+          const rawKelas =
+            data
+              ?.filter_options
+              ?.kelas || [];
+
+          const cleanedKelas =
+            rawKelas.filter(
+              (kelas) =>
+                kelas &&
+                kelas.id &&
+                kelas.nama_kelas &&
+                String(
+                  kelas.nama_kelas
+                )
+                  .trim()
+                  .toLowerCase() !==
+                  "string"
+            );
+
+          setKelasOptions(
+            cleanedKelas
+          );
+
+          // ===================================================
+          // MAPEL
+          // ===================================================
+
+          const rawMapel =
+            data
+              ?.filter_options
+              ?.mapel || [];
+
+          const cleanedMapel =
+            rawMapel.filter(
+              (mapel) =>
+                mapel &&
+                mapel.id &&
+                mapel.nama_mapel &&
+                String(
+                  mapel.nama_mapel
+                )
+                  .trim()
+                  .toLowerCase() !==
+                  "string"
+            );
+
+          let visibleMapel =
+            cleanedMapel;
+
+          // ===================================================
+          // GURU
+          // HANYA MAPEL YANG DIA AJAR
+          // ===================================================
+
+          if (isGuru) {
+            visibleMapel =
+              cleanedMapel.filter(
+                (mapel) => {
+                  const kode =
+                    String(
+                      mapel.kode_mapel ||
+                        mapel.kode ||
+                        mapel.code ||
+                        ""
+                    )
+                      .trim()
+                      .toUpperCase();
+
+                  const nama =
+                    String(
+                      mapel.nama_mapel ||
+                        ""
+                    )
+                      .trim()
+                      .toLowerCase();
+
+                  const cocokKode =
+                    guruMapelCode &&
+                    kode ===
+                      guruMapelCode
+                        .trim()
+                        .toUpperCase();
+
+                  const cocokNama =
+                    guruMapelName &&
+                    nama ===
+                      guruMapelName
+                        .trim()
+                        .toLowerCase();
+
+                  return (
+                    cocokKode ||
+                    cocokNama
+                  );
+                }
+              );
+          }
+
+          // ===================================================
+          // ADMIN
+          // ===================================================
+
+          if (isAdmin) {
+            visibleMapel =
+              cleanedMapel;
+          }
+
+          console.log(
+            "ATTENDANCE KELAS:",
+            cleanedKelas
+          );
+
+          console.log(
+            "ATTENDANCE SEMUA MAPEL:",
+            cleanedMapel
+          );
+
+          console.log(
+            "ATTENDANCE MAPEL GURU:",
+            guruMapel
+          );
+
+          console.log(
+            "ATTENDANCE MAPEL TERLIHAT:",
+            visibleMapel
+          );
+
+          setMapelOptions(
+            visibleMapel
+          );
+
+          // ===================================================
+          // GURU
+          // OTOMATIS PILIH MAPEL GURU
+          // ===================================================
+
+          if (
+            isGuru &&
+            !mapelId &&
+            visibleMapel.length === 1
+          ) {
+            setMapelId(
+              String(
+                visibleMapel[0].id
+              )
+            );
+          }
+
+        } catch (error) {
+          console.error(
+            "Gagal mengambil filter absensi:",
+            error.response?.data ||
+              error.message
+          );
+
+          setKelasOptions([]);
+          setMapelOptions([]);
+        }
+      };
+
+    fetchFilterOptions();
+
+  }, [
+    userLoading,
+    currentUser,
+    isGuru,
+    isAdmin,
+    guruMapelCode,
+    guruMapelName,
+    mapelId,
+  ]);
+
+  // =========================================================
+  // DEBUG SEMESTER
+  // =========================================================
+
+  useEffect(() => {
+    console.log(
+      "SEMESTER ID AKTIF ABSENSI:",
+      semesterId
+    );
+  }, [semesterId]);
+
+  // =========================================================
+  // AMBIL SISWA BERDASARKAN KELAS
+  // =========================================================
+  //
+  // Guru:
+  // → gunakan siswa-risk-summary karena endpoint
+  //   academic/siswa dibatasi.
+  //
+  // Admin:
+  // → gunakan getStudents() seperti sebelumnya.
+  // =========================================================
+
+useEffect(() => {
   const fetchStudents = async () => {
     if (!attendanceClass) {
       setStudents([]);
+      setAttendance({});
       return;
     }
 
@@ -39,80 +386,64 @@ function useAttendanceForm() {
         kelas_id: attendanceClass,
       });
 
-      setStudents(result.results || []);
+      const studentList =
+        result?.results || [];
+
+      console.log(
+        "KELAS TERPILIH ABSENSI:",
+        attendanceClass
+      );
+
+      console.log(
+        "SISWA ABSENSI:",
+        studentList
+      );
+
+      setStudents(studentList);
+
+      // Reset absensi ketika kelas berubah
+      setAttendance({});
     } catch (error) {
       console.error(
-        "Gagal mengambil siswa:",
-        error.response?.data || error.message
+        "Gagal mengambil siswa absensi:",
+        error.response?.data ||
+          error.message
       );
 
       setStudents([]);
+      setAttendance({});
     }
   };
 
   fetchStudents();
 }, [attendanceClass]);
 
-  // =========================
-  // Ambil filter
-  // =========================
-
-  useEffect(() => {
-    const fetchFilterOptions = async () => {
-      try {
-        const [
-          kelasResult,
-          mapelResult,
-          semesterResult,
-        ] = await Promise.all([
-          getKelas(),
-          getMapel(),
-          getSemester(),
-        ]);
-
-        setKelasOptions(
-          kelasResult.results || []
-        );
-
-        setMapelOptions(
-          mapelResult.results || []
-        );
-
-        const activeSemester =
-          semesterResult.results?.find(
-            (semester) => semester.is_aktif
-          );
-
-        setSemesterId(
-          activeSemester?.id || null
-        );
-      } catch (error) {
-        console.error(
-          "Gagal mengambil data form absensi:",
-          error.response?.data ||
-            error.message
-        );
-      }
-    };
-
-    fetchFilterOptions();
-  }, []);
-
-  // =========================
-  // Buat daftar tanggal
-  // =========================
+  // =========================================================
+  // DAFTAR TANGGAL
+  // =========================================================
 
   const attendanceDates = [];
 
-  if (startDate && endDate) {
-    const start = new Date(startDate);
-    const end = new Date(endDate);
+  if (
+    startDate &&
+    endDate
+  ) {
+    const start =
+      new Date(startDate);
 
-    const current = new Date(start);
+    const end =
+      new Date(endDate);
 
-    while (current <= end) {
+    const current =
+      new Date(start);
+
+    while (
+      current <= end
+    ) {
       attendanceDates.push(
-        current.toISOString().split("T")[0]
+        current
+          .toISOString()
+          .split("T")[0]
       );
 
       current.setDate(
@@ -121,29 +452,33 @@ function useAttendanceForm() {
     }
   }
 
-  // =========================
-  // Ubah status absensi
-  // =========================
+  // =========================================================
+  // UBAH STATUS ABSENSI
+  // =========================================================
 
-  const handleAttendanceChange = (
-    nisn,
-    date,
-    status
-  ) => {
-    setAttendance((prev) => ({
-      ...prev,
+  const handleAttendanceChange =
+    (
+      nisn,
+      date,
+      status
+    ) => {
+      setAttendance(
+        (prev) => ({
+          ...prev,
 
-      [nisn]: {
-        ...prev[nisn],
+          [nisn]: {
+            ...prev[nisn],
 
-        [date]: status,
-      },
-    }));
-  };
+            [date]:
+              status,
+          },
+        })
+      );
+    };
 
-  // =========================
-  // Summary
-  // =========================
+  // =========================================================
+  // SUMMARY ABSENSI
+  // =========================================================
 
   const attendanceSummary = {
     HADIR: 0,
@@ -152,161 +487,239 @@ function useAttendanceForm() {
     ALPHA: 0,
   };
 
- students.forEach((student) => {
-  attendanceDates.forEach((date) => {
-    const status =
-      attendance[student.nisn]?.[date] || "HADIR";
+  students.forEach(
+    (student) => {
+      attendanceDates.forEach(
+        (date) => {
+          const status =
+            attendance[
+              student.nisn
+            ]?.[date] ||
+            "HADIR";
 
-    attendanceSummary[status] += 1;
-  });
-});
-
-  // =========================
-  // Submit
-  // =========================
-
-  const handleAttendanceSubmit = async (
-    event
-  ) => {
-    event.preventDefault();
-
-    if (!attendanceClass) {
-      alert("Silakan pilih kelas.");
-      return;
-    }
-
-    if (!mapelId) {
-      alert("Silakan pilih mata pelajaran.");
-      return;
-    }
-
-    if (!startDate || !endDate) {
-      alert(
-        "Silakan pilih periode tanggal."
+          if (
+            attendanceSummary[
+              status
+            ] !== undefined
+          ) {
+            attendanceSummary[
+              status
+            ] += 1;
+          }
+        }
       );
-      return;
     }
+  );
 
-    if (
-      new Date(startDate) >
-      new Date(endDate)
-    ) {
-      alert(
-        "Tanggal mulai tidak boleh lebih besar dari tanggal akhir."
-      );
+  // =========================================================
+  // SUBMIT ABSENSI
+  // =========================================================
 
-      return;
-    }
+  const handleAttendanceSubmit =
+    async (event) => {
+      event.preventDefault();
 
-    if (!semesterId) {
-      alert(
-        "Semester aktif tidak ditemukan."
-      );
+      // =====================================================
+      // VALIDASI
+      // =====================================================
 
-      return;
-    }
+      if (!attendanceClass) {
+        alert(
+          "Silakan pilih kelas."
+        );
+        return;
+      }
 
-    if (attendanceDates.length === 0) {
-      alert(
-        "Periode tanggal tidak valid."
-      );
+      if (!mapelId) {
+        alert(
+          "Silakan pilih mata pelajaran."
+        );
+        return;
+      }
 
-      return;
-    }
+      if (
+        !startDate ||
+        !endDate
+      ) {
+        alert(
+          "Silakan pilih periode tanggal."
+        );
+        return;
+      }
 
-    // API memakai format:
-    // Hadir / Izin / Sakit / Alpha
+      if (
+        new Date(startDate) >
+        new Date(endDate)
+      ) {
+        alert(
+          "Tanggal mulai tidak boleh lebih besar dari tanggal akhir."
+        );
+        return;
+      }
 
-    const statusMap = {
-      HADIR: "Hadir",
-      IZIN: "Izin",
-      SAKIT: "Sakit",
-      ALPHA: "Alpha",
-    };
+      if (!semesterId) {
+        alert(
+          "Semester aktif tidak ditemukan."
+        );
+        return;
+      }
 
-const items = students.map((student) => ({
-  siswa_nisn: student.nisn,
+      if (
+        attendanceDates.length ===
+        0
+      ) {
+        alert(
+          "Periode tanggal tidak valid."
+        );
+        return;
+      }
 
-  presensi_harian: attendanceDates.map((date) => ({
-    tanggal: date,
+      if (
+        students.length === 0
+      ) {
+        alert(
+          "Tidak ada siswa pada kelas yang dipilih."
+        );
+        return;
+      }
 
-    status:
-      statusMap[
-        attendance[student.nisn]?.[date] || "HADIR"
-      ],
-  })),
-}));
+      // =====================================================
+      // STATUS
+      // =====================================================
 
-    const payload = {
-      mapel_id: Number(mapelId),
-      semester_id: Number(semesterId),
+      const statusMap = {
+        HADIR: "Hadir",
+        IZIN: "Izin",
+        SAKIT: "Sakit",
+        ALPHA: "Alpha",
+      };
 
-      tanggal_mulai: startDate,
-      tanggal_akhir: endDate,
+      // =====================================================
+      // ITEMS
+      // =====================================================
 
-      items,
-    };
+      const items =
+        students.map(
+          (student) => ({
+            siswa_nisn:
+              student.nisn,
 
-    console.log(
-      "PAYLOAD PRESENSI:",
-      payload
-    );
+            presensi_harian:
+              attendanceDates.map(
+                (date) => ({
+                  tanggal:
+                    date,
 
-    try {
-      setLoading(true);
+                  status:
+                    statusMap[
+                      attendance[
+                        student.nisn
+                      ]?.[date] ||
+                        "HADIR"
+                    ],
+                })
+              ),
+          })
+        );
 
-      const result =
-        await createPresensi(payload);
+      // =====================================================
+      // PAYLOAD
+      // =====================================================
+
+      const payload = {
+        mapel_id:
+          Number(
+            mapelId
+          ),
+
+        semester_id:
+          Number(
+            semesterId
+          ),
+
+        tanggal_mulai:
+          startDate,
+
+        tanggal_akhir:
+          endDate,
+
+        items,
+      };
 
       console.log(
-        "HASIL PRESENSI:",
-        result
+        "PAYLOAD PRESENSI:",
+        payload
       );
 
-      alert(
-        "Data absensi berhasil disimpan."
-      );
-    } catch (error) {
-      console.error(
-        "Gagal menyimpan absensi:",
-        error.response?.data ||
-          error.message
-      );
+      try {
+        setLoading(true);
 
-      alert(
-        "Gagal menyimpan data absensi."
-      );
-    } finally {
-      setLoading(false);
-    }
+        const result =
+          await createPresensi(
+            payload
+          );
+
+        console.log(
+          "HASIL PRESENSI:",
+          result
+        );
+
+        alert(
+          result?.message ||
+            "Data absensi berhasil disimpan."
+        );
+
+      } catch (error) {
+        console.error(
+          "Gagal menyimpan absensi:",
+          error.response?.data ||
+            error.message
+        );
+
+        alert(
+          error.response?.data
+            ?.message ||
+            "Gagal menyimpan data absensi."
+        );
+
+      } finally {
+        setLoading(false);
+      }
+    };
+
+  // =========================================================
+  // RETURN
+  // =========================================================
+
+  return {
+    students,
+
+    attendanceClass,
+    setAttendanceClass,
+
+    kelasOptions,
+
+    mapelId,
+    setMapelId,
+    mapelOptions,
+
+    semesterId,
+
+    startDate,
+    setStartDate,
+
+    endDate,
+    setEndDate,
+
+    attendance,
+    attendanceDates,
+    attendanceSummary,
+
+    handleAttendanceChange,
+    handleAttendanceSubmit,
+
+    loading,
   };
-
-return {
-  students,
-
-  attendanceClass,
-  setAttendanceClass,
-
-  kelasOptions,
-
-  mapelId,
-  setMapelId,
-  mapelOptions,
-
-  startDate,
-  setStartDate,
-  endDate,
-  setEndDate,
-
-  attendance,
-  attendanceDates,
-  attendanceSummary,
-
-  handleAttendanceChange,
-  handleAttendanceSubmit,
-
-  loading,
-};
 }
 
 export default useAttendanceForm;

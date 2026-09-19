@@ -29,6 +29,11 @@ function StudentListPage() {
     highRiskStudents,
   } = useStudentList();
 
+  console.log(
+  "KELAS OPTIONS:",
+  kelasOptions
+);
+
   return (
     <main className="student-list-page d-flex">
       <Sidebar />
