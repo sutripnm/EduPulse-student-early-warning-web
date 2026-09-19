@@ -4,6 +4,7 @@ import { BsBuildingFill } from "react-icons/bs";
 function SchoolSettingsCard({
   activeTahunAjaran,
   activeSemester,
+  isAdmin,
 }) {
   return (
     <section className="settings-card mb-4">
@@ -60,14 +61,16 @@ function SchoolSettingsCard({
         </div>
       </div>
 
-      <div className="d-flex gap-2 mt-4">
-        <Link
-          to="/pengaturan-akademik"
-          className="btn btn-outline-dark"
-        >
-          + Kelola Data Akademik
-        </Link>
-      </div>
+      {isAdmin && (
+        <div className="d-flex gap-2 mt-4">
+          <Link
+            to="/pengaturan-akademik"
+            className="btn btn-outline-dark"
+          >
+            + Kelola Data Akademik
+          </Link>
+        </div>
+      )}
     </section>
   );
 }

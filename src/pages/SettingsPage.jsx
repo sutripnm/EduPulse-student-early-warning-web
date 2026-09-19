@@ -21,6 +21,10 @@ function SettingsPage() {
   // karena sifatnya murni preferensi tampilan, bukan data dari server.
   const { theme, setTheme } = useTheme();
 
+
+  const isAdmin =
+  String(user?.role || "").toUpperCase() === "ADMIN";
+
   // Selagi data pengaturan masih di-fetch, tampilkan loading dulu
   // sebelum konten utama dirender.
   if (loading) {
@@ -74,12 +78,9 @@ function SettingsPage() {
           <ProfileCard user={user} />
 
           <SchoolSettingsCard
-            activeTahunAjaran={
-              activeTahunAjaran
-            }
-            activeSemester={
-              activeSemester
-            }
+            activeTahunAjaran={activeTahunAjaran}
+            activeSemester={activeSemester}
+            isAdmin={isAdmin}
           />
 
           <ThemeCard

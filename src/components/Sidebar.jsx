@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { getCurrentUser } from "../services/api";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
   BsChevronLeft,
@@ -12,6 +14,33 @@ import sidebarMenuItems from "../data/sidebarMenuItems";
 function Sidebar() {
   const { collapsed, toggleCollapsed } = useSidebar();
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
+
+useEffect(() => {
+  const fetchUser = async () => {
+    try {
+      const result = await getCurrentUser();
+
+      console.log("HASIL AUTH ME:", result);
+      console.log(
+        "ROLE USER:",
+        result?.data?.role || result?.role
+      );
+
+      setCurrentUser(
+        result.data || result
+      );
+    } catch (error) {
+      console.error(
+        "Gagal mengambil data user:",
+        error.response?.data ||
+          error.message
+      );
+    }
+  };
+
+  fetchUser();
+}, []);
 
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
@@ -20,6 +49,21 @@ function Sidebar() {
       replace: true,
     });
   };
+
+
+  const role = currentUser?.role;
+  const visibleMenuItems =
+    sidebarMenuItems.filter((item) => {
+      if (
+        item.adminOnly &&
+        role !== "ADMIN"
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+
 
   return (
     <aside
@@ -79,7 +123,7 @@ function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar-menu">
-        {sidebarMenuItems.map((item) => (
+        {visibleMenuItems.map((item) => (
           <NavLink
             key={item.to}
             to={item.to}

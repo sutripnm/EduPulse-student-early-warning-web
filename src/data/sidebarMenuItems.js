@@ -3,15 +3,35 @@ import {
   BsPeopleFill,
   BsPencilSquare,
   BsGearFill,
+  BsBookFill,
+  BsPersonPlusFill,
 } from "react-icons/bs";
 
-// `icon` di sini adalah komponen icon-nya sendiri (bukan string/emoji),
-// jadi konsumennya (Sidebar.jsx) tinggal render <item.icon />.
 const sidebarMenuItems = [
-  { to: "/dashboard", label: "Dashboard", icon: BsSpeedometer2 },
-  { to: "/daftar-siswa", label: "Daftar Siswa", icon: BsPeopleFill },
-  { to: "/input-nilai-dan-absensi", label: "Input Nilai & Absensi", icon: BsPencilSquare },
-  { to: "/pengaturan", label: "Pengaturan", icon: BsGearFill },
+  {
+    label: "Dashboard",
+    to: "/",
+    icon: BsSpeedometer2,
+  },
+
+  {
+    label: "Daftar Siswa",
+    to: "/daftar-siswa",
+    icon: BsPeopleFill,
+  },
+
+  {
+    label: "Input Nilai & Absensi",
+    to: "/input-nilai",
+    icon: BsPencilSquare,
+  },
+
+  {
+    label: "Pengaturan",
+    to: "/pengaturan",
+    icon: BsGearFill,
+  },
+
 ];
 
 export default sidebarMenuItems;
