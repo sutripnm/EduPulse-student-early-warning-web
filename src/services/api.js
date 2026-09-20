@@ -6,8 +6,7 @@ import { filterValidKelas, filterValidMapel } from "../utils/academic";
 // VITE_API_BASE_URL dari environment deployment.
 const API_BASE_URL = import.meta.env.DEV
   ? "/api"
-  : import.meta.env.VITE_API_BASE_URL ||
-    "https://92d0-2402-8780-1018-c90c-9800-a1d9-4813-cf12.ngrok-free.app/api";
+  : import.meta.env.VITE_API_BASE_URL || "/api";
 
 const api = axios.create({
   baseURL: API_BASE_URL,

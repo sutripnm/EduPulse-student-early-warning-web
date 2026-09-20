@@ -1,16 +1,22 @@
 import react from "@vitejs/plugin-react";
 import { defineConfig, loadEnv } from "vite";
 
-const DEFAULT_API_TARGET =
-  "https://92d0-2402-8780-1018-c90c-9800-a1d9-4813-cf12.ngrok-free.app";
+const DEFAULT_API_TARGET = "";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const apiTarget = env.VITE_API_PROXY_TARGET || DEFAULT_API_TARGET;
 
+  if (!apiTarget) {
+    console.warn(
+      "VITE_API_PROXY_TARGET belum diatur. Buat .env.local dan isi dengan URL backend ngrok yang sedang aktif."
+    );
+  }
+
   return {
     plugins: [react()],
     server: {
+      host: true,
       proxy: {
         "/api": {
           target: apiTarget,
