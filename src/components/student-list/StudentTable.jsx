@@ -4,9 +4,12 @@ import RiskBadge from "../common/RiskBadge";
 /**
  * Menampilkan tabel daftar siswa.
  *
- * Pada desktop seluruh informasi siswa ditampilkan.
- * Pada mobile beberapa kolom sekunder disembunyikan melalui CSS
- * agar tabel tetap nyaman dibaca pada layar kecil.
+ * Desktop:
+ * Menampilkan seluruh informasi siswa.
+ *
+ * Mobile:
+ * Hanya menampilkan informasi utama agar tabel tetap nyaman
+ * dibaca pada layar kecil.
  */
 function StudentTable({
   students,
@@ -28,7 +31,9 @@ function StudentTable({
 
   return (
     <section className="student-table-card">
-      {/* Header tabel */}
+      {/* =================================================
+          HEADER
+          ================================================= */}
       <div className="student-table-header mb-3">
         <div>
           <h5 className="fw-bold mb-1">
@@ -42,23 +47,58 @@ function StudentTable({
         </div>
       </div>
 
-      {/* Wrapper untuk menjaga tabel tetap responsif */}
+      {/* =================================================
+          TABLE WRAPPER
+          ================================================= */}
       <div className="student-table-wrapper">
         <table className="table student-data-table align-middle mb-0">
           <thead>
             <tr>
-              <th className="student-col-nisn">NISN</th>
-              <th>Nama Siswa</th>
-              <th>Kelas</th>
+              {/* NISN - desktop only */}
+              <th className="student-col-nisn">
+                NISN
+              </th>
+
+              {/* Nama siswa */}
+              <th className="student-col-name">
+                Nama Siswa
+              </th>
+
+              {/* Kelas */}
+              <th className="student-col-class">
+                Kelas
+              </th>
+
+              {/* Gender - desktop only */}
               <th className="student-col-gender">
                 Gender
               </th>
+
+              {/* Presensi - desktop only */}
               <th className="student-col-presensi">
                 Presensi
               </th>
-              <th>Nilai</th>
-              <th>Status Risiko</th>
-              <th>Aksi</th>
+
+              {/* Nilai */}
+              <th className="student-col-score">
+                Nilai
+              </th>
+
+              {/* Risiko */}
+              <th className="student-col-risk">
+                <span className="desktop-risk-title">
+                  Status Risiko
+                </span>
+
+                <span className="mobile-risk-title">
+                  Risiko
+                </span>
+              </th>
+
+              {/* Aksi */}
+              <th className="student-col-action">
+                Aksi
+              </th>
             </tr>
           </thead>
 
@@ -75,39 +115,73 @@ function StudentTable({
             ) : (
               students.map((student) => (
                 <tr key={student.nisn}>
+                  {/* ================================
+                      NISN
+                      ================================ */}
                   <td className="student-col-nisn">
-                    {student.nisn}
+                    {student.nisn || "-"}
                   </td>
 
-                  <td>
-                    <span className="fw-semibold student-name">
+                  {/* ================================
+                      NAMA
+                      ================================ */}
+                  <td className="student-col-name">
+                    <span
+                      className="student-name"
+                      title={student.nama_siswa || "-"}
+                    >
                       {student.nama_siswa || "-"}
                     </span>
                   </td>
 
-                  <td>
-                    {student.kelas || "-"}
+                  {/* ================================
+                      KELAS
+                      ================================ */}
+                  <td className="student-col-class">
+                    <span
+                      className="student-class"
+                      title={student.kelas || "-"}
+                    >
+                      {student.kelas || "-"}
+                    </span>
                   </td>
 
+                  {/* ================================
+                      GENDER
+                      ================================ */}
                   <td className="student-col-gender">
                     {student.gender || "-"}
                   </td>
 
+                  {/* ================================
+                      PRESENSI
+                      ================================ */}
                   <td className="student-col-presensi">
                     {student.presensi || "-"}
                   </td>
 
-                  <td>
+                  {/* ================================
+                      NILAI
+                      ================================ */}
+                  <td className="student-col-score">
                     {student.nilai ?? "-"}
                   </td>
 
-                  <td>
-                    <RiskBadge
-                      status={student.status_risiko}
-                    />
+                  {/* ================================
+                      RISIKO
+                      ================================ */}
+                  <td className="student-col-risk">
+                    <div className="student-risk-wrapper">
+                      <RiskBadge
+                        status={student.status_risiko}
+                      />
+                    </div>
                   </td>
 
-                  <td>
+                  {/* ================================
+                      AKSI
+                      ================================ */}
+                  <td className="student-col-action">
                     <Link
                       to={`/detail-siswa/${student.nisn}`}
                       className="btn btn-sm btn-outline-dark student-detail-button"

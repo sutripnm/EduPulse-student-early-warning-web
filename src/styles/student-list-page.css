@@ -1,3 +1,7 @@
+/* =========================================================
+   STUDENT LIST PAGE
+   ========================================================= */
+
 .student-list-page {
   min-height: 100vh;
   background-color: #f3f1f7;
@@ -6,6 +10,10 @@
 .student-list-main {
   min-width: 0;
 }
+
+/* =========================================================
+   CARD
+   ========================================================= */
 
 .student-filter,
 .student-table-card,
@@ -16,10 +24,18 @@
   box-shadow: var(--edupulse-card-shadow);
 }
 
+.student-table-card {
+  min-width: 0;
+}
+
 .risk-student-card {
   height: 100%;
   overflow: hidden;
 }
+
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
 
 .student-list-header {
   display: flex;
@@ -45,38 +61,120 @@
 
 .student-table-wrapper {
   width: 100%;
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+
   -webkit-overflow-scrolling: touch;
 }
 
 .student-data-table {
   width: 100%;
-  min-width: 760px;
+  min-width: 850px;
+  margin-bottom: 0;
 }
 
 .student-data-table th {
+  padding: 12px 10px;
   font-size: 13px;
+  font-weight: 600;
   color: var(--edupulse-text-muted);
   white-space: nowrap;
+  vertical-align: middle;
 }
 
 .student-data-table td {
+  padding: 12px 10px;
   font-size: 14px;
-  white-space: nowrap;
   vertical-align: middle;
 }
 
-.student-data-table .student-name {
-  display: inline-block;
-  max-width: 180px;
+/* =========================================================
+   DESKTOP COLUMN
+   ========================================================= */
+
+.student-col-nisn {
+  min-width: 130px;
+}
+
+.student-col-name {
+  min-width: 190px;
+}
+
+.student-col-class {
+  min-width: 100px;
+}
+
+.student-col-gender {
+  min-width: 90px;
+}
+
+.student-col-presensi {
+  min-width: 100px;
+}
+
+.student-col-score {
+  min-width: 80px;
+  text-align: center;
+}
+
+.student-col-risk {
+  min-width: 130px;
+  text-align: center;
+}
+
+.student-col-action {
+  min-width: 90px;
+  text-align: center;
+}
+
+/* =========================================================
+   TEXT
+   ========================================================= */
+
+.student-name,
+.student-class {
+  display: block;
+
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: middle;
+  white-space: nowrap;
 }
+
+.student-name {
+  max-width: 190px;
+}
+
+.student-class {
+  max-width: 100px;
+}
+
+/* =========================================================
+   RISK
+   ========================================================= */
+
+.student-risk-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =========================================================
+   DETAIL BUTTON
+   ========================================================= */
 
 .student-detail-button {
   white-space: nowrap;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* =========================================================
+   RISK HEADER
+   ========================================================= */
+
+.mobile-risk-title {
+  display: none;
 }
 
 /* =========================================================
@@ -120,7 +218,7 @@
 }
 
 /* =========================================================
-   MOBILE
+   TABLET
    ========================================================= */
 
 @media (max-width: 768px) {
@@ -135,83 +233,134 @@
     border-radius: 16px;
   }
 
-  /* -------------------------------------------------------
-     TABEL
+  /* =======================================================
+     MOBILE TABLE
 
-     Di mobile kita sembunyikan informasi sekunder.
-     Informasi utama tetap:
-     Nama, Kelas, Nilai, Risiko, Aksi.
-     ------------------------------------------------------- */
+     Kolom yang ditampilkan:
+     Nama | Kelas | Nilai | Risiko | Aksi
 
+     Tidak memakai min-width besar pada mobile.
+     ======================================================= */
+
+  .student-data-table {
+    width: 100%;
+    min-width: 0;
+    table-layout: fixed;
+  }
+
+  /* Sembunyikan informasi sekunder */
   .student-col-nisn,
   .student-col-gender,
   .student-col-presensi {
     display: none;
   }
 
-  .student-data-table {
-    min-width: 100%;
-    table-layout: fixed;
+  /* Header tidak lagi dipaksa satu baris */
+  .student-data-table th {
+    padding: 10px 5px;
+    font-size: 12px;
+    white-space: normal;
+    line-height: 1.2;
   }
 
-  .student-data-table th,
   .student-data-table td {
+    padding: 11px 5px;
     font-size: 13px;
-    padding: 10px 6px;
   }
 
-  /* Nama mendapat ruang terbesar */
-  .student-data-table th:nth-child(2),
-  .student-data-table td:nth-child(2) {
-    width: 31%;
+  /* =======================================================
+     WIDTH COLUMN MOBILE
+     ======================================================= */
+
+  .student-col-name {
+    width: 34%;
+    min-width: 0;
   }
 
-  /* Kelas */
-  .student-data-table th:nth-child(3),
-  .student-data-table td:nth-child(3) {
+  .student-col-class {
     width: 15%;
+    min-width: 0;
   }
 
-  /* Nilai */
-  .student-data-table th:nth-child(6),
-  .student-data-table td:nth-child(6) {
-    width: 15%;
+  .student-col-score {
+    width: 13%;
+    min-width: 0;
     text-align: center;
   }
 
-  /* Risiko */
-  .student-data-table th:nth-child(7),
-  .student-data-table td:nth-child(7) {
-    width: 23%;
+  .student-col-risk {
+    width: 21%;
+    min-width: 0;
     text-align: center;
   }
 
-  /* Aksi */
-  .student-data-table th:nth-child(8),
-  .student-data-table td:nth-child(8) {
-    width: 16%;
+  .student-col-action {
+    width: 17%;
+    min-width: 0;
     text-align: center;
   }
 
-  .student-data-table .student-name {
-    max-width: 100px;
+  /* =======================================================
+     TEXT MOBILE
+     ======================================================= */
+
+  .student-name {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
+
+  .student-class {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* =======================================================
+     RISK BADGE MOBILE
+     ======================================================= */
+
+  .student-risk-wrapper {
+    justify-content: center;
+  }
+
+  .student-risk-wrapper > * {
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  /* =======================================================
+     DETAIL BUTTON MOBILE
+     ======================================================= */
 
   .student-detail-button {
-    padding: 6px 9px;
-    font-size: 12px;
+    padding: 5px 7px;
+    font-size: 11px;
+    border-radius: 7px;
   }
 
-  /* -------------------------------------------------------
-     PAGINATION
+  /* =======================================================
+     RISK HEADER
+     ======================================================= */
 
-     Tombol desktop 180px terlalu besar untuk HP.
-     ------------------------------------------------------- */
+  .desktop-risk-title {
+    display: none;
+  }
+
+  .mobile-risk-title {
+    display: inline;
+  }
+
+  /* =======================================================
+     PAGINATION MOBILE
+     ======================================================= */
 
   .student-pagination {
+    width: 100%;
     gap: 8px;
     margin-top: 20px;
-    width: 100%;
   }
 
   .student-pagination .btn {
@@ -229,7 +378,7 @@
 }
 
 /* =========================================================
-   EXTRA SMALL SCREEN
+   EXTRA SMALL MOBILE
    ========================================================= */
 
 @media (max-width: 400px) {
@@ -243,19 +392,19 @@
     padding: 14px;
   }
 
-  .student-data-table th,
+  .student-data-table th {
+    padding: 9px 4px;
+    font-size: 11px;
+  }
+
   .student-data-table td {
-    padding: 8px 4px;
+    padding: 10px 4px;
     font-size: 12px;
   }
 
-  .student-data-table .student-name {
-    max-width: 82px;
-  }
-
   .student-detail-button {
-    padding: 5px 7px;
-    font-size: 11px;
+    padding: 5px 6px;
+    font-size: 10px;
   }
 
   .student-pagination {
