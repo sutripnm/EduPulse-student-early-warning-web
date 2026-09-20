@@ -484,3 +484,45 @@ html {
   background-color: var(--edupulse-surface);
   border-color: var(--edupulse-primary);
 }
+
+@media (max-width: 768px) {
+  .landing-section {
+    padding: 70px 0;
+  }
+
+  .cta-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .landing-kpi-row {
+    grid-template-columns: 1fr;
+  }
+
+  /* Tombol hero ditumpuk di layar kecil
+     agar tidak terlalu rapat dan mudah ditekan. */
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px !important;
+  }
+
+  /* Tombol mengambil lebar container supaya nyaman
+     digunakan dengan jempol pada perangkat mobile. */
+  .hero-actions .btn {
+    width: 100%;
+    min-height: 48px;
+  }
+}
+
+@media (max-width: 576px) {
+  .hero-title {
+    font-size: 36px;
+    line-height: 1.08;
+  }
+
+  .hero-description {
+    font-size: 16px;
+    line-height: 1.65;
+  }
+}

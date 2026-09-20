@@ -49,10 +49,64 @@
 }
 
 @media (max-width: 768px) {
-  .navbar-menu {
+  /* Navbar mobile dibuat menjadi dua baris:
+     baris pertama = logo + tombol masuk,
+     baris kedua = menu navigasi. */
+  .landing-page .navbar {
+    padding: 10px 12px;
+  }
+
+  /* Container boleh membungkus isi ke baris berikutnya. */
+  .landing-page .navbar .container-fluid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /* Menu tidak lagi berada di tengah secara absolute.
+     Menu menempati satu baris penuh di bawah logo. */
+  .landing-page .navbar-menu {
     position: static !important;
     transform: none !important;
-    margin: 0 auto;
-    gap: 16px !important;
+    order: 3;
+
+    width: 100%;
+    margin: 10px 0 0 !important;
+    padding: 4px 6px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    gap: 2px !important;
+    border-radius: 12px;
+  }
+
+  /* Link menu dibuat fleksibel agar tidak saling bertabrakan. */
+  .landing-page .navbar-menu a {
+    flex: 1;
+    text-align: center;
+    padding: 8px 6px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* Logo sedikit diperkecil agar lebih lega di HP. */
+  .landing-page .navbar-brand img {
+    height: 36px;
+  }
+
+  .landing-page .navbar-brand {
+    gap: 6px !important;
+  }
+
+  .landing-page .navbar-brand .fw-bold {
+    font-size: 20px !important;
+  }
+
+  /* Tombol login dibuat sedikit lebih kecil. */
+  .landing-page .navbar-login {
+    padding: 7px 16px !important;
+    font-size: 14px;
   }
 }
