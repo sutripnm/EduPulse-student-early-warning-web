@@ -1,3 +1,231 @@
+============ DATA LEAKS SCHOOL ID ==========
+
+akun user GURU :
+all Password : password123
+{
+      "id": 5,
+      "email": "guru5@school.id",
+      "first_name": "Rahmat",
+      "last_name": "Hidayat",
+      "role": "GURU",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:34:36.163182Z"
+    },
+    {
+      "id": 4,
+      "email": "guru4@school.id",
+      "first_name": "Dewi",
+      "last_name": "Lestari",
+      "role": "GURU",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:34:35.773220Z"
+    },
+    {
+      "id": 3,
+      "email": "guru3@school.id",
+      "first_name": "Eko",
+      "last_name": "Prasetyo",
+      "role": "GURU",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:34:35.383095Z"
+    },
+    {
+      "id": 2,
+      "email": "guru2@school.id",
+      "first_name": "Siti",
+      "last_name": "Aminah",
+      "role": "GURU",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:34:34.993118Z"
+    },
+    {
+      "id": 1,
+      "email": "guru1@school.id",
+      "first_name": "Budi",
+      "last_name": "Santoso",
+      "role": "GURU",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:34:34.488557Z"
+    }
+
+
+---------------------------------------------------------
+akun user ORANGTUA :
+password : password123
+{
+      "id": 146,
+      "email": "ortu_1000000071@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Warta Prayoga",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:50.455622Z"
+    },
+    {
+      "id": 144,
+      "email": "ortu_1000000070@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Wulan Farida, M.Ak",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:49.358345Z"
+    },
+    {
+      "id": 142,
+      "email": "ortu_1000000069@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Ira Mangunsong",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:48.293088Z"
+    },
+    {
+      "id": 140,
+      "email": "ortu_1000000068@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "KH. Jasmani Widodo",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:47.173701Z"
+    },
+    {
+      "id": 138,
+      "email": "ortu_1000000067@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Humaira Melani, S.E.",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:46.083997Z"
+    },
+    {
+      "id": 136,
+      "email": "ortu_1000000066@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Timbul Sudiati",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:45.020006Z"
+    },
+    {
+      "id": 134,
+      "email": "ortu_1000000065@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Sabar Sirait",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:43.898008Z"
+    },
+    {
+      "id": 132,
+      "email": "ortu_1000000064@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Prayogo Suryatmi",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:42.843703Z"
+    },
+    {
+      "id": 130,
+      "email": "ortu_1000000063@school.id",
+      "first_name": "Orang Tua dari",
+      "last_name": "Ulya Prakasa",
+      "role": "ORANGTUA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:41.785776Z"
+    },
+
+
+
+--------------------------------------------------------------
+Akun User SISWA:
+password : password123
+
+
+{
+      "id": 147,
+      "email": "siswa_1000000071@school.id",
+      "first_name": "Warta",
+      "last_name": "Prayoga",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:50.857775Z"
+    },
+    {
+      "id": 145,
+      "email": "siswa_1000000070@school.id",
+      "first_name": "Wulan",
+      "last_name": "M.Ak",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:49.767519Z"
+    },
+    {
+      "id": 143,
+      "email": "siswa_1000000069@school.id",
+      "first_name": "Ira",
+      "last_name": "Mangunsong",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:48.684886Z"
+    },
+    {
+      "id": 141,
+      "email": "siswa_1000000068@school.id",
+      "first_name": "KH.",
+      "last_name": "Widodo",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:47.590297Z"
+    },
+    {
+      "id": 139,
+      "email": "siswa_1000000067@school.id",
+      "first_name": "Humaira",
+      "last_name": "S.E.",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:46.502795Z"
+    },
+    {
+      "id": 137,
+      "email": "siswa_1000000066@school.id",
+      "first_name": "Timbul",
+      "last_name": "Sudiati",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:45.417339Z"
+    },
+    {
+      "id": 135,
+      "email": "siswa_1000000065@school.id",
+      "first_name": "Sabar",
+      "last_name": "Sirait",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:44.309047Z"
+    },
+    {
+      "id": 133,
+      "email": "siswa_1000000064@school.id",
+      "first_name": "Prayogo",
+      "last_name": "Suryatmi",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:43.226195Z"
+    },
+    {
+      "id": 131,
+      "email": "siswa_1000000063@school.id",
+      "first_name": "Ulya",
+      "last_name": "Prakasa",
+      "role": "SISWA",
+      "is_active": true,
+      "date_joined": "2026-09-12T09:35:42.193791Z"
+    },
+
+
+
+
 # EduPulse — Student Early Warning System
 
 EduPulse adalah aplikasi web **Student Early Warning System** yang membantu sekolah memantau kondisi akademik siswa melalui data nilai, presensi, performa, dan informasi risiko.
