@@ -54,9 +54,6 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
 
-  // Mencegah halaman warning dari ngrok muncul pada browser.
-  config.headers["ngrok-skip-browser-warning"] = "true";
-
   return config;
 });
 
@@ -84,9 +81,6 @@ async function refreshAccessToken() {
         `${api.defaults.baseURL}/v1/auth/refresh/`,
         { refresh: refreshToken },
         {
-          headers: {
-            "ngrok-skip-browser-warning": "true",
-          },
         }
       )
       .then((response) => {
