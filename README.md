@@ -385,72 +385,7 @@ Style bersama yang sebelumnya berulang telah dipusatkan untuk mengurangi duplika
 
 ---
 
-## 14. Refactor & Code Quality
-
-Project telah melalui refactor untuk meningkatkan maintainability, antara lain:
-
-- Mengurangi function yang memiliki tanggung jawab sama.
-- Memindahkan logic bersama ke custom hooks.
-- Memusatkan utility akademik, dashboard role, dan risk handling.
-- Mengurangi duplikasi CSS.
-- Memusatkan komunikasi API pada satu service.
-- Menambahkan komentar/JSDoc pada function agar logic lebih mudah dipahami.
-- Menghapus file dummy/hook yang sudah tidak direferensikan.
-- Menangani refresh token secara terpusat.
-
-Detail refactor tersedia di:
-
-```text
-REFACTOR_NOTES.md
-```
-
----
-
-## 15. Screenshot & Demo
-
-Untuk dokumentasi GitHub, disarankan menambahkan screenshot pada folder:
-
-```text
-docs/images/
-```
-
-Contoh dokumentasi yang dapat ditambahkan:
-
-- Landing page.
-- Login.
-- Dashboard guru/admin.
-- Daftar siswa.
-- Detail siswa dan analisis risiko.
-- Input nilai & presensi.
-- Dashboard siswa.
-- Dashboard orang tua.
-- Pengaturan akademik.
-
-### Demo Video
-
-Tambahkan link video demo project di bagian ini setelah video di-upload, misalnya ke YouTube atau Google Drive:
-
-```text
-Demo: [Link video demo]
-```
-
----
-
-## 16. Dokumentasi Backend
-
-Frontend membutuhkan backend REST API yang menyediakan endpoint autentikasi, data akademik, dashboard, nilai, presensi, prediksi risiko, dan rekomendasi.
-
-Tambahkan link dokumentasi API backend pada repository, misalnya:
-
-```text
-API Documentation: [Swagger / OpenAPI / API Docs]
-```
-
-> Gunakan URL API docs yang sedang aktif. Hindari menaruh URL ngrok sementara sebagai link permanen di README karena URL ngrok dapat berubah.
-
----
-
-## 17. Repository Documentation Checklist
+## 14. Repository Documentation Checklist
 
 Dokumentasi minimum yang disarankan untuk repository ini:
 
@@ -465,7 +400,7 @@ Dokumen tambahan seperti `CONTRIBUTING.md`, `CHANGELOG.md`, dan `LICENSE` dapat 
 
 ---
 
-## 18. Git Workflow
+## 15. Git Workflow
 
 Contoh workflow sederhana untuk perubahan fitur:
 
@@ -488,7 +423,7 @@ Gunakan pesan commit yang menjelaskan tujuan perubahan agar riwayat repository m
 
 ---
 
-## 19. Project Structure
+## 16. Project Structure
 
 ```text
 EduPulse/
@@ -519,21 +454,7 @@ EduPulse/
 
 ---
 
-## 20. Catatan Pengembangan
-
-Project frontend ini bergantung pada backend API yang aktif. Karena backend development menggunakan URL ngrok, URL tersebut dapat berubah ketika tunnel di-restart.
-
-Untuk local development, cukup ubah:
-
-```env
-VITE_API_PROXY_TARGET=https://URL-NGROK-BACKEND-AKTIF.ngrok-free.app
-```
-
-dan restart Vite setelah perubahan environment.
-
----
-
-## 21. Team / Contributors
+## 17. Team / Contributors
 
 Fullstack Developer
 B26B14R010  - Sutri Purnomo 
@@ -544,7 +465,3 @@ B26B14S007 - Muhammad Hizam Al Ibrahim
 
 
 ---
-
-## License
-
-Tambahkan informasi lisensi project di sini sesuai kebutuhan dan aturan project/capstone.
