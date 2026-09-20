@@ -428,6 +428,23 @@ html {
   }
 }
 
+/* Memberi ruang antara tombol hero dan KPI/Student Overview */
+.hero-actions {
+  margin-bottom: 36px;
+}
+
+/* Tombol ditumpuk agar lebih nyaman di layar HP */
+.hero-actions {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px !important;
+}
+
+.hero-actions .btn {
+  width: 100%;
+  min-height: 48px;
+}
+
 /* =========================================================
    LANDING PAGE - DARK MODE
    ========================================================= */

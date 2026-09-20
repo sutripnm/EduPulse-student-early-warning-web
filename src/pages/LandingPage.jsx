@@ -34,11 +34,18 @@ function LandingPage() {
                sebelum masalah tersebut berkembang menjadi lebih besar.
               </p>
 
-              <div className="d-flex gap-3 mt-4">
-                <Link to="/dashboard" className="btn btn-dark rounded-pill px-4">
-                  Buka   Dashboard
+              <div className="hero-actions d-flex gap-3 mt-4">
+                <Link
+                  to="/dashboard"
+                  className="btn btn-dark rounded-pill px-4"
+                >
+                  Buka Dashboard
                 </Link>
-                <a href="#cara-kerja" className="btn btn-outline-dark rounded-pill px-4">
+
+                <a
+                  href="#cara-kerja"
+                  className="btn btn-outline-dark rounded-pill px-4"
+                >
                   Cara Kerja
                 </a>
               </div>
