@@ -1,3 +1,7 @@
+/* =========================================================
+   INPUT NILAI & ABSENSI
+   ========================================================= */
+
 .input-nilai-page {
   min-height: 100vh;
   background-color: #f4f2f7;
@@ -5,11 +9,14 @@
 
 .input-nilai-main {
   min-height: 100vh;
+  min-width: 0;
   background-color: var(--edupulse-primary-soft);
   padding: 40px;
+  overflow-x: hidden;
 }
 
 .input-nilai-container {
+  width: 100%;
   max-width: 1500px;
   margin: 0 auto;
 }
@@ -19,6 +26,8 @@
 }
 
 .input-data-card {
+  width: 100%;
+  min-width: 0;
   background-color: var(--edupulse-surface);
   border: 1px solid var(--edupulse-border-strong);
   border-radius: 20px;
@@ -29,16 +38,53 @@
   margin-bottom: 24px;
 }
 
+.input-section-header h5 {
+  line-height: 1.4;
+}
+
+/* =========================================================
+   FILTER & RINGKASAN
+   ========================================================= */
+
 .selected-period-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+
   background-color: var(--edupulse-primary-soft);
   border: 1px solid #d7d2e3;
   border-radius: 12px;
   padding: 14px 18px;
+
+  color: var(--edupulse-text);
+  line-height: 1.5;
 }
 
-/* =========================
+.selected-period-item {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+  min-width: 0;
+}
+
+.selected-period-item strong {
+  flex-shrink: 0;
+}
+
+.selected-period-item span {
+  overflow-wrap: anywhere;
+}
+
+.selected-period-separator {
+  color: var(--edupulse-text-muted);
+}
+
+/* =========================================================
    TABLE
-========================= */
+   ========================================================= */
 
 .input-data-card .table {
   margin-bottom: 0;
@@ -59,14 +105,39 @@
   vertical-align: middle;
 }
 
-.attendance-table,
-.score-table {
+/*
+ * Wrapper tabel dibuat scroll horizontal.
+ * Ini penting karena tabel input nilai/absensi memang
+ * memiliki banyak kolom dan tidak realistis dipaksa
+ * masuk ke layar HP.
+ */
+.input-table-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =========================================================
+   ABSENSI TABLE
+   ========================================================= */
+
+.attendance-table {
   min-width: 1050px;
 }
 
-/* =========================
-   ABSENSI
-========================= */
+.attendance-number-column {
+  width: 60px;
+}
+
+.attendance-student-column {
+  min-width: 220px;
+}
+
+.attendance-date-column {
+  min-width: 140px;
+}
 
 .attendance-select {
   min-width: 125px;
@@ -94,19 +165,45 @@
   border-color: #d2a2a8;
 }
 
+/* =========================================================
+   ABSENSI SUMMARY
+   ========================================================= */
+
 .attendance-summary {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 12px 20px;
+
   margin-top: 20px;
   padding: 15px 18px;
+
   border-radius: 12px;
   background-color: var(--edupulse-primary-soft);
 }
 
-/* =========================
-   NILAI
-========================= */
+.attendance-summary > div {
+  white-space: nowrap;
+}
+
+/* =========================================================
+   NILAI TABLE
+   ========================================================= */
+
+.score-table {
+  min-width: 1050px;
+}
+
+.score-number-column {
+  width: 60px;
+}
+
+.score-student-column {
+  min-width: 220px;
+}
+
+.score-value-column {
+  min-width: 140px;
+}
 
 .score-table th small {
   display: block;
@@ -132,28 +229,170 @@
   font-size: 14px;
 }
 
-/* =========================
-   BUTTON
-========================= */
-
-
-
 /* =========================================================
-   INPUT NILAI & ABSENSI - TWO COLUMN LAYOUT
+   TWO COLUMN LAYOUT
    ========================================================= */
 
+/*
+ * Desktop:
+ * Absensi | Nilai
+ *
+ * minmax(0, 1fr) digunakan supaya masing-masing card
+ * tidak memaksa parent menjadi lebih lebar.
+ */
 .input-section-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
   gap: 20px;
   align-items: start;
 }
 
 .input-section-column {
+  width: 100%;
   min-width: 0;
 }
 
 .input-section-column .input-data-card {
   height: 100%;
   margin-bottom: 0 !important;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+  /*
+   * Tablet menggunakan satu kolom agar masing-masing
+   * form memiliki ruang yang cukup.
+   */
+  .input-section-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .input-nilai-main {
+    padding: 28px;
+  }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+  .input-nilai-main {
+    padding: 20px 16px;
+  }
+
+  .input-nilai-container {
+    width: 100%;
+  }
+
+  .input-data-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .input-section-header {
+    margin-bottom: 20px;
+  }
+
+  .input-section-header h5 {
+    font-size: 17px;
+  }
+
+  .input-section-header p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /*
+   * Ringkasan filter boleh turun ke baris berikutnya
+   * jika ruang layar tidak cukup.
+   */
+  .selected-period-info {
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+
+  .selected-period-item {
+    width: 100%;
+  }
+
+  .selected-period-separator {
+    display: none;
+  }
+
+  /*
+   * Tabel tidak diperkecil secara paksa.
+   * User dapat scroll horizontal hanya pada tabel.
+   */
+  .input-table-wrapper {
+    margin-right: -2px;
+    padding-bottom: 4px;
+  }
+
+  .input-data-card .table th,
+  .input-data-card .table td {
+    padding: 12px 10px;
+  }
+
+  .attendance-summary {
+    gap: 10px 16px;
+    padding: 13px 14px;
+    font-size: 14px;
+  }
+
+  .score-summary {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  .input-data-card .btn[type="submit"] {
+    width: 100%;
+    min-height: 46px;
+  }
+}
+
+/* =========================================================
+   EXTRA SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+  .input-nilai-main {
+    padding: 16px 12px;
+  }
+
+  .input-data-card {
+    padding: 16px 14px;
+    border-radius: 14px;
+  }
+
+  .input-page-header h1 {
+    font-size: 22px;
+    line-height: 1.25;
+  }
+
+  .input-page-header p {
+    font-size: 14px;
+  }
+
+  .selected-period-info {
+    padding: 12px;
+    font-size: 13px;
+  }
+
+  .attendance-summary {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .attendance-summary > div {
+    white-space: normal;
+  }
 }

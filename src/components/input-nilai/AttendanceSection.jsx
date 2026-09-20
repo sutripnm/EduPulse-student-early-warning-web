@@ -1,10 +1,10 @@
 import { BsClipboardCheck } from "react-icons/bs";
 import { getDayName } from "../../utils/date";
 
-// Form input absensi: filter kelas/mapel/tanggal + tabel absensi harian.
-// Semua state & handler (attendance, attendanceDates, dst) datang dari
-// hook useAttendanceForm di InputNilaiAbsensiPage, komponen ini murni
-// menampilkan apa yang dikirim lewat props.
+/**
+ * Menampilkan form input absensi siswa berdasarkan
+ * kelas, mata pelajaran, dan rentang tanggal.
+ */
 function AttendanceSection({
   attendanceClass,
   setAttendanceClass,
@@ -32,149 +32,167 @@ function AttendanceSection({
 }) {
   return (
     <section className="input-data-card mb-4">
+      {/* =================================================
+          HEADER
+          ================================================= */}
       <div className="input-section-header">
         <div>
           <h5 className="fw-bold mb-1">
             <BsClipboardCheck className="me-2" />
             Input Absensi
           </h5>
+
           <p className="text-secondary mb-0">
             Input kehadiran siswa berdasarkan tanggal yang dipilih.
           </p>
         </div>
       </div>
 
-      {/* FILTER ABSENSI */}
-<div className="row g-3 mb-4">
+      {/* =================================================
+          FILTER ABSENSI
+          ================================================= */}
+      <div className="row g-3 mb-4">
+        {/* Kelas */}
+        <div className="col-12">
+          <label
+            htmlFor="attendance-class"
+            className="form-label fw-semibold"
+          >
+            Kelas
+          </label>
 
-  {/* Kelas */}
-  <div className="col-12">
-    <label
-      htmlFor="attendance-class"
-      className="form-label fw-semibold"
-    >
-      Kelas
-    </label>
+          <select
+            id="attendance-class"
+            className="form-select"
+            value={attendanceClass}
+            onChange={(event) =>
+              setAttendanceClass(event.target.value)
+            }
+          >
+            <option value="">
+              Pilih kelas
+            </option>
 
-    <select
-      id="attendance-class"
-      className="form-select"
-      value={attendanceClass}
-      onChange={(event) =>
-        setAttendanceClass(
-          event.target.value
-        )
-      }
-    >
-      <option value="">
-        Pilih kelas
-      </option>
+            {kelasOptions.map((kelas) => (
+              <option
+                key={kelas.id}
+                value={kelas.id}
+              >
+                {kelas.nama_kelas}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {kelasOptions.map((kelas) => (
-        <option
-          key={kelas.id}
-          value={kelas.id}
-        >
-          {kelas.nama_kelas}
-        </option>
-      ))}
-    </select>
-  </div>
+        {/* Mata Pelajaran */}
+        <div className="col-12">
+          <label
+            htmlFor="attendance-mapel"
+            className="form-label fw-semibold"
+          >
+            Mata Pelajaran
+          </label>
 
-  {/* Mapel */}
-  <div className="col-12">
-    <label
-      htmlFor="attendance-mapel"
-      className="form-label fw-semibold"
-    >
-      Mata Pelajaran
-    </label>
+          <select
+            id="attendance-mapel"
+            className="form-select"
+            value={mapelId}
+            onChange={(event) =>
+              setMapelId(event.target.value)
+            }
+          >
+            <option value="">
+              Pilih mata pelajaran
+            </option>
 
-    <select
-      id="attendance-mapel"
-      className="form-select"
-      value={mapelId}
-      onChange={(event) =>
-        setMapelId(
-          event.target.value
-        )
-      }
-    >
-      <option value="">
-        Pilih mata pelajaran
-      </option>
+            {mapelOptions.map((mapel) => (
+              <option
+                key={mapel.id}
+                value={mapel.id}
+              >
+                {mapel.nama_mapel}
+              </option>
+            ))}
+          </select>
+        </div>
 
-      {mapelOptions.map((mapel) => (
-        <option
-          key={mapel.id}
-          value={mapel.id}
-        >
-          {mapel.nama_mapel}
-        </option>
-      ))}
-    </select>
-  </div>
+        {/* Tanggal Mulai */}
+        <div className="col-12 col-md-6">
+          <label
+            htmlFor="start-date"
+            className="form-label fw-semibold"
+          >
+            Tanggal Mulai
+          </label>
 
-  {/* Tanggal */}
-  <div className="col-md-6">
-    <label
-      htmlFor="start-date"
-      className="form-label fw-semibold"
-    >
-      Tanggal Mulai
-    </label>
+          <input
+            type="date"
+            id="start-date"
+            className="form-control"
+            value={startDate}
+            onChange={(event) =>
+              setStartDate(event.target.value)
+            }
+          />
+        </div>
 
-    <input
-      type="date"
-      id="start-date"
-      className="form-control"
-      value={startDate}
-      onChange={(event) =>
-        setStartDate(
-          event.target.value
-        )
-      }
-    />
-  </div>
+        {/* Tanggal Akhir */}
+        <div className="col-12 col-md-6">
+          <label
+            htmlFor="end-date"
+            className="form-label fw-semibold"
+          >
+            Tanggal Akhir
+          </label>
 
-  <div className="col-md-6">
-    <label
-      htmlFor="end-date"
-      className="form-label fw-semibold"
-    >
-      Tanggal Akhir
-    </label>
-
-    <input
-      type="date"
-      id="end-date"
-      className="form-control"
-      value={endDate}
-      onChange={(event) =>
-        setEndDate(
-          event.target.value
-        )
-      }
-    />
-  </div>
-</div>
-
-      <div className="selected-period-info mb-4">
-        <strong>Periode:</strong> {startDate || "Belum dipilih"}
-        <span className="mx-2">sampai</span>
-        {endDate || "Belum dipilih"}
+          <input
+            type="date"
+            id="end-date"
+            className="form-control"
+            value={endDate}
+            onChange={(event) =>
+              setEndDate(event.target.value)
+            }
+          />
+        </div>
       </div>
 
-      {/* TABEL ABSENSI */}
+      {/* =================================================
+          RINGKASAN PERIODE
+          ================================================= */}
+      <div className="selected-period-info mb-4">
+        <div className="selected-period-item">
+          <strong>Periode</strong>
+
+          <span>
+            {startDate || "Belum dipilih"}
+            {" sampai "}
+            {endDate || "Belum dipilih"}
+          </span>
+        </div>
+      </div>
+
+      {/* =================================================
+          TABEL ABSENSI
+          ================================================= */}
       <form onSubmit={onSubmit}>
-        <div className="table-responsive">
+        <div className="table-responsive input-table-wrapper">
           <table className="table align-middle attendance-table">
             <thead>
               <tr>
-                <th style={{ width: "60px" }}>No</th>
-                <th style={{ minWidth: "220px" }}>Nama Siswa</th>
+                <th className="attendance-number-column">
+                  No
+                </th>
+
+                <th className="attendance-student-column">
+                  Nama Siswa
+                </th>
+
                 {attendanceDates.map((date) => (
-                  <th key={date} className="text-center" style={{ minWidth: "140px" }}>
+                  <th
+                    key={date}
+                    className="text-center attendance-date-column"
+                  >
                     {getDayName(date)}
                   </th>
                 ))}
@@ -182,69 +200,128 @@ function AttendanceSection({
             </thead>
 
             <tbody>
-              {students.map((student, index) => (
-                <tr key={student.nisn}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <span className="fw-semibold">
-                      {student.nama_siswa || student.nama || "-"}
-                    </span>
-
-                    <small className="d-block text-secondary">
-                      {student.nisn}
-                    </small>
+              {students.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={attendanceDates.length + 2}
+                    className="text-center text-secondary py-4"
+                  >
+                    Silakan pilih kelas terlebih dahulu.
                   </td>
-
-                  {attendanceDates.map((date) => (
-                    <td key={date} className="text-center">
-                      <select
-                        className={`form-select attendance-select ${
-                          attendance[student.nisn]?.[date]
-                            ? `status-${attendance[student.nisn][date].toLowerCase()}`
-                            : ""
-                        }`}
-                        value={attendance[student.nisn]?.[date] || "HADIR"}
-                        onChange={(event) =>
-                          onAttendanceChange(student.nisn, date, event.target.value)
-                        }
-                      >
-                        <option value="HADIR">Hadir</option>
-                        <option value="IZIN">Izin</option>
-                        <option value="SAKIT">Sakit</option>
-                        <option value="ALPHA">Alpha</option>
-                      </select>
-                    </td>
-                  ))}
                 </tr>
-              ))}
+              ) : (
+                students.map((student, index) => (
+                  <tr key={student.nisn}>
+                    <td>
+                      {index + 1}
+                    </td>
+
+                    <td>
+                      <span className="fw-semibold">
+                        {student.nama_siswa ||
+                          student.nama ||
+                          "-"}
+                      </span>
+
+                      <small className="d-block text-secondary">
+                        {student.nisn}
+                      </small>
+                    </td>
+
+                    {attendanceDates.map((date) => {
+                      const currentStatus =
+                        attendance[student.nisn]?.[date] ||
+                        "HADIR";
+
+                      return (
+                        <td
+                          key={date}
+                          className="text-center"
+                        >
+                          <select
+                            className={`form-select attendance-select ${
+                              currentStatus
+                                ? `status-${currentStatus.toLowerCase()}`
+                                : ""
+                            }`}
+                            value={currentStatus}
+                            onChange={(event) =>
+                              onAttendanceChange(
+                                student.nisn,
+                                date,
+                                event.target.value
+                              )
+                            }
+                          >
+                            <option value="HADIR">
+                              Hadir
+                            </option>
+
+                            <option value="IZIN">
+                              Izin
+                            </option>
+
+                            <option value="SAKIT">
+                              Sakit
+                            </option>
+
+                            <option value="ALPHA">
+                              Alpha
+                            </option>
+                          </select>
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
+        {/* =================================================
+            RINGKASAN ABSENSI
+            ================================================= */}
         <div className="attendance-summary">
-          <span>
-            Hadir: <strong>{attendanceSummary.HADIR}</strong>
-          </span>
-          <span>
-            Izin: <strong>{attendanceSummary.IZIN}</strong>
-          </span>
-          <span>
-            Sakit: <strong>{attendanceSummary.SAKIT}</strong>
-          </span>
-          <span>
-            Alpha: <strong>{attendanceSummary.ALPHA}</strong>
-          </span>
+          <div>
+            Hadir:{" "}
+            <strong>
+              {attendanceSummary.HADIR}
+            </strong>
+          </div>
+
+          <div>
+            Izin:{" "}
+            <strong>
+              {attendanceSummary.IZIN}
+            </strong>
+          </div>
+
+          <div>
+            Sakit:{" "}
+            <strong>
+              {attendanceSummary.SAKIT}
+            </strong>
+          </div>
+
+          <div>
+            Alpha:{" "}
+            <strong>
+              {attendanceSummary.ALPHA}
+            </strong>
+          </div>
         </div>
 
-<button
-  type="submit"
-  className="btn btn-primary mt-4"
-  disabled={loading}
->
-  {loading
-    ? "Menyimpan..."
-    : "Simpan Absensi"}
-</button>
+        {/* Tombol submit */}
+        <button
+          type="submit"
+          className="btn btn-primary mt-4"
+          disabled={loading}
+        >
+          {loading
+            ? "Menyimpan..."
+            : "Simpan Absensi"}
+        </button>
       </form>
     </section>
   );

@@ -1,47 +1,61 @@
 import { Link } from "react-router-dom";
 import RiskBadge from "../common/RiskBadge";
 
-// Tabel utama daftar siswa (kolom kiri StudentListPage). Data siswa,
-// nomor halaman, dan total siswa semua datang dari hook useStudentList
-// lewat props — komponen ini cuma menampilkan.
+/**
+ * Menampilkan tabel daftar siswa.
+ *
+ * Pada desktop seluruh informasi siswa ditampilkan.
+ * Pada mobile beberapa kolom sekunder disembunyikan melalui CSS
+ * agar tabel tetap nyaman dibaca pada layar kecil.
+ */
 function StudentTable({
   students,
   page,
   totalStudents,
+  pageSize = 10,
 }) {
-  // Hitung "menampilkan X–Y dari Z siswa" berdasarkan halaman aktif.
-  // 10 = jumlah data per halaman (samakan dengan page size di
-  // useStudentList kalau nanti diubah).
-  const rangeStart = students.length > 0 ? (page - 1) * 10 + 1 : 0;
-  const rangeEnd = Math.min(page * 10, totalStudents);
+  // Menghitung nomor data pertama pada halaman aktif.
+  const rangeStart =
+    students.length > 0
+      ? (page - 1) * pageSize + 1
+      : 0;
+
+  // Menghitung nomor data terakhir pada halaman aktif.
+  const rangeEnd = Math.min(
+    page * pageSize,
+    totalStudents
+  );
 
   return (
     <section className="student-table-card">
-      <div className="d-flex justify-content-between align-items-center mb-3">
+      {/* Header tabel */}
+      <div className="student-table-header mb-3">
         <div>
           <h5 className="fw-bold mb-1">
             Data Siswa
           </h5>
 
           <small className="text-secondary">
-            Menampilkan{" "}
-            {rangeStart}
-            –
-            {rangeEnd}{" "}
-            dari {totalStudents} siswa
+            Menampilkan {rangeStart}–{rangeEnd} dari{" "}
+            {totalStudents} siswa
           </small>
         </div>
       </div>
 
-      <div className="table-responsive">
-        <table className="table align-middle mb-0">
+      {/* Wrapper untuk menjaga tabel tetap responsif */}
+      <div className="student-table-wrapper">
+        <table className="table student-data-table align-middle mb-0">
           <thead>
             <tr>
-              <th>NISN</th>
+              <th className="student-col-nisn">NISN</th>
               <th>Nama Siswa</th>
               <th>Kelas</th>
-              <th>Gender</th>
-              <th>Presensi</th>
+              <th className="student-col-gender">
+                Gender
+              </th>
+              <th className="student-col-presensi">
+                Presensi
+              </th>
               <th>Nilai</th>
               <th>Status Risiko</th>
               <th>Aksi</th>
@@ -61,12 +75,12 @@ function StudentTable({
             ) : (
               students.map((student) => (
                 <tr key={student.nisn}>
-                  <td>
+                  <td className="student-col-nisn">
                     {student.nisn}
                   </td>
 
                   <td>
-                    <span className="fw-semibold">
+                    <span className="fw-semibold student-name">
                       {student.nama_siswa || "-"}
                     </span>
                   </td>
@@ -75,11 +89,11 @@ function StudentTable({
                     {student.kelas || "-"}
                   </td>
 
-                  <td>
+                  <td className="student-col-gender">
                     {student.gender || "-"}
                   </td>
 
-                  <td>
+                  <td className="student-col-presensi">
                     {student.presensi || "-"}
                   </td>
 
@@ -89,16 +103,14 @@ function StudentTable({
 
                   <td>
                     <RiskBadge
-                      status={
-                        student.status_risiko
-                      }
+                      status={student.status_risiko}
                     />
                   </td>
 
                   <td>
                     <Link
                       to={`/detail-siswa/${student.nisn}`}
-                      className="btn btn-sm btn-outline-dark"
+                      className="btn btn-sm btn-outline-dark student-detail-button"
                     >
                       Detail
                     </Link>

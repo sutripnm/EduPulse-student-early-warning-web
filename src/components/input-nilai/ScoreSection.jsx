@@ -1,7 +1,7 @@
 import { BsBarChartFill } from "react-icons/bs";
 
 /**
- * Definisi field nilai yang ditampilkan pada tabel input mingguan.
+ * Daftar field nilai yang ditampilkan pada tabel input nilai mingguan.
  */
 const scoreFields = [
   {
@@ -18,6 +18,7 @@ const scoreFields = [
     hint: "Pretest",
     min: "0",
     max: "100",
+    step: "1",
     placeholder: "0-100",
   },
   {
@@ -26,6 +27,7 @@ const scoreFields = [
     hint: "Assessment",
     min: "0",
     max: "100",
+    step: "1",
     placeholder: "0-100",
   },
   {
@@ -34,12 +36,44 @@ const scoreFields = [
     hint: "Posttest",
     min: "0",
     max: "100",
+    step: "1",
     placeholder: "0-100",
   },
 ];
 
 /**
- * Menampilkan form input nilai mingguan berdasarkan data dari hook.
+ * Mengambil nama kelas berdasarkan ID kelas yang sedang dipilih.
+ */
+function getSelectedClassName(scoreClass, kelasOptions) {
+  if (!scoreClass) {
+    return "Belum dipilih";
+  }
+
+  return (
+    kelasOptions.find(
+      (kelas) => String(kelas.id) === String(scoreClass)
+    )?.nama_kelas || "-"
+  );
+}
+
+/**
+ * Mengambil nama mata pelajaran berdasarkan ID yang dipilih.
+ */
+function getSelectedSubjectName(subject, mapelOptions) {
+  if (!subject) {
+    return "Belum dipilih";
+  }
+
+  return (
+    mapelOptions.find(
+      (mapel) => String(mapel.id) === String(subject)
+    )?.nama_mapel || "-"
+  );
+}
+
+/**
+ * Menampilkan form input nilai mingguan untuk seluruh siswa
+ * dalam kelas yang dipilih.
  */
 function ScoreSection({
   scoreClass,
@@ -56,20 +90,23 @@ function ScoreSection({
   onSubmit,
   loading,
 }) {
-  const selectedKelasName = scoreClass
-    ? kelasOptions.find(
-        (kelas) => String(kelas.id) === String(scoreClass)
-      )?.nama_kelas || "-"
-    : "Belum dipilih";
+  // Nama kelas yang sedang dipilih untuk ringkasan.
+  const selectedKelasName = getSelectedClassName(
+    scoreClass,
+    kelasOptions
+  );
 
-  const selectedMapelName = subject
-    ? mapelOptions.find(
-        (mapel) => String(mapel.id) === String(subject)
-      )?.nama_mapel || "-"
-    : "Belum dipilih";
+  // Nama mata pelajaran yang sedang dipilih untuk ringkasan.
+  const selectedMapelName = getSelectedSubjectName(
+    subject,
+    mapelOptions
+  );
 
   return (
     <section className="input-data-card">
+      {/* =================================================
+          HEADER
+          ================================================= */}
       <div className="input-section-header">
         <div>
           <h5 className="fw-bold mb-1">
@@ -83,10 +120,16 @@ function ScoreSection({
         </div>
       </div>
 
-      {/* Filter nilai. */}
+      {/* =================================================
+          FILTER NILAI
+          ================================================= */}
       <div className="row g-3 mb-4">
+        {/* Kelas */}
         <div className="col-12">
-          <label htmlFor="score-class" className="form-label fw-semibold">
+          <label
+            htmlFor="score-class"
+            className="form-label fw-semibold"
+          >
             Kelas
           </label>
 
@@ -94,20 +137,29 @@ function ScoreSection({
             id="score-class"
             className="form-select"
             value={scoreClass}
-            onChange={(event) => setScoreClass(event.target.value)}
+            onChange={(event) =>
+              setScoreClass(event.target.value)
+            }
           >
             <option value="">Pilih kelas</option>
 
             {kelasOptions.map((kelas) => (
-              <option key={kelas.id} value={kelas.id}>
+              <option
+                key={kelas.id}
+                value={kelas.id}
+              >
                 {kelas.nama_kelas}
               </option>
             ))}
           </select>
         </div>
 
+        {/* Mata Pelajaran */}
         <div className="col-12">
-          <label htmlFor="subject" className="form-label fw-semibold">
+          <label
+            htmlFor="subject"
+            className="form-label fw-semibold"
+          >
             Mata Pelajaran
           </label>
 
@@ -115,20 +167,31 @@ function ScoreSection({
             id="subject"
             className="form-select"
             value={subject}
-            onChange={(event) => setSubject(event.target.value)}
+            onChange={(event) =>
+              setSubject(event.target.value)
+            }
           >
-            <option value="">Pilih mata pelajaran</option>
+            <option value="">
+              Pilih mata pelajaran
+            </option>
 
             {mapelOptions.map((mapel) => (
-              <option key={mapel.id} value={mapel.id}>
+              <option
+                key={mapel.id}
+                value={mapel.id}
+              >
                 {mapel.nama_mapel}
               </option>
             ))}
           </select>
         </div>
 
+        {/* Tanggal */}
         <div className="col-12">
-          <label htmlFor="score-date" className="form-label fw-semibold">
+          <label
+            htmlFor="score-date"
+            className="form-label fw-semibold"
+          >
             Tanggal Input
           </label>
 
@@ -137,31 +200,58 @@ function ScoreSection({
             id="score-date"
             className="form-control"
             value={scoreDate}
-            onChange={(event) => setScoreDate(event.target.value)}
+            onChange={(event) =>
+              setScoreDate(event.target.value)
+            }
           />
         </div>
       </div>
 
-      {/* Ringkasan periode yang sedang dipilih. */}
+      {/* =================================================
+          RINGKASAN FILTER
+          ================================================= */}
       <div className="selected-period-info mb-4">
-        <strong>Kelas:</strong> {selectedKelasName}
-        <span className="mx-2">|</span>
-        <strong>Mapel:</strong> {selectedMapelName}
-        <span className="mx-2">|</span>
-        <strong>Tanggal:</strong> {scoreDate || "Belum dipilih"}
+        <div className="selected-period-item">
+          <strong>Kelas</strong>
+          <span>{selectedKelasName}</span>
+        </div>
+
+        <span className="selected-period-separator">|</span>
+
+        <div className="selected-period-item">
+          <strong>Mapel</strong>
+          <span>{selectedMapelName}</span>
+        </div>
+
+        <span className="selected-period-separator">|</span>
+
+        <div className="selected-period-item">
+          <strong>Tanggal</strong>
+          <span>{scoreDate || "Belum dipilih"}</span>
+        </div>
       </div>
 
-      {/* Tabel input nilai per siswa. */}
+      {/* =================================================
+          TABEL INPUT NILAI
+          ================================================= */}
       <form onSubmit={onSubmit}>
-        <div className="table-responsive">
+        <div className="table-responsive input-table-wrapper">
           <table className="table align-middle score-table">
             <thead>
               <tr>
-                <th style={{ width: "60px" }}>No</th>
-                <th style={{ minWidth: "220px" }}>Nama Siswa</th>
+                <th className="score-number-column">
+                  No
+                </th>
+
+                <th className="score-student-column">
+                  Nama Siswa
+                </th>
 
                 {scoreFields.map((field) => (
-                  <th key={field.key} style={{ minWidth: "140px" }}>
+                  <th
+                    key={field.key}
+                    className="score-value-column"
+                  >
                     {field.label}
                     <small>{field.hint}</small>
                   </th>
@@ -173,7 +263,7 @@ function ScoreSection({
               {students.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="6"
+                    colSpan={scoreFields.length + 2}
                     className="text-center text-secondary py-4"
                   >
                     Silakan pilih kelas terlebih dahulu.
@@ -182,11 +272,15 @@ function ScoreSection({
               ) : (
                 students.map((student, index) => (
                   <tr key={student.nisn}>
-                    <td>{index + 1}</td>
+                    <td>
+                      {index + 1}
+                    </td>
 
                     <td>
                       <span className="fw-semibold">
-                        {student.nama || student.nama_siswa || "-"}
+                        {student.nama ||
+                          student.nama_siswa ||
+                          "-"}
                       </span>
 
                       <small className="d-block text-secondary">
@@ -203,7 +297,10 @@ function ScoreSection({
                           max={field.max}
                           step={field.step}
                           placeholder={field.placeholder}
-                          value={scores[student.nisn]?.[field.key] || ""}
+                          value={
+                            scores[student.nisn]?.[field.key] ??
+                            ""
+                          }
                           onChange={(event) =>
                             onScoreChange(
                               student.nisn,
@@ -221,17 +318,22 @@ function ScoreSection({
           </table>
         </div>
 
+        {/* Ringkasan jumlah data yang akan disimpan. */}
         <div className="score-summary">
-          {students.length} siswa • {students.length * 4} nilai yang akan
+          {students.length} siswa •{" "}
+          {students.length * scoreFields.length} nilai yang akan
           disimpan
         </div>
 
+        {/* Tombol submit */}
         <button
           type="submit"
           className="btn btn-primary mt-4"
           disabled={loading}
         >
-          {loading ? "Menyimpan..." : "Simpan Data Nilai"}
+          {loading
+            ? "Menyimpan..."
+            : "Simpan Data Nilai"}
         </button>
       </form>
     </section>
