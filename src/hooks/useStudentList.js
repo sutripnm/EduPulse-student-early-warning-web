@@ -16,14 +16,38 @@ function useStudentList() {
   const [totalStudents, setTotalStudents] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
   const [search, setSearch] = useState("");
   const [classFilter, setClassFilter] = useState("");
   const [riskFilter, setRiskFilter] = useState("");
+
   const [kelasOptions, setKelasOptions] = useState([]);
   const [page, setPage] = useState(1);
   const [highRiskStudents, setHighRiskStudents] = useState([]);
 
+  // Jumlah siswa yang ditampilkan setiap halaman.
   const pageSize = 10;
+
+  /**
+   * Menghitung jumlah halaman berdasarkan jumlah seluruh siswa.
+   */
+  const totalPages = Math.max(
+    1,
+    Math.ceil(totalStudents / pageSize)
+  );
+
+  /**
+   * Berpindah ke halaman tertentu.
+   * Nilai halaman dibatasi agar tidak melebihi halaman pertama/terakhir.
+   */
+  const goToPage = (nextPage) => {
+    const targetPage = Math.min(
+      Math.max(1, Number(nextPage)),
+      totalPages
+    );
+
+    setPage(targetPage);
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -110,7 +134,7 @@ function useStudentList() {
     let isMounted = true;
 
     /**
-     * Mengambil sampai 10 siswa berisiko tinggi untuk ringkasan halaman.
+     * Mengambil maksimal 10 siswa berisiko tinggi.
      */
     const fetchHighRisk = async () => {
       try {
@@ -144,7 +168,7 @@ function useStudentList() {
   }, [classFilter, search]);
 
   /**
-   * Mengubah pencarian dan mengembalikan pagination ke halaman pertama.
+   * Mengubah pencarian dan kembali ke halaman pertama.
    */
   const handleSearchChange = (value) => {
     setSearch(value);
@@ -152,7 +176,7 @@ function useStudentList() {
   };
 
   /**
-   * Mengubah filter kelas dan mengembalikan pagination ke halaman pertama.
+   * Mengubah filter kelas dan kembali ke halaman pertama.
    */
   const handleClassChange = (value) => {
     setClassFilter(value);
@@ -160,7 +184,7 @@ function useStudentList() {
   };
 
   /**
-   * Mengubah filter risiko dan mengembalikan pagination ke halaman pertama.
+   * Mengubah filter risiko dan kembali ke halaman pertama.
    */
   const handleRiskChange = (value) => {
     setRiskFilter(value);
@@ -172,17 +196,25 @@ function useStudentList() {
     totalStudents,
     loading,
     error,
+
     search,
     setSearch,
+
     classFilter,
     setClassFilter,
+
     riskFilter,
     setRiskFilter,
+
     kelasOptions,
+
     page,
-    setPage,
     pageSize,
+    totalPages,
+    goToPage,
+
     highRiskStudents,
+
     handleSearchChange,
     handleClassChange,
     handleRiskChange,
