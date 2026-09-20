@@ -136,15 +136,7 @@
    BUTTON
 ========================= */
 
-.input-data-card .btn-primary {
-  background-color: var(--edupulse-primary);
-  border-color: var(--edupulse-primary);
-}
 
-.input-data-card .btn-primary:hover {
-  background-color: var(--edupulse-primary-hover);
-  border-color: var(--edupulse-primary-hover);
-}
 
 /* =========================================================
    INPUT NILAI & ABSENSI - TWO COLUMN LAYOUT

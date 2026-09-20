@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
+/** Komponen atau fungsi PerformanceTrendChart yang menangani bagian UI terkait. */
 function PerformanceTrendChart({ data }) {
   // Ambil warna garis chart langsung dari CSS variable tema (theme.css),
   // biar warnanya ikut berubah kalau tema/palet warna diubah, tanpa

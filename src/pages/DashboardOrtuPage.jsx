@@ -20,6 +20,7 @@ import useParentDashboard from "../hooks/useParentDashboard";
 import { getRiskLabel } from "../utils/risk";
 import ComparisonCard from "../components/dashboard-ortu/ComparisonCard";
 
+/** Menampilkan halaman DashboardOrtu EduPulse. */
 function DashboardOrtuPage() {
   // Semua data dashboard (profil, grafik mingguan, komparasi bulanan,
   // rekomendasi) + status loading/dummy ada di sini.

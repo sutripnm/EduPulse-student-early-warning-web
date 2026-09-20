@@ -5,6 +5,7 @@ import {
   FiCheckCircle,
 } from "react-icons/fi";
 
+/** Komponen atau fungsi KpiCards yang menangani bagian UI terkait. */
 function KpiCards({ dashboardData }) {
   return (
     <section className="row g-3 mb-4">

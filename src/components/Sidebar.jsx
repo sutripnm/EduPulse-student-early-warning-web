@@ -1,7 +1,4 @@
-import { useEffect, useState } from "react";
-import { getCurrentUser } from "../services/api";
 import { NavLink, useNavigate } from "react-router-dom";
-
 import {
   BsChevronLeft,
   BsChevronRight,
@@ -9,110 +6,42 @@ import {
 } from "react-icons/bs";
 
 import logo from "../assets/gemini-svg.svg";
-
 import "../styles/sidebar.css";
 
 import useSidebar from "../hooks/useSidebar";
+import useCurrentUser from "../hooks/useCurrentUser";
 
-import {
-  getSidebarMenuItems,
-} from "../data/sidebarMenuItems";
+import { getSidebarMenuItems } from "../data/sidebarMenuItems";
 
+/**
+ * Menampilkan sidebar navigasi sesuai role pengguna dan menangani logout.
+ */
 function Sidebar() {
-  const {
-    collapsed,
-    toggleCollapsed,
-  } = useSidebar();
-
+  const { collapsed, toggleCollapsed } = useSidebar();
+  const { user: currentUser } = useCurrentUser();
   const navigate = useNavigate();
 
-  const [currentUser, setCurrentUser] =
-    useState(null);
+  const role = currentUser?.role;
+  const studentNisn = localStorage.getItem("nisn");
+  const visibleMenuItems = getSidebarMenuItems(role, studentNisn);
 
-  // =========================
-  // USER LOGIN
-  // =========================
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const result =
-          await getCurrentUser();
-
-        const user =
-          result?.data || result;
-
-        console.log(
-          "USER SIDEBAR:",
-          user
-        );
-
-        console.log(
-          "ROLE SIDEBAR:",
-          user?.role
-        );
-
-        setCurrentUser(user);
-      } catch (error) {
-        console.error(
-          "Gagal mengambil data user:",
-          error.response?.data ||
-            error.message
-        );
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  // =========================
-  // ROLE & NISN
-  // =========================
-
-  const role =
-    currentUser?.role;
-
-  const studentNisn =
-    localStorage.getItem("nisn");
-
-  // =========================
-  // MENU SESUAI ROLE
-  // =========================
-
-  const visibleMenuItems =
-    getSidebarMenuItems(
-      role,
-      studentNisn
-    );
-
-  // =========================
-  // LOGOUT
-  // =========================
-
+  /**
+   * Menghapus session lokal lalu kembali ke halaman login.
+   */
   const handleLogout = () => {
-    localStorage.removeItem(
-      "accessToken"
-    );
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    localStorage.removeItem("nisn");
+    localStorage.removeItem("role");
+    localStorage.removeItem("user");
 
-    localStorage.removeItem(
-      "refreshToken"
-    );
-
-    localStorage.removeItem(
-      "nisn"
-    );
-
-    navigate("/login", {
-      replace: true,
-    });
+    navigate("/login", { replace: true });
   };
 
   return (
     <aside
       className={`sidebar d-flex flex-column ${
-        collapsed
-          ? "sidebar-collapsed"
-          : ""
+        collapsed ? "sidebar-collapsed" : ""
       }`}
     >
       {/* Floating Toggle Button */}
@@ -120,43 +49,23 @@ function Sidebar() {
         type="button"
         className="sidebar-toggle"
         onClick={toggleCollapsed}
-        aria-label={
-          collapsed
-            ? "Expand sidebar"
-            : "Collapse sidebar"
-        }
-        title={
-          collapsed
-            ? "Buka Sidebar"
-            : "Tutup Sidebar"
-        }
+        aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+        title={collapsed ? "Buka Sidebar" : "Tutup Sidebar"}
       >
-        {collapsed ? (
-          <BsChevronRight />
-        ) : (
-          <BsChevronLeft />
-        )}
+        {collapsed ? <BsChevronRight /> : <BsChevronLeft />}
       </button>
 
       {/* Header */}
       <div className="sidebar-header">
         <div className="sidebar-brand-card">
           <div className="sidebar-logo">
-            <img
-              src={logo}
-              alt="EduPulse Logo"
-            />
+            <img src={logo} alt="EduPulse Logo" />
           </div>
 
           <div className="sidebar-brand-text">
             <strong className="brand-title">
-              <span className="text-edu">
-                Edu
-              </span>
-
-              <span className="text-pulse">
-                Pulse
-              </span>
+              <span className="text-edu">Edu</span>
+              <span className="text-pulse">Pulse</span>
             </strong>
 
             <span className="brand-subtitle">
@@ -168,34 +77,22 @@ function Sidebar() {
 
       {/* Navigation */}
       <nav className="sidebar-menu">
-        {visibleMenuItems.map(
-          (item) => (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              data-tooltip={
-                item.label
-              }
-              className={({
-                isActive,
-              }) =>
-                `sidebar-link ${
-                  isActive
-                    ? "active"
-                    : ""
-                }`
-              }
-            >
-              <span className="sidebar-link-icon">
-                <item.icon />
-              </span>
+        {visibleMenuItems.map((item) => (
+          <NavLink
+            key={item.to}
+            to={item.to}
+            data-tooltip={item.label}
+            className={({ isActive }) =>
+              `sidebar-link ${isActive ? "active" : ""}`
+            }
+          >
+            <span className="sidebar-link-icon">
+              <item.icon />
+            </span>
 
-              <span className="sidebar-link-text">
-                {item.label}
-              </span>
-            </NavLink>
-          )
-        )}
+            <span className="sidebar-link-text">{item.label}</span>
+          </NavLink>
+        ))}
       </nav>
 
       {/* Logout */}
@@ -210,9 +107,7 @@ function Sidebar() {
             <BsBoxArrowRight />
           </span>
 
-          <span className="sidebar-link-text">
-            Logout
-          </span>
+          <span className="sidebar-link-text">Logout</span>
         </button>
       </div>
     </aside>

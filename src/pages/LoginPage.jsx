@@ -3,6 +3,7 @@ import LoginBrandPanel from "../components/login/LoginBrandPanel";
 import LoginForm from "../components/login/LoginForm";
 import useLogin from "../hooks/useLogin";
 
+/** Menampilkan halaman Login EduPulse. */
 function LoginPage() {
   // State email/password + fungsi submit login ada di useLogin, biar
   // halaman ini tinggal merakit LoginBrandPanel + LoginForm.

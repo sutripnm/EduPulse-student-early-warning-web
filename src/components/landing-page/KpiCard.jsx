@@ -1,3 +1,4 @@
+/** Komponen atau fungsi KpiCard yang menangani bagian UI terkait. */
 export default function KpiCard({ label, value, note, icon: Icon, textClass = "" }) {
   return (
     <div className="landing-kpi-card">

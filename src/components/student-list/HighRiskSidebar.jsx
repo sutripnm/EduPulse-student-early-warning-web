@@ -7,6 +7,7 @@ function getKelasName(student) {
     : student.kelas || "-";
 }
 
+/** Komponen atau fungsi HighRiskSidebar yang menangani bagian UI terkait. */
 function HighRiskSidebar({ students }) {
   return (
     <section className="risk-student-card">

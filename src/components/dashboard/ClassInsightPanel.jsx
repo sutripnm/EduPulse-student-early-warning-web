@@ -19,6 +19,7 @@ function RankedClassList({ items, colorClass }) {
   ));
 }
 
+/** Komponen atau fungsi ClassInsightPanel yang menangani bagian UI terkait. */
 function ClassInsightPanel({ highRiskClasses, lowRiskClasses }) {
   return (
     <div className="dashboard-box today-summary h-100">

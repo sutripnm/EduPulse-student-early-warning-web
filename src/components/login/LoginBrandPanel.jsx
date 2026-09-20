@@ -5,6 +5,7 @@ import {
 } from "react-icons/bs";
 import logo from "../../assets/gemini-svg.svg";
 
+/** Komponen atau fungsi LoginBrandPanel yang menangani bagian UI terkait. */
 function LoginBrandPanel() {
   return (
     <div className="col-lg-6 login-brand p-5 d-flex flex-column">

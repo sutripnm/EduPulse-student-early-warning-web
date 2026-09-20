@@ -5,6 +5,7 @@ import "../styles/academic-settings-page.css";
 import useAcademicSettings from "../hooks/useAcademicSettings";
 import AcademicCrudCard from "../components/academic-settings/AcademicCrudCard";
 
+/** Menampilkan halaman AcademicSettings EduPulse. */
 function AcademicSettingsPage() {
   // Semua data (daftar mapel & kelas) dan fungsi CRUD-nya (create/update/
   // delete) datang dari sini, supaya AcademicCrudCard di bawah cuma perlu

@@ -6,6 +6,7 @@ import ProfileCard from "../components/settings/ProfileCard";
 import SchoolSettingsCard from "../components/settings/SchoolSettingsCard";
 import ThemeCard from "../components/settings/ThemeCard";
 
+/** Menampilkan halaman Settings EduPulse. */
 function SettingsPage() {
   // Data user + tahun ajaran/semester aktif (read-only di halaman ini),
   // plus status loading/error dari fetch-nya.

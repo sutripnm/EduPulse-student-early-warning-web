@@ -10,6 +10,7 @@ import ClassInsightPanel from "../components/dashboard/ClassInsightPanel";
 import SchoolAnalyticsSection from "../components/dashboard/SchoolAnalyticsSection";
 import DashboardFilterBar from "../components/dashboard/DashboardFilterBar";
 
+/** Menampilkan halaman Dashboard EduPulse. */
 function DashboardPage() {
   // Semua data dashboard (KPI, tren performa, data risiko per kelas, dst)
   // plus state filter kelas/mapel yang dipakai bareng oleh beberapa

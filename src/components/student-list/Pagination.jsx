@@ -1,5 +1,6 @@
 import { BsChevronLeft, BsChevronRight } from "react-icons/bs";
 
+/** Komponen atau fungsi Pagination yang menangani bagian UI terkait. */
 function Pagination({ page, totalPages, onPageChange }) {
   if (totalPages <= 1) {
     return null;

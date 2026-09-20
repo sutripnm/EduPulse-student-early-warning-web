@@ -26,15 +26,7 @@
   box-shadow: 0 0 0 0.15rem rgba(111, 99, 168, 0.12);
 }
 
-.academic-settings-card .btn-primary {
-  background-color: var(--edupulse-primary);
-  border-color: var(--edupulse-primary);
-}
 
-.academic-settings-card .btn-primary:hover {
-  background-color: var(--edupulse-primary-hover);
-  border-color: var(--edupulse-primary-hover);
-}
 
 .academic-settings-card .table th {
   font-weight: 600;

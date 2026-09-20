@@ -1,3 +1,4 @@
+/** Komponen atau fungsi AddStudentForm yang menangani bagian UI terkait. */
 function AddStudentForm({
   formData,
   onChange,

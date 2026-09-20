@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BsBuildingFill } from "react-icons/bs";
 
+/** Komponen atau fungsi SchoolSettingsCard yang menangani bagian UI terkait. */
 function SchoolSettingsCard({
   activeTahunAjaran,
   activeSemester,

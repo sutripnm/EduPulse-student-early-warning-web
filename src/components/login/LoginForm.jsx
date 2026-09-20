@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BsArrowRight, BsArrowLeft } from "react-icons/bs";
 
+/** Komponen atau fungsi LoginForm yang menangani bagian UI terkait. */
 function LoginForm({ email, setEmail, password, setPassword, onSubmit }) {
   return (
     <div className="col-lg-6 login-form p-5 d-flex align-items-center">

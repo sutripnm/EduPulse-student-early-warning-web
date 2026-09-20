@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 
+/** Komponen atau fungsi ErrorState yang menangani bagian UI terkait. */
 function ErrorState({ message, backTo, backLabel }) {
   return (
     <>

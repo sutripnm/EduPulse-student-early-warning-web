@@ -1,3 +1,4 @@
+/** Komponen atau fungsi StudentFilterBar yang menangani bagian UI terkait. */
 function StudentFilterBar({
   search,
   setSearch,

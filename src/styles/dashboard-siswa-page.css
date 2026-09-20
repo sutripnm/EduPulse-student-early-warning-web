@@ -2,7 +2,6 @@
   min-height: 100vh;
   background-color: var(--edupulse-bg);
   color: var(--edupulse-text);
-
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -12,63 +11,6 @@
   min-width: 0;
 }
 
-.dashboard-siswa-box {
-  padding: 20px;
-
-  background-color: var(--edupulse-surface);
-  color: var(--edupulse-text);
-
-  border: 1px solid var(--edupulse-border);
-  border-radius: 18px;
-
-  box-shadow: var(--edupulse-card-shadow);
-
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    color 0.3s ease;
-}
-
-.siswa-profile-chip {
-  background-color: var(--edupulse-primary);
-  color: #ffffff;
-
-  border-radius: 20px;
-  padding: 6px 16px;
-
-  display: flex;
-  flex-direction: column;
-
-  min-width: 110px;
-}
-
-.siswa-profile-chip small {
-  font-size: 11px;
-  opacity: 0.85;
-}
-
-.siswa-profile-chip strong {
-  font-size: 14px;
-}
-
-/* =========================
-   STATUS RISK
-   ========================= */
-
-.siswa-profile-chip.risk-high {
-  background-color: var(--edupulse-danger);
-}
-
-.siswa-profile-chip.risk-medium {
-  background-color: var(--edupulse-warning);
-  color: #ffffff;
-}
-
-.siswa-profile-chip.risk-low {
-  background-color: var(--edupulse-success);
-}
-
 /* =========================
    ABSENSI
    ========================= */
@@ -76,11 +18,8 @@
 .absensi-chip {
   min-width: 56px;
   padding: 8px 6px;
-
   border-radius: 12px;
-
   text-align: center;
-
   background-color: var(--edupulse-primary-soft);
   color: var(--edupulse-primary);
 }
@@ -105,121 +44,3 @@
   background-color: var(--edupulse-danger-soft);
   color: var(--edupulse-danger);
 }
-
-/* =========================
-   REKOMENDASI
-   ========================= */
-
-.risk-recommendation-box {
-  min-height: 120px;
-}
-
-/* =========================================================
-   MAPEL RISK BUTTON
-   ========================================================= */
-
-.mapel-risk-button {
-  border-radius: 10px;
-  padding: 8px 16px;
-  font-weight: 600;
-
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease;
-}
-
-/* LOW */
-
-.mapel-risk-low {
-  color: var(--edupulse-success);
-  border-color: var(--edupulse-success);
-  background-color: transparent;
-}
-
-.mapel-risk-low:hover,
-.mapel-risk-low.active {
-  background-color: var(--edupulse-success);
-  border-color: var(--edupulse-success);
-  color: #ffffff;
-}
-
-/* MEDIUM */
-
-.mapel-risk-medium {
-  color: var(--edupulse-warning);
-  border-color: var(--edupulse-warning);
-  background-color: transparent;
-}
-
-.mapel-risk-medium:hover,
-.mapel-risk-medium.active {
-  background-color: var(--edupulse-warning);
-  border-color: var(--edupulse-warning);
-  color: #ffffff;
-}
-
-/* HIGH */
-
-.mapel-risk-high {
-  color: var(--edupulse-danger);
-  border-color: var(--edupulse-danger);
-  background-color: transparent;
-}
-
-.mapel-risk-high:hover,
-.mapel-risk-high.active {
-  background-color: var(--edupulse-danger);
-  border-color: var(--edupulse-danger);
-  color: #ffffff;
-}
-
-.mapel-risk-button {
-  border-radius: 10px;
-  padding: 8px 16px;
-  font-weight: 600;
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
-}
-
-.mapel-risk-high {
-  color: var(--edupulse-danger);
-  border-color: var(--edupulse-danger);
-  background-color: transparent;
-}
-
-.mapel-risk-high:hover,
-.mapel-risk-high.active {
-  background-color: var(--edupulse-danger);
-  border-color: var(--edupulse-danger);
-  color: #ffffff;
-}
-
-.mapel-risk-medium {
-  color: var(--edupulse-warning);
-  border-color: var(--edupulse-warning);
-  background-color: transparent;
-}
-
-.mapel-risk-medium:hover,
-.mapel-risk-medium.active {
-  background-color: var(--edupulse-warning);
-  border-color: var(--edupulse-warning);
-  color: #ffffff;
-}
-
-.mapel-risk-low {
-  color: var(--edupulse-success);
-  border-color: var(--edupulse-success);
-  background-color: transparent;
-}
-
-.mapel-risk-low:hover,
-.mapel-risk-low.active {
-  background-color: var(--edupulse-success);
-  border-color: var(--edupulse-success);
-  color: #ffffff;
-} 

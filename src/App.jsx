@@ -13,6 +13,7 @@ import AcademicSettingsPage from "./pages/AcademicSettingsPage";
 import DashboardSiswaPage from "./pages/DashboardSiswaPage";
 import DashboardOrtuPage from "./pages/DashboardOrtuPage";
 
+/** Komponen atau fungsi App yang menangani bagian UI terkait. */
 function App() {
   useTheme();
 

@@ -7,6 +7,7 @@ import StudentTable from "../components/student-list/StudentTable";
 import HighRiskSidebar from "../components/student-list/HighRiskSidebar";
 import Pagination from "../components/student-list/Pagination";
 
+/** Menampilkan halaman StudentList EduPulse. */
 function StudentListPage() {
   // Data siswa (sudah terfilter+dipaginasi), state filter (search/kelas/
   // risiko), dan state pagination — semuanya dikelola di useStudentList
@@ -29,10 +30,6 @@ function StudentListPage() {
     highRiskStudents,
   } = useStudentList();
 
-  console.log(
-  "KELAS OPTIONS:",
-  kelasOptions
-);
 
   return (
     <main className="student-list-page d-flex">

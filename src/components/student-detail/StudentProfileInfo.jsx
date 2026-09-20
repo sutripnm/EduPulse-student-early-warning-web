@@ -1,5 +1,6 @@
 import { BsPersonFill } from "react-icons/bs";
 
+/** Komponen atau fungsi StudentProfileInfo yang menangani bagian UI terkait. */
 function StudentProfileInfo({ student }) {
   const profile = student?.profil_siswa;
 

@@ -16,6 +16,7 @@ function useTheme() {
     localStorage.setItem("theme", theme);
   }, [theme]);
 
+  /** Mengubah state menggunakan fungsi setTheme. */
   const setTheme = (newTheme) => {
     setThemeState(newTheme);
   };

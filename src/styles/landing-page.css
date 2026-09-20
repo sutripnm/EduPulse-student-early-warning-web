@@ -60,7 +60,7 @@ html {
   box-shadow: 0 4px 18px rgba(52, 52, 61, 0.06);
 }
 
-.navbar-menu {
+.landing-page .navbar-menu {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -73,7 +73,7 @@ html {
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
 }
 
-.navbar-menu a {
+.landing-page .navbar-menu a {
   position: relative;
   padding: 8px 16px;
   border-radius: 10px;
@@ -84,7 +84,7 @@ html {
   transition: color 0.25s ease, background-color 0.25s ease, transform 0.25s ease;
 }
 
-.navbar-menu a:hover {
+.landing-page .navbar-menu a:hover {
   color: var(--edupulse-primary) !important;
   transform: translateY(-2px);
   background-color: var(--edupulse-primary-soft);
@@ -408,7 +408,7 @@ html {
    9. RESPONSIVE BREAKPOINTS
    ========================================== */
 @media (max-width: 991.98px) {
-  .navbar-menu {
+  .landing-page .navbar-menu {
     margin-left: 0;
   }
 }

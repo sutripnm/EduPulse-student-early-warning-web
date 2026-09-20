@@ -15,6 +15,7 @@ function useAcademicCrudForm({ type, title, onCreate, onUpdate, onDelete }) {
 
   const [saving, setSaving] = useState(false);
 
+  /** Membuka atau menyiapkan form melalui openAddForm. */
   const openAddForm = () => {
     setEditingId(null);
     setKodeMapel("");
@@ -22,6 +23,7 @@ function useAcademicCrudForm({ type, title, onCreate, onUpdate, onDelete }) {
     setShowForm(true);
   };
 
+  /** Membuka atau menyiapkan form melalui openEditForm. */
   const openEditForm = (item) => {
     setEditingId(item.id);
 
@@ -35,6 +37,7 @@ function useAcademicCrudForm({ type, title, onCreate, onUpdate, onDelete }) {
     setShowForm(true);
   };
 
+  /** Membatalkan proses form melalui cancelForm. */
   const cancelForm = () => {
     setShowForm(false);
     setEditingId(null);
@@ -42,6 +45,7 @@ function useAcademicCrudForm({ type, title, onCreate, onUpdate, onDelete }) {
     setNama("");
   };
 
+  /** Menangani aksi pengguna melalui handleSubmit. */
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -75,6 +79,7 @@ function useAcademicCrudForm({ type, title, onCreate, onUpdate, onDelete }) {
     }
   };
 
+  /** Menangani aksi pengguna melalui handleDelete. */
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
       `Yakin ingin menghapus ${title.toLowerCase()} ini?`

@@ -6,280 +6,186 @@ import {
   getHighRiskStudents,
 } from "../services/api";
 
+import { filterValidKelas } from "../utils/academic";
+
+/**
+ * Mengelola daftar siswa, filter, pagination, dan daftar siswa berisiko tinggi.
+ */
 function useStudentList() {
-  const [students, setStudents] =
-    useState([]);
-
-  const [totalStudents, setTotalStudents] =
-    useState(0);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [error, setError] =
-    useState(false);
-
-  const [search, setSearch] =
-    useState("");
-
-  const [classFilter, setClassFilter] =
-    useState("");
-
-  const [riskFilter, setRiskFilter] =
-    useState("");
-
-  const [kelasOptions, setKelasOptions] =
-    useState([]);
-
-  const [page, setPage] =
-    useState(1);
-
-  const [highRiskStudents, setHighRiskStudents] =
-    useState([]);
+  const [students, setStudents] = useState([]);
+  const [totalStudents, setTotalStudents] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+  const [search, setSearch] = useState("");
+  const [classFilter, setClassFilter] = useState("");
+  const [riskFilter, setRiskFilter] = useState("");
+  const [kelasOptions, setKelasOptions] = useState([]);
+  const [page, setPage] = useState(1);
+  const [highRiskStudents, setHighRiskStudents] = useState([]);
 
   const pageSize = 10;
 
-  // =========================================================
-  // DAFTAR SISWA
-  // =========================================================
-
   useEffect(() => {
-    const fetchStudents =
-      async () => {
-        setLoading(true);
-        setError(false);
+    let isMounted = true;
 
-        try {
-          console.log(
-            "=== FILTER DAFTAR SISWA ==="
-          );
+    /**
+     * Mengambil daftar siswa sesuai filter dan halaman aktif.
+     */
+    const fetchStudents = async () => {
+      setLoading(true);
+      setError(false);
 
-          console.log(
-            "Search:",
-            search
-          );
+      try {
+        const result = await getStudentRiskSummary({
+          page,
+          page_size: pageSize,
+          search: search.trim(),
+          kelas_id: classFilter,
+          risk_status: riskFilter,
+        });
 
-          console.log(
-            "Kelas ID:",
-            classFilter
-          );
+        if (!isMounted) return;
 
-          console.log(
-            "Risk:",
-            riskFilter
-          );
+        setStudents(result?.results || []);
+        setTotalStudents(result?.count || 0);
+      } catch (requestError) {
+        console.error(
+          "Gagal mengambil daftar siswa:",
+          requestError.response?.data || requestError.message
+        );
 
-          const result =
-            await getStudentRiskSummary({
-              page,
-              page_size:
-                pageSize,
-              search:
-                search.trim(),
-              kelas_id:
-                classFilter,
-              risk_status:
-                riskFilter,
-            });
+        if (!isMounted) return;
 
-          console.log(
-            "HASIL SISWA:",
-            result.results
-          );
-
-          setStudents(
-            result.results || []
-          );
-
-          setTotalStudents(
-            result.count || 0
-          );
-
-        } catch (error) {
-          console.error(
-            "Gagal mengambil daftar siswa:",
-            error.response
-              ?.data ||
-              error.message
-          );
-
-          setError(true);
-
-          setStudents([]);
-          setTotalStudents(0);
-
-        } finally {
+        setError(true);
+        setStudents([]);
+        setTotalStudents(0);
+      } finally {
+        if (isMounted) {
           setLoading(false);
         }
-      };
+      }
+    };
 
     fetchStudents();
 
-  }, [
-    page,
-    search,
-    classFilter,
-    riskFilter,
-  ]);
-
-  // =========================================================
-  // KELAS
-  // =========================================================
+    return () => {
+      isMounted = false;
+    };
+  }, [page, search, classFilter, riskFilter]);
 
   useEffect(() => {
-    const fetchClasses =
-      async () => {
-        try {
-          const result =
-            await getSchoolAnalytics({});
+    let isMounted = true;
 
-          const classes =
-            result?.data
-              ?.filter_options
-              ?.kelas || [];
+    /**
+     * Mengambil daftar kelas yang tersedia untuk filter siswa.
+     */
+    const fetchClasses = async () => {
+      try {
+        const result = await getSchoolAnalytics({});
+        const classes = result?.data?.filter_options?.kelas || [];
 
-          const cleanedClasses =
-            classes.filter(
-              (kelas) =>
-                kelas &&
-                kelas.id &&
-                kelas.nama_kelas &&
-                String(
-                  kelas.nama_kelas
-                )
-                  .trim()
-                  .toLowerCase() !==
-                  "string"
-            );
+        if (!isMounted) return;
 
-          console.log(
-            "KELAS FILTER DAFTAR SISWA:",
-            cleanedClasses
-          );
+        setKelasOptions(filterValidKelas(classes));
+      } catch (requestError) {
+        console.error(
+          "Gagal mengambil kelas untuk filter:",
+          requestError.response?.data || requestError.message
+        );
 
-          setKelasOptions(
-            cleanedClasses
-          );
-
-        } catch (error) {
-          console.error(
-            "Gagal mengambil kelas untuk filter:",
-            error.response
-              ?.data ||
-              error.message
-          );
-
+        if (isMounted) {
           setKelasOptions([]);
         }
-      };
+      }
+    };
 
     fetchClasses();
 
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // =========================================================
-  // HIGH RISK
-  // =========================================================
-
   useEffect(() => {
-    const fetchHighRisk =
-      async () => {
-        try {
-          const result =
-            await getHighRiskStudents({
-              page: 1,
-              page_size: 10,
-              kelas_id:
-                classFilter,
-              search:
-                search.trim(),
-            });
+    let isMounted = true;
 
-          setHighRiskStudents(
-            result.results || []
-          );
+    /**
+     * Mengambil sampai 10 siswa berisiko tinggi untuk ringkasan halaman.
+     */
+    const fetchHighRisk = async () => {
+      try {
+        const result = await getHighRiskStudents({
+          page: 1,
+          page_size: 10,
+          kelas_id: classFilter,
+          search: search.trim(),
+        });
 
-        } catch (error) {
-          console.error(
-            "Gagal mengambil siswa risiko tinggi:",
-            error.response
-              ?.data ||
-              error.message
-          );
+        if (!isMounted) return;
 
+        setHighRiskStudents(result?.results || []);
+      } catch (requestError) {
+        console.error(
+          "Gagal mengambil siswa risiko tinggi:",
+          requestError.response?.data || requestError.message
+        );
+
+        if (isMounted) {
           setHighRiskStudents([]);
         }
-      };
+      }
+    };
 
     fetchHighRisk();
 
-  }, [
-    classFilter,
-    search,
-  ]);
+    return () => {
+      isMounted = false;
+    };
+  }, [classFilter, search]);
 
-  // =========================================================
-  // RESET PAGE
-  // =========================================================
-
-  useEffect(() => {
+  /**
+   * Mengubah pencarian dan mengembalikan pagination ke halaman pertama.
+   */
+  const handleSearchChange = (value) => {
+    setSearch(value);
     setPage(1);
-  }, [
-    search,
-    classFilter,
-    riskFilter,
-  ]);
-
-  // =========================================================
-  // PAGINATION
-  // =========================================================
-
-  const totalPages =
-    Math.ceil(
-      totalStudents /
-        pageSize
-    );
-
-  const goToPage = (
-    newPage
-  ) => {
-    if (
-      newPage < 1 ||
-      newPage > totalPages
-    ) {
-      return;
-    }
-
-    setPage(newPage);
   };
 
-  // =========================================================
-  // RETURN
-  // =========================================================
+  /**
+   * Mengubah filter kelas dan mengembalikan pagination ke halaman pertama.
+   */
+  const handleClassChange = (value) => {
+    setClassFilter(value);
+    setPage(1);
+  };
+
+  /**
+   * Mengubah filter risiko dan mengembalikan pagination ke halaman pertama.
+   */
+  const handleRiskChange = (value) => {
+    setRiskFilter(value);
+    setPage(1);
+  };
 
   return {
     students,
     totalStudents,
-
     loading,
     error,
-
     search,
     setSearch,
-
     classFilter,
     setClassFilter,
-
     riskFilter,
     setRiskFilter,
-
     kelasOptions,
-
     page,
-    totalPages,
-    goToPage,
-
+    setPage,
+    pageSize,
     highRiskStudents,
+    handleSearchChange,
+    handleClassChange,
+    handleRiskChange,
   };
 }
 

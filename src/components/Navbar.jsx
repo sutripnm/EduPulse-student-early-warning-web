@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/gemini-svg.svg";
 import "../styles/navbar.css";
 
+/** Komponen atau fungsi Navbar yang menangani bagian UI terkait. */
 function Navbar() {
   return (
     <nav className="navbar px-4 py-3">

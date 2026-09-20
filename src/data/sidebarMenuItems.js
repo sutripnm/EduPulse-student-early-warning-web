@@ -5,14 +5,11 @@ import {
   BsGearFill,
 } from "react-icons/bs";
 
+/**
+ * Membuat daftar menu sidebar sesuai role user dan NISN terkait.
+ */
 export function getSidebarMenuItems(role, nisn) {
-  const normalizedRole = String(
-    role || ""
-  ).toUpperCase();
-
-  // =========================
-  // SISWA
-  // =========================
+  const normalizedRole = String(role || "").toUpperCase();
 
   if (normalizedRole === "SISWA") {
     return [
@@ -23,10 +20,6 @@ export function getSidebarMenuItems(role, nisn) {
       },
     ];
   }
-
-  // =========================
-  // ORANG TUA
-  // =========================
 
   if (
     normalizedRole === "ORANGTUA" ||
@@ -41,10 +34,6 @@ export function getSidebarMenuItems(role, nisn) {
     ];
   }
 
-  // =========================
-  // GURU
-  // =========================
-
   if (normalizedRole === "GURU") {
     return [
       {
@@ -52,13 +41,11 @@ export function getSidebarMenuItems(role, nisn) {
         to: "/dashboard",
         icon: BsSpeedometer2,
       },
-
       {
         label: "Daftar Siswa",
         to: "/daftar-siswa",
         icon: BsPeopleFill,
       },
-
       {
         label: "Input Nilai & Absensi",
         to: "/input-nilai-dan-absensi",
@@ -67,35 +54,32 @@ export function getSidebarMenuItems(role, nisn) {
     ];
   }
 
-  // =========================
-  // ADMIN
-  // =========================
+  if (normalizedRole === "ADMIN") {
+    return [
+      {
+        label: "Dashboard",
+        to: "/dashboard",
+        icon: BsSpeedometer2,
+      },
+      {
+        label: "Daftar Siswa",
+        to: "/daftar-siswa",
+        icon: BsPeopleFill,
+      },
+      {
+        label: "Input Nilai & Absensi",
+        to: "/input-nilai-dan-absensi",
+        icon: BsPencilSquare,
+      },
+      {
+        label: "Pengaturan",
+        to: "/pengaturan",
+        icon: BsGearFill,
+      },
+    ];
+  }
 
-  return [
-    {
-      label: "Dashboard",
-      to: "/dashboard",
-      icon: BsSpeedometer2,
-    },
-
-    {
-      label: "Daftar Siswa",
-      to: "/daftar-siswa",
-      icon: BsPeopleFill,
-    },
-
-    {
-      label: "Input Nilai & Absensi",
-      to: "/input-nilai-dan-absensi",
-      icon: BsPencilSquare,
-    },
-
-    {
-      label: "Pengaturan",
-      to: "/pengaturan",
-      icon: BsGearFill,
-    },
-  ];
+  return [];
 }
 
 export default getSidebarMenuItems;

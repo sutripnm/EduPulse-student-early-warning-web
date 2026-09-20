@@ -12,6 +12,7 @@ import StudentProfileInfo from "../components/student-detail/StudentProfileInfo"
 import StudentMetrics from "../components/student-detail/StudentMetrics";
 import RiskAnalysisCard from "../components/student-detail/RiskAnalysisCard";
 
+/** Menampilkan halaman StudentDetail EduPulse. */
 function StudentDetailPage() {
   const { id } =
     useParams();

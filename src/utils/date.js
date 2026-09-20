@@ -1,11 +1,25 @@
+/**
+ * Mengubah tanggal ISO menjadi nama hari dalam Bahasa Indonesia.
+ */
 export const getDayName = (date) => {
   if (!date) return "";
 
-  const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
+  const days = [
+    "Minggu",
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+    "Sabtu",
+  ];
 
   return days[new Date(`${date}T00:00:00`).getDay()];
 };
 
+/**
+ * Membuat daftar tanggal inklusif dari tanggal awal sampai tanggal akhir.
+ */
 export const getDateRange = (start, end) => {
   if (!start || !end) return [];
 

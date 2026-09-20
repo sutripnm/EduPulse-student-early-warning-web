@@ -32,15 +32,7 @@
   background-color: var(--edupulse-surface);
 }
 
-.settings-card .btn-primary {
-  background-color: var(--edupulse-primary);
-  border-color: var(--edupulse-primary);
-}
 
-.settings-card .btn-primary:hover {
-  background-color: var(--edupulse-primary-hover);
-  border-color: var(--edupulse-primary-hover);
-}
 
 .settings-card .form-check-input:checked {
   background-color: var(--edupulse-primary);

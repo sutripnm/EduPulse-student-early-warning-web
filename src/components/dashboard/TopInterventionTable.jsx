@@ -1,43 +1,12 @@
 import { Link } from "react-router-dom";
 import { BsClipboardCheck } from "react-icons/bs";
 
-function getRiskBadgeClass(statusRisk) {
-  const status = String(statusRisk || "").toUpperCase();
+import { getRiskBadgeClass, getRiskLabel } from "../../utils/risk";
 
-  if (status === "HIGH" || status === "TINGGI") {
-    return "risk-badge risk-high";
-  }
-
-  if (status === "MEDIUM" || status === "SEDANG") {
-    return "risk-badge risk-medium";
-  }
-
-  if (status === "LOW" || status === "RENDAH") {
-    return "risk-badge risk-low";
-  }
-
-  return "risk-badge";
-}
-
-function getRiskLabel(statusRisk) {
-  const status = String(statusRisk || "").toUpperCase();
-
-  if (status === "HIGH" || status === "TINGGI") {
-    return "HIGH";
-  }
-
-  if (status === "MEDIUM" || status === "SEDANG") {
-    return "MEDIUM";
-  }
-
-  if (status === "LOW" || status === "RENDAH") {
-    return "LOW";
-  }
-
-  return statusRisk || "-";
-}
-
-function TopInterventionTable({ students }) {
+/**
+ * Menampilkan tabel siswa dengan prioritas intervensi tertinggi.
+ */
+function TopInterventionTable({ students = [] }) {
   return (
     <section className="mt-3">
       <h6>
@@ -67,27 +36,13 @@ function TopInterventionTable({ students }) {
                   </span>
                 </td>
 
-                <td>
-                  {student.kelas || "-"}
-                </td>
+                <td>{student.kelas || "-"}</td>
+                <td>{student.nilai ?? "-"}</td>
+                <td>{student.kehadiran ?? "-"}%</td>
 
                 <td>
-                  {student.nilai ?? "-"}
-                </td>
-
-                <td>
-                  {student.kehadiran ?? "-"}%
-                </td>
-
-                <td>
-                  <span
-                    className={getRiskBadgeClass(
-                      student.status_risk
-                    )}
-                  >
-                    {getRiskLabel(
-                      student.status_risk
-                    )}
+                  <span className={getRiskBadgeClass(student.status_risk)}>
+                    {getRiskLabel(student.status_risk)}
                   </span>
                 </td>
 

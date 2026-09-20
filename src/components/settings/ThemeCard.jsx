@@ -1,5 +1,6 @@
 import { BsPaletteFill, BsSunFill, BsMoonFill } from "react-icons/bs";
 
+/** Komponen atau fungsi ThemeCard yang menangani bagian UI terkait. */
 function ThemeCard({ theme, setTheme }) {
   return (
     <section className="settings-card mb-4">

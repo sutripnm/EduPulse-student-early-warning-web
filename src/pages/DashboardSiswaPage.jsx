@@ -21,6 +21,7 @@ const HARI_LIST = [
   "Jumat",
 ];
 
+/** Menampilkan halaman DashboardSiswa EduPulse. */
 function DashboardSiswaPage() {
   const {
     studentNisn,

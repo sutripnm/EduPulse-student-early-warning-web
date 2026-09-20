@@ -336,30 +336,6 @@
   color: var(--edupulse-text-muted);
 }
 
-/* =========================================================
-   DARK MODE
-   Sidebar tetap ungu sebagai brand utama
-   ========================================================= */
-
-[data-theme="dark"] .sidebar-brand-card {
-  background-color: var(--edupulse-surface);
-  box-shadow:
-    inset 0 0 0 1px var(--edupulse-border),
-    0 4px 12px rgba(0, 0, 0, 0.18);
-}
-
-[data-theme="dark"] .brand-title .text-edu {
-  color: var(--edupulse-text);
-}
-
-[data-theme="dark"] .brand-title .text-pulse {
-  color: var(--edupulse-primary);
-}
-
-[data-theme="dark"] .brand-subtitle {
-  color: var(--edupulse-text-muted);
-}
-
 [data-theme="dark"] .sidebar-toggle {
   background-color: var(--edupulse-surface);
   color: var(--edupulse-primary);
@@ -370,17 +346,6 @@
 [data-theme="dark"] .sidebar-toggle:hover {
   background-color: var(--edupulse-primary);
   color: #ffffff;
-}
-
-[data-theme="dark"] .sidebar-link.active {
-  color: var(--edupulse-primary);
-  background-color: var(--edupulse-surface);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
-}
-
-[data-theme="dark"] .sidebar-link.active:hover {
-  color: var(--edupulse-primary);
-  background-color: var(--edupulse-surface);
 }
 
 [data-theme="dark"] .sidebar-link.active {

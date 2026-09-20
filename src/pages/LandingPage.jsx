@@ -6,9 +6,10 @@ import ProcessCard from "../components/landing-page/ProcessCard";
 import { KPI_DATA, FEATURES_DATA, PROCESS_DATA } from "../data/landingData";
 import "../styles/landing-page.css";
 
+/** Menampilkan landing page publik EduPulse. */
 function LandingPage() {
   return (
-    <main>
+    <main className="landing-page">
       <Navbar />
 
       {/* HERO SECTION */}

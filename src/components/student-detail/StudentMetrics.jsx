@@ -3,6 +3,7 @@ import {
   getRiskBadgeClass,
 } from "../../utils/risk";
 
+/** Komponen atau fungsi StudentMetrics yang menangani bagian UI terkait. */
 function StudentMetrics({ student }) {
   const metrics = student?.metrik_kinerja;
   const analysis = student?.analisis_ews;

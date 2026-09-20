@@ -1,9 +1,7 @@
 .dashboard-ortu-page {
   min-height: 100vh;
-
   background-color: var(--edupulse-bg);
   color: var(--edupulse-text);
-
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
@@ -13,70 +11,6 @@
   min-width: 0;
 }
 
-.dashboard-ortu-box {
-  padding: 20px;
-
-  background-color: var(--edupulse-surface);
-  color: var(--edupulse-text);
-
-  border: 1px solid var(--edupulse-border);
-  border-radius: 18px;
-
-  box-shadow: var(--edupulse-card-shadow);
-
-  transition:
-    background-color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease,
-    color 0.3s ease;
-}
-
 .chart-box {
   min-height: 220px;
-}
-
-.ortu-profile-chip {
-  background-color: var(--edupulse-primary);
-  color: #ffffff;
-
-  border-radius: 20px;
-  padding: 6px 16px;
-
-  display: flex;
-  flex-direction: column;
-
-  min-width: 110px;
-}
-
-.ortu-profile-chip small {
-  font-size: 11px;
-  opacity: 0.85;
-}
-
-.ortu-profile-chip strong {
-  font-size: 14px;
-}
-
-/* =========================
-   STATUS RISK
-   ========================= */
-
-.ortu-profile-chip.risk-high {
-  background-color: var(--edupulse-danger);
-}
-
-.ortu-profile-chip.risk-medium {
-  background-color: var(--edupulse-warning);
-  color: #ffffff;
-}
-
-.ortu-profile-chip.risk-low {
-  background-color: var(--edupulse-success);
-}
-
-.risk-recommendation-box {
-  min-height: 120px;
-
-  background-color: var(--edupulse-surface);
-  color: var(--edupulse-text);
 }

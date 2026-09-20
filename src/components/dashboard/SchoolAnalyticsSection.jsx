@@ -14,6 +14,7 @@ import {
 } from "recharts";
 import { riskFactorColors } from "../../utils/dashboardColors";
 
+/** Komponen atau fungsi SchoolAnalyticsSection yang menangani bagian UI terkait. */
 function SchoolAnalyticsSection({
   riskByClassData,
   riskFactorData,

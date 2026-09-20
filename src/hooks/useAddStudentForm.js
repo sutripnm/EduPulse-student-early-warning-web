@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  createStudent,
-  getKelas,
-} from "../services/api";
+import { createStudent, getKelas } from "../services/api";
 
+/**
+ * Mengelola form tambah siswa, opsi kelas, validasi, dan submit API.
+ */
 function useAddStudentForm() {
   const navigate = useNavigate();
 
   const [kelasOptions, setKelasOptions] = useState([]);
-
   const [formData, setFormData] = useState({
     nisn: "",
     nama: "",
@@ -18,96 +17,84 @@ function useAddStudentForm() {
     first_name_orang_tua: "",
     last_name_orang_tua: "",
   });
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // =========================
-  // GET KELAS
-  // =========================
-
   useEffect(() => {
+    let isMounted = true;
+
+    /**
+     * Mengambil kelas valid untuk dropdown siswa baru.
+     */
     const fetchKelas = async () => {
       try {
         const result = await getKelas();
 
-        setKelasOptions(
-          result.results || []
-        );
-      } catch (error) {
+        if (isMounted) {
+          setKelasOptions(result?.results || []);
+        }
+      } catch (requestError) {
         console.error(
           "Gagal mengambil kelas:",
-          error.response?.data ||
-            error.message
+          requestError.response?.data || requestError.message
         );
 
-        setError(
-          "Gagal mengambil daftar kelas."
-        );
+        if (isMounted) {
+          setError("Gagal mengambil daftar kelas.");
+        }
       }
     };
 
     fetchKelas();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  // =========================
-  // CHANGE
-  // =========================
-
+  /**
+   * Memperbarui satu field form tanpa menimpa field lainnya.
+   */
   const handleChange = (event) => {
     const { name, value } = event.target;
 
-    setFormData((prev) => ({
-      ...prev,
+    setFormData((previous) => ({
+      ...previous,
       [name]: value,
     }));
   };
 
-  // =========================
-  // SUBMIT
-  // =========================
-
+  /**
+   * Memvalidasi data lalu membuat siswa baru melalui API.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
-
     setError("");
 
-    // Validasi
-    if (!formData.nisn.trim()) {
-      setError("NISN wajib diisi.");
-      return;
-    }
+    const requiredFields = [
+      ["nisn", "NISN wajib diisi."],
+      ["nama", "Nama siswa wajib diisi."],
+      ["gender", "Silakan pilih gender."],
+      ["kelas_id", "Silakan pilih kelas."],
+      [
+        "first_name_orang_tua",
+        "Nama depan orang tua wajib diisi.",
+      ],
+      [
+        "last_name_orang_tua",
+        "Nama belakang orang tua wajib diisi.",
+      ],
+    ];
 
-    if (!formData.nama.trim()) {
-      setError("Nama siswa wajib diisi.");
-      return;
-    }
+    const invalidField = requiredFields.find(([field]) => {
+      const value = formData[field];
+      return typeof value === "string"
+        ? !value.trim()
+        : !value;
+    });
 
-    if (!formData.gender) {
-      setError("Silakan pilih gender.");
-      return;
-    }
-
-    if (!formData.kelas_id) {
-      setError("Silakan pilih kelas.");
-      return;
-    }
-
-    if (
-      !formData.first_name_orang_tua.trim()
-    ) {
-      setError(
-        "Nama depan orang tua wajib diisi."
-      );
-      return;
-    }
-
-    if (
-      !formData.last_name_orang_tua.trim()
-    ) {
-      setError(
-        "Nama belakang orang tua wajib diisi."
-      );
+    if (invalidField) {
+      setError(invalidField[1]);
       return;
     }
 
@@ -116,42 +103,24 @@ function useAddStudentForm() {
       nama: formData.nama.trim(),
       gender: formData.gender,
       kelas_id: Number(formData.kelas_id),
-      first_name_orang_tua:
-        formData.first_name_orang_tua.trim(),
-      last_name_orang_tua:
-        formData.last_name_orang_tua.trim(),
+      first_name_orang_tua: formData.first_name_orang_tua.trim(),
+      last_name_orang_tua: formData.last_name_orang_tua.trim(),
     };
-
-    console.log(
-      "PAYLOAD TAMBAH SISWA:",
-      payload
-    );
 
     try {
       setLoading(true);
+      await createStudent(payload);
 
-      const result =
-        await createStudent(payload);
-
-      console.log(
-        "HASIL TAMBAH SISWA:",
-        result
-      );
-
-      alert(
-        "Data siswa berhasil ditambahkan."
-      );
-
+      alert("Data siswa berhasil ditambahkan.");
       navigate("/daftar-siswa");
-    } catch (error) {
+    } catch (requestError) {
       console.error(
         "Gagal menambahkan siswa:",
-        error.response?.data ||
-          error.message
+        requestError.response?.data || requestError.message
       );
 
       setError(
-        error.response?.data?.message ||
+        requestError.response?.data?.message ||
           "Gagal menambahkan siswa."
       );
     } finally {
@@ -163,9 +132,7 @@ function useAddStudentForm() {
     formData,
     handleChange,
     handleSubmit,
-
     kelasOptions,
-
     loading,
     error,
   };

@@ -1,85 +1,84 @@
 import { useEffect, useState } from "react";
 import {
-  getCurrentUser,
   getTahunAjaran,
   getSemester,
 } from "../services/api";
+import useCurrentUser from "./useCurrentUser";
 
+/**
+ * Mengambil user, tahun ajaran, dan semester untuk halaman pengaturan.
+ */
 function useSettings() {
-  const [user, setUser] = useState(null);
+  const { user, loading: userLoading } = useCurrentUser();
+
   const [tahunAjaran, setTahunAjaran] = useState([]);
   const [semester, setSemester] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    let isMounted = true;
+
+    /**
+     * Mengambil data tahun ajaran dan semester secara paralel.
+     */
     const fetchSettings = async () => {
+      if (userLoading) return;
+
       setLoading(true);
       setError(false);
 
       try {
-        const [
-          userResult,
-          tahunAjaranResult,
-          semesterResult,
-        ] = await Promise.all([
-          getCurrentUser(),
+        const [tahunAjaranResult, semesterResult] = await Promise.all([
           getTahunAjaran(),
           getSemester(),
         ]);
 
-        if (userResult.success) {
-          setUser(userResult.data);
-        }
+        if (!isMounted) return;
 
         if (tahunAjaranResult.success) {
-          setTahunAjaran(
-            tahunAjaranResult.results || []
-          );
+          setTahunAjaran(tahunAjaranResult.results || []);
         }
 
         if (semesterResult.success) {
-          setSemester(
-            semesterResult.results || []
-          );
+          setSemester(semesterResult.results || []);
         }
-      } catch (error) {
+      } catch (requestError) {
         console.error(
           "Gagal mengambil data pengaturan:",
-          error.response?.data ||
-            error.message
+          requestError.response?.data || requestError.message
         );
 
-        setError(true);
+        if (isMounted) {
+          setError(true);
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchSettings();
-  }, []);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [userLoading]);
 
   const activeTahunAjaran =
-    tahunAjaran.find(
-      (item) => item.is_aktif
-    ) || null;
+    tahunAjaran.find((item) => item.is_aktif) || null;
 
   const activeSemester =
-    semester.find(
-      (item) => item.is_aktif
-    ) || null;
+    semester.find((item) => item.is_aktif) || null;
 
   return {
     user,
-
     tahunAjaran,
     activeTahunAjaran,
-
     semester,
     activeSemester,
-
-    loading,
+    loading: loading || userLoading,
     error,
   };
 }

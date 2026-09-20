@@ -1,5 +1,6 @@
 import { BsPersonFill } from "react-icons/bs";
 
+/** Komponen atau fungsi ProfileCard yang menangani bagian UI terkait. */
 function ProfileCard({ user }) {
   // Gabung first_name + last_name jadi satu nama utuh buat ditampilkan.
   // filter(Boolean) biar gak ada spasi ganda kalau salah satunya kosong.

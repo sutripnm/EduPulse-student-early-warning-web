@@ -5,6 +5,7 @@ import {
 
 import { getRiskLabel } from "../../utils/risk";
 
+/** Komponen atau fungsi RiskAnalysisCard yang menangani bagian UI terkait. */
 function RiskAnalysisCard({
   student,
   selectedMapel,

@@ -9,6 +9,7 @@ import {
 
 import { riskColors } from "../../utils/dashboardColors";
 
+/** Komponen atau fungsi RiskDonutChart yang menangani bagian UI terkait. */
 function RiskDonutChart({ data }) {
   return (
     <div className="dashboard-box risk-donut-box">

@@ -1,3 +1,4 @@
+/** Komponen atau fungsi DashboardFilterBar yang menangani bagian UI terkait. */
 function DashboardFilterBar({
   kelasOptions,
   mapelOptions,

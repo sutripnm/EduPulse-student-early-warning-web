@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   getMapel,
   createMapel,
@@ -9,164 +8,40 @@ import {
   updateKelas,
   deleteKelas,
 } from "../services/api";
+import useAcademicResource from "./useAcademicResource";
 
+/**
+ * Menyatukan operasi CRUD mata pelajaran dan kelas.
+ * Kedua resource memakai hook CRUD generik agar tidak ada pola fetch ulang
+ * yang ditulis dua kali.
+ */
 function useAcademicSettings() {
-  const [subjects, setSubjects] = useState([]);
-  const [classes, setClasses] = useState([]);
+  const subjects = useAcademicResource({
+    load: getMapel,
+    create: createMapel,
+    update: updateMapel,
+    remove: deleteMapel,
+  });
 
-  const [loadingSubjects, setLoadingSubjects] =
-    useState(true);
-
-  const [loadingClasses, setLoadingClasses] =
-    useState(true);
-
-  const [error, setError] = useState(false);
-
-  // =========================
-  // GET MAPEL
-  // =========================
-
-  const fetchSubjects = async () => {
-    try {
-      setLoadingSubjects(true);
-
-const result = await getMapel();
-
-const cleanSubjects = (result.results || []).filter(
-  (item) =>
-    item.kode_mapel !== "string" &&
-    item.nama_mapel !== "string"
-);
-
-setSubjects(cleanSubjects);
-    } catch (error) {
-      console.error(
-        "Gagal mengambil mata pelajaran:",
-        error.response?.data || error.message
-      );
-
-      setError(true);
-    } finally {
-      setLoadingSubjects(false);
-    }
-  };
-
-  // =========================
-  // GET KELAS
-  // =========================
-
-  const fetchClasses = async () => {
-    try {
-      setLoadingClasses(true);
-
-      const result = await getKelas();
-
-      setClasses(result.results || []);
-    } catch (error) {
-      console.error(
-        "Gagal mengambil kelas:",
-        error.response?.data || error.message
-      );
-
-      setError(true);
-    } finally {
-      setLoadingClasses(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchSubjects();
-    fetchClasses();
-  }, []);
-
-  // =========================
-  // CREATE MAPEL
-  // =========================
-
-  const handleCreateMapel = async (data) => {
-    const result = await createMapel(data);
-
-    await fetchSubjects();
-
-    return result;
-  };
-
-  // =========================
-  // UPDATE MAPEL
-  // =========================
-
-  const handleUpdateMapel = async (id, data) => {
-    const result = await updateMapel(id, data);
-
-    await fetchSubjects();
-
-    return result;
-  };
-
-  // =========================
-  // DELETE MAPEL
-  // =========================
-
-  const handleDeleteMapel = async (id) => {
-    const result = await deleteMapel(id);
-
-    await fetchSubjects();
-
-    return result;
-  };
-
-  // =========================
-  // CREATE KELAS
-  // =========================
-
-  const handleCreateKelas = async (data) => {
-    const result = await createKelas(data);
-
-    await fetchClasses();
-
-    return result;
-  };
-
-  // =========================
-  // UPDATE KELAS
-  // =========================
-
-  const handleUpdateKelas = async (id, data) => {
-    const result = await updateKelas(id, data);
-
-    await fetchClasses();
-
-    return result;
-  };
-
-  // =========================
-  // DELETE KELAS
-  // =========================
-
-  const handleDeleteKelas = async (id) => {
-    const result = await deleteKelas(id);
-
-    await fetchClasses();
-
-    return result;
-  };
+  const classes = useAcademicResource({
+    load: getKelas,
+    create: createKelas,
+    update: updateKelas,
+    remove: deleteKelas,
+  });
 
   return {
-    subjects,
-    classes,
-
-    loadingSubjects,
-    loadingClasses,
-
-    error,
-
-    handleCreateMapel,
-    handleUpdateMapel,
-    handleDeleteMapel,
-
-    handleCreateKelas,
-    handleUpdateKelas,
-    handleDeleteKelas,
+    subjects: subjects.items,
+    classes: classes.items,
+    loadingSubjects: subjects.loading,
+    loadingClasses: classes.loading,
+    error: subjects.error || classes.error,
+    handleCreateMapel: subjects.createItem,
+    handleUpdateMapel: subjects.updateItem,
+    handleDeleteMapel: subjects.removeItem,
+    handleCreateKelas: classes.createItem,
+    handleUpdateKelas: classes.updateItem,
+    handleDeleteKelas: classes.removeItem,
   };
 }
 

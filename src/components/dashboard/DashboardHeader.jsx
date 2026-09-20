@@ -1,8 +1,11 @@
 import { FiUser } from "react-icons/fi";
 import useCurrentUser from "../../hooks/useCurrentUser";
 
+/**
+ * Menampilkan identitas user yang sedang login pada header dashboard.
+ */
 function DashboardHeader() {
-  const user = useCurrentUser();
+  const { user } = useCurrentUser();
 
   return (
     <header className="d-flex justify-content-between align-items-center mb-3">

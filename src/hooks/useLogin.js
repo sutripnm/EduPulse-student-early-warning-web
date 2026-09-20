@@ -2,285 +2,63 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../services/api";
 
+/**
+ * Mengelola input login, penyimpanan session, dan redirect berdasarkan role.
+ */
 function useLogin() {
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  /**
+   * Mengirim kredensial ke API lalu menyiapkan session user.
+   */
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    console.log("=== LOGIN START ===");
-    console.log("EMAIL:", email);
-
     try {
-      // =========================
-      // LOGIN
-      // =========================
+      const response = await api.post("/v1/auth/login/", {
+        email,
+        password,
+      });
 
-      const response = await api.post(
-        "/v1/auth/login/",
-        {
-          email,
-          password,
-        }
-      );
+      const loginData = response.data?.data;
 
-      const loginData =
-        response.data?.data;
-
-      console.log(
-        "=== LOGIN SUCCESS ==="
-      );
-
-      console.log(
-        "STATUS:",
-        response.status
-      );
-
-      console.log(
-        "LOGIN DATA JSON:",
-        JSON.stringify(
-          loginData,
-          null,
-          2
-        )
-      );
-
-      // =========================
-      // VALIDASI RESPONSE
-      // =========================
-
-      if (!loginData) {
-        throw new Error(
-          "Data login tidak tersedia."
-        );
+      if (!loginData?.access_token) {
+        throw new Error("Access token tidak tersedia.");
       }
 
-      if (
-        !loginData.access_token
-      ) {
-        throw new Error(
-          "Access token tidak tersedia."
-        );
+      if (!loginData?.refresh_token) {
+        throw new Error("Refresh token tidak tersedia.");
       }
 
-      if (
-        !loginData.refresh_token
-      ) {
-        throw new Error(
-          "Refresh token tidak tersedia."
-        );
+      localStorage.setItem("accessToken", loginData.access_token);
+      localStorage.setItem("refreshToken", loginData.refresh_token);
+
+      const user = loginData.user;
+      const role = String(user?.role || "").toUpperCase();
+
+      // Cache user agar hook useCurrentUser tidak perlu request tambahan.
+      if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
       }
 
-      // =========================
-      // SIMPAN ACCESS TOKEN
-      // =========================
+      localStorage.setItem("role", role);
 
-      localStorage.setItem(
-        "accessToken",
-        loginData.access_token
-      );
+      const nisn = extractStudentNisn(user, role);
 
-      // =========================
-      // SIMPAN REFRESH TOKEN
-      // =========================
-
-      localStorage.setItem(
-        "refreshToken",
-        loginData.refresh_token
-      );
-
-      // =========================
-      // DATA USER
-      // =========================
-
-      const user =
-        loginData.user;
-
-      console.log(
-        "USER LOGIN:",
-        user
-      );
-
-      // =========================
-      // ROLE
-      // =========================
-
-      const role = String(
-        user?.role || ""
-      ).toUpperCase();
-
-      console.log(
-        "ROLE USER:",
-        role
-      );
-
-      // Simpan role
-      localStorage.setItem(
-        "role",
-        role
-      );
-
-      // =========================
-      // AMBIL NISN
-      // =========================
-      //
-      // Saat ini API login belum
-      // mengirim nisn secara langsung.
-      //
-      // Untuk akun siswa/orang tua,
-      // NISN terdapat pada email:
-      //
-      // ortu_1000000071@school.id
-      //
-      // → 1000000071
-      //
-      // =========================
-
-      let nisn = "";
-
-      if (
-        role === "SISWA" ||
-        role === "ORANGTUA" ||
-        role === "ORANG_TUA"
-      ) {
-        const nisnMatch =
-          user?.email?.match(
-            /\d{10}/
-          );
-
-        nisn =
-          nisnMatch?.[0] || "";
-
-        // =========================
-        // SIMPAN NISN
-        // =========================
-
-        if (nisn) {
-          localStorage.setItem(
-            "nisn",
-            nisn
-          );
-
-          console.log(
-            "NISN USER:",
-            nisn
-          );
-        } else {
-          console.warn(
-            "NISN tidak ditemukan dari email user."
-          );
-
-          localStorage.removeItem(
-            "nisn"
-          );
-        }
+      if (nisn) {
+        localStorage.setItem("nisn", nisn);
       } else {
-        // Admin / Guru tidak membutuhkan
-        // NISN siswa.
-        localStorage.removeItem(
-          "nisn"
-        );
+        localStorage.removeItem("nisn");
       }
 
-      // =========================
-      // CEK LOCAL STORAGE
-      // =========================
-
-      console.log(
-        "ACCESS TOKEN:",
-        localStorage.getItem(
-          "accessToken"
-        )
-          ? "ADA"
-          : "TIDAK ADA"
-      );
-
-      console.log(
-        "REFRESH TOKEN:",
-        localStorage.getItem(
-          "refreshToken"
-        )
-          ? "ADA"
-          : "TIDAK ADA"
-      );
-
-      console.log(
-        "ROLE LOCAL STORAGE:",
-        localStorage.getItem(
-          "role"
-        )
-      );
-
-      console.log(
-        "NISN LOCAL STORAGE:",
-        localStorage.getItem(
-          "nisn"
-        )
-      );
-
-      // =========================
-      // REDIRECT BERDASARKAN ROLE
-      // =========================
-
-      if (
-        role === "ORANGTUA" ||
-        role === "ORANG_TUA"
-      ) {
-        // Pastikan NISN tersedia
-        if (!nisn) {
-          throw new Error(
-            "NISN siswa untuk akun orang tua tidak ditemukan."
-          );
-        }
-
-        navigate(
-          `/dashboard-ortu/${nisn}`
-        );
-
-        return;
-      }
-
-      if (
-        role === "SISWA"
-      ) {
-        // Pastikan NISN tersedia
-        if (!nisn) {
-          throw new Error(
-            "NISN siswa tidak ditemukan."
-          );
-        }
-
-        navigate(
-          `/dashboard-siswa/${nisn}`
-        );
-
-        return;
-      }
-
-      // ADMIN dan GURU
-      navigate("/dashboard");
-
+      redirectByRole(role, nisn, navigate);
     } catch (error) {
-      console.log(
-        "=== LOGIN ERROR ==="
-      );
-
-      console.log(
-        "STATUS:",
-        error.response?.status
-      );
-
-      console.log(
-        "DATA:",
-        error.response?.data
-      );
-
-      console.log(
-        "MESSAGE:",
-        error.message
+      console.error(
+        "Login gagal:",
+        error.response?.data || error.message
       );
     }
   };
@@ -292,6 +70,46 @@ function useLogin() {
     setPassword,
     handleSubmit,
   };
+}
+
+/**
+ * Mengambil NISN dari email akun siswa/orang tua sesuai format akun sekolah.
+ */
+function extractStudentNisn(user, role) {
+  const studentRoles = ["SISWA", "ORANGTUA", "ORANG_TUA"];
+
+  if (!studentRoles.includes(role)) {
+    return "";
+  }
+
+  return user?.email?.match(/\d{10}/)?.[0] || "";
+}
+
+/**
+ * Mengarahkan user ke dashboard sesuai role.
+ */
+function redirectByRole(role, nisn, navigate) {
+  if (role === "ORANGTUA" || role === "ORANG_TUA") {
+    if (!nisn) {
+      throw new Error(
+        "NISN siswa untuk akun orang tua tidak ditemukan."
+      );
+    }
+
+    navigate(`/dashboard-ortu/${nisn}`);
+    return;
+  }
+
+  if (role === "SISWA") {
+    if (!nisn) {
+      throw new Error("NISN siswa tidak ditemukan.");
+    }
+
+    navigate(`/dashboard-siswa/${nisn}`);
+    return;
+  }
+
+  navigate("/dashboard");
 }
 
 export default useLogin;

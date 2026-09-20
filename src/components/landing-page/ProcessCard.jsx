@@ -1,3 +1,4 @@
+/** Komponen atau fungsi ProcessCard yang menangani bagian UI terkait. */
 export default function ProcessCard({ step, title, description }) {
   return (
     <div className="col-md-4">

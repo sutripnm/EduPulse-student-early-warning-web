@@ -1,3 +1,4 @@
+/** Komponen atau fungsi FeatureCard yang menangani bagian UI terkait. */
 export default function FeatureCard({ icon: Icon, title, description }) {
   return (
     <div className="col-md-6 col-lg-3">

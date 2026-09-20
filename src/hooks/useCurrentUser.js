@@ -1,66 +1,96 @@
 import { useEffect, useState } from "react";
 import { getCurrentUser } from "../services/api";
 
+let currentUserCache = null;
+let currentUserRequest = null;
+
+/**
+ * Mengambil user yang sedang login dan menyediakan status loading.
+ * Request yang bersamaan dibagikan agar Sidebar, Dashboard, dan halaman lain
+ * tidak memanggil endpoint /auth/me/ berkali-kali.
+ */
 function useCurrentUser() {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCurrentUser = async () => {
-      const accessToken =
-        localStorage.getItem("accessToken");
+    let isMounted = true;
+    const accessToken = localStorage.getItem("accessToken");
 
-      // Belum login
+    /**
+     * Mengambil current user sekali untuk access token yang sama.
+     */
+    const fetchCurrentUser = async () => {
       if (!accessToken) {
-        setUser(null);
+        if (isMounted) {
+          setUser(null);
+          setLoading(false);
+        }
         return;
       }
 
       try {
-        const result =
-          await getCurrentUser();
+        let currentUser;
 
-        const currentUser =
-          result?.data || result;
+        if (currentUserCache?.token === accessToken) {
+          currentUser = currentUserCache.user;
+        } else if (currentUserRequest?.token === accessToken) {
+          currentUser = await currentUserRequest.promise;
+        } else {
+          const promise = getCurrentUser().then((result) => {
+            const nextUser = result?.data || result || null;
+            currentUserCache = {
+              token: accessToken,
+              user: nextUser,
+            };
+            return nextUser;
+          });
 
-        console.log(
-          "CURRENT USER HEADER:",
-          currentUser
-        );
+          currentUserRequest = {
+            token: accessToken,
+            promise,
+          };
 
-        setUser(
-          currentUser || null
-        );
+          try {
+            currentUser = await promise;
+          } finally {
+            if (currentUserRequest?.promise === promise) {
+              currentUserRequest = null;
+            }
+          }
+        }
 
-        // Sinkronkan juga localStorage
-        // supaya data user lama tidak tertinggal
+        if (!isMounted) return;
+
+        setUser(currentUser);
         if (currentUser) {
-          localStorage.setItem(
-            "user",
-            JSON.stringify(
-              currentUser
-            )
-          );
+          localStorage.setItem("user", JSON.stringify(currentUser));
         }
       } catch (error) {
         console.error(
           "Gagal mengambil current user:",
-          error.response?.data ||
-            error.message
+          error.response?.data || error.message
         );
+
+        if (!isMounted) return;
 
         setUser(null);
-
-        // Hapus data user lama
-        localStorage.removeItem(
-          "user"
-        );
+        localStorage.removeItem("user");
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
       }
     };
 
     fetchCurrentUser();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  return user;
+  return { user, loading };
 }
 
 export default useCurrentUser;
